@@ -25,6 +25,7 @@ usethis::use_package("")
 usethis::use_data_raw("trolley_raw")
 usethis::use_data_raw("trolley_preprocessed")
 usethis::use_data_raw("trolley")
+usethis::use_data_raw("cd_raw")
 
 # Add data files
 usethis::use_data(correct_answers, qualtrics_surveys, internal = TRUE, overwrite = TRUE)
