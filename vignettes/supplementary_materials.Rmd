@@ -21,30 +21,11 @@ library(tidyverse)
 library(countrycode)
 
 # Prepare datafiles for the analysis
-# Prepare collectivism data
-cd <- 
-  trolleyMultilabReplication::cd_raw %>% 
-  transmute(country = names(.),
-            Collectivism = `United States2010-2014`) %>% 
-  extract(country, 
-          into = c("Country", "distance_year"), 
-          regex = "(.*)(\\d{4}-\\d{4})") %>% 
-  # Get the latest similarity data
-  group_by(Country) %>% 
-  slice_tail(n = 1) %>% 
-  ungroup() %>% 
-  # USA should have 0 distance (not NA)
-  mutate(Collectivism = if_else(is.na(Collectivism), 0, Collectivism),
-         country3 = countryname(sourcevar = Country, 
-                                destination = "iso3c"))
-# TODO: Check why serbia and montenegro country code is NA
-# TODO: Do we need this code here at all?
-# Proposal: Country should be added as a variable in the data_raw/trolley.R file to the trolley.rda table
-
 # Merge collectivism data with trolley responses
 trolley <- 
   trolley %>% 
-  left_join(., cd, by = "country3")
+  left_join(., cultural_distance, by = "country3")
+# TODO: Why is this needed?
 
 # Save data for each study separately
 study1a <- filter(trolley, include_study1a)
@@ -62,13 +43,7 @@ trolley_proc <- filter(trolley, include_allstudy_withoutfamiliarity)
 trolley_familiar <- filter(trolley_proc, !include_nofamiliarity)
 
 # Calculate individualism and collectivism overall scores for each respondent
-trolley_proc <- 
-  trolley_proc %>% 
-  rowwise() %>% 
-  mutate(hor_ind = mean(c(individualism_scale_1, individualism_scale_2, individualism_scale_3, individualism_scale_4)),
-         ver_ind = mean(c(individualism_scale_5, individualism_scale_6, individualism_scale_7, individualism_scale_8)),
-         hor_col = mean(c(individualism_scale_9, individualism_scale_10, individualism_scale_11, individualism_scale_12)),
-         ver_col = mean(c(individualism_scale_13, individualism_scale_14, individualism_scale_15, individualism_scale_16)))
+trolley_proc <- add_ind_col_scale(trolley_proc)
 ```
 
 ```{r}

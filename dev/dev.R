@@ -28,7 +28,7 @@ usethis::use_pipe(export = TRUE)
 usethis::use_data_raw("trolley_raw")
 usethis::use_data_raw("trolley_preprocessed")
 usethis::use_data_raw("trolley")
-usethis::use_data_raw("cd_raw")
+usethis::use_data_raw("cultural_distance")
 
 # Add data files
 usethis::use_data(correct_answers, qualtrics_surveys, internal = TRUE, overwrite = TRUE)
@@ -46,7 +46,7 @@ usethis::use_r("generate_dataset")
 usethis::use_r("get_lmbf_inference")
 usethis::use_r("get_ttestbf_inference")
 usethis::use_r("simulate")
-usethis::use_r("")
+usethis::use_r("add_ind_col_scale")
 usethis::use_r("")
 usethis::use_r("")
 
