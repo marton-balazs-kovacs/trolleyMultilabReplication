@@ -39,6 +39,7 @@ cd <-
                                 destination = "iso3c"))
 # TODO: Check why serbia and montenegro country code is NA
 # TODO: Do we need this code here at all?
+# Proposal: Country should be added as a variable in the data_raw/trolley.R file to the trolley.rda table
 
 # Merge collectivism data with trolley responses
 trolley <- 
