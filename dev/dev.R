@@ -21,6 +21,9 @@ usethis::use_package("")
 usethis::use_package("")
 usethis::use_package("")
 
+# Add pipe
+usethis::use_pipe(export = TRUE)
+
 # Add raw data files
 usethis::use_data_raw("trolley_raw")
 usethis::use_data_raw("trolley_preprocessed")
@@ -49,3 +52,4 @@ usethis::use_r("")
 
 # Add vignettes
 usethis::use_vignette("supplementary_materials")
+usethis::use_vignette("manuscript")

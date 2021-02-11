@@ -15,8 +15,13 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+# Load packages
 library(trolleyMultilabReplication)
+library(tidyverse)
+library(countrycode)
 
+# Prepare datafiles for the analysis
+# Prepare collectivism data
 cd <- 
   trolleyMultilabReplication::cd_raw %>% 
   transmute(country = names(.),
@@ -32,8 +37,37 @@ cd <-
   mutate(Collectivism = if_else(is.na(Collectivism), 0, Collectivism),
          country3 = countryname(sourcevar = Country, 
                                 destination = "iso3c"))
+# TODO: Check why serbia and montenegro country code is NA
+# TODO: Do we need this code here at all?
 
+# Merge collectivism data with trolley responses
+trolley <- 
+  trolley %>% 
+  left_join(., cd, by = "country3")
 
+# Save data for each study separately
+study1a <- filter(trolley, include_study1a)
+study1b <- filter(trolley, include_study1b)
+study2a <- filter(trolley, include_study2a)
+study2b <- filter(trolley, include_study2b)
+
+# Save trolley data where all participants whether they were familiar or not are included
+# Every other exclusion criteria is applied
+# TODO: Rename the object
+trolley_proc <- filter(trolley, include_allstudy_withoutfamiliarity)
+
+# Save data where all exclusion criteria is applied
+# TODO: Rename the object, use the include_noproblem variable
+trolley_familiar <- filter(trolley_proc, !include_nofamiliarity)
+
+# Calculate individualism and collectivism overall scores for each respondent
+trolley_proc <- 
+  trolley_proc %>% 
+  rowwise() %>% 
+  mutate(hor_ind = mean(c(individualism_scale_1, individualism_scale_2, individualism_scale_3, individualism_scale_4)),
+         ver_ind = mean(c(individualism_scale_5, individualism_scale_6, individualism_scale_7, individualism_scale_8)),
+         hor_col = mean(c(individualism_scale_9, individualism_scale_10, individualism_scale_11, individualism_scale_12)),
+         ver_col = mean(c(individualism_scale_13, individualism_scale_14, individualism_scale_15, individualism_scale_16)))
 ```
 
 ```{r}
