@@ -16,4 +16,457 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(trolleyMultilabReplication)
+library(tidyverse)
+library(countrycode)
+
+# Save data for each study separately
+study1a <- filter(trolley, include_study1a)
+study1b <- filter(trolley, include_study1b)
+study2a <- filter(trolley, include_study2a)
+study2b <- filter(trolley, include_study2b)
+
+# Save data but wihtouth the familiarity filter for each study
+study1a_nf <- filter(trolley, include_study1a_withoutfamiliarity)
+study1b_nf <- filter(trolley, include_study1b_withoutfamiliarity)
+study2a_nf <- filter(trolley, include_study2a_withoutfamiliarity)
+study2b_nf <- filter(trolley, include_study2b_withoutfamiliarity)
+```
+
+## 1. Exclusion
+
+```{r exclusion,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+all_responses <- 
+  trolley %>% 
+  count(Region, name = "all", .drop = TRUE)
+
+exclude_careless <- 
+  trolley %>% 
+  filter(!include_nocareless) %>% 
+  group_by(Region) %>% 
+  summarise(Reason = "Careless responding", 
+            n = n(), 
+            .groups = "drop")
+
+exclude_confusion <- 
+  trolley %>% 
+  filter(!include_noconfusion) %>% 
+  group_by(Region) %>% 
+  summarise(Reason = "Confusion",
+            n = n(), 
+            .groups = "drop")
+
+exclude_familiar <- 
+  trolley %>% 
+  filter(!include_nofamiliarity) %>% 
+  group_by(Region) %>% 
+  summarise(Reason = "Familiarity of the research question",
+            n = n(), 
+            .groups = "drop")
+
+exclude_techproblem <- 
+  trolley %>% 
+  filter(!include_notechproblem) %>% 
+  group_by(Region) %>%   
+  summarise(Reason = "Technical problem",
+            n = n(), 
+            .groups = "drop")
+
+exclude_nonnative <- 
+  trolley %>% 
+  filter(!include_nonativelang) %>% 
+  group_by(Region) %>%   
+  summarise(Reason = "Non-native speaker",
+            n = n(), 
+            .groups = "drop")
+
+exclude_study1a <- 
+  trolley %>%
+  filter(!include_study1a_attention) %>% 
+  group_by(Region) %>%   
+  summarise(Reason = "Failed attention check (Study1a)",
+            n = n(), 
+            .groups = "drop")
+
+exclude_study1b <- 
+  trolley %>% 
+  filter(!include_study1b_attention) %>% 
+  group_by(Region) %>%   
+  summarise(Reason = "Failed attention check (Study1b)",
+            n = n(), 
+            .groups = "drop")
+
+exclude_study2a <-
+  trolley %>% 
+  filter(!include_study2a_attention) %>% 
+  group_by(Region) %>% 
+  summarise(Reason = "Failed attention check (Study2a)",
+            n = n(), 
+            .groups = "drop")
+
+exclude_study2b <-
+  trolley %>% 
+  filter(!include_study2b_attention) %>% 
+  group_by(Region) %>%   
+  summarise(Reason = "Failed attention check (Study2b)",
+            n = n(), 
+            .groups = "drop")
+
+# Create a table with all included studies in 
+all_wide <-
+  bind_rows(tibble(study = "study1a", count(study1a, Region)),
+            tibble(study = "study1b", count(study1b, Region)),
+            tibble(study = "study2a", count(study2a, Region)),
+            tibble(study = "study2b", count(study2b, Region))) %>% 
+  pivot_wider(names_from = "Region", 
+              values_from = "n", 
+              names_prefix = "n_") %>% 
+  mutate(info = "Final sample",
+         n_All = n_Eastern + n_Southern + n_Western,
+         Reason = str_glue("{str_to_sentence(study)}")) %>% 
+  select(-study)
+
+all_wide_wofamiliarity <-
+  bind_rows(tibble(study = "study1a", count(study1a, Region)),
+            tibble(study = "study1b", count(study1b, Region)),
+            tibble(study = "study2a", count(study2a, Region)),
+            tibble(study = "study2b", count(study2b, Region))) %>% 
+  pivot_wider(names_from = "Region", 
+              values_from = "n", 
+              names_prefix = "n_") %>% 
+  mutate(info = "Final sample",
+         n_All = n_Eastern + n_Southern + n_Western,
+         Reason = str_glue("{str_to_sentence(study)}")) %>% 
+  select(-study)
+
+exclude_all <-
+  bind_rows(exclude_careless,
+            exclude_confusion,
+            exclude_familiar,
+            exclude_techproblem,
+            exclude_nonnative,
+            exclude_study1a,
+            exclude_study1b,
+            exclude_study2a,
+            exclude_study2b) %>% 
+  left_join(all_responses, by = "Region") %>% 
+  mutate(perc = n / all) %>% 
+  select(-all) %>% 
+  pivot_wider(names_from = "Region", 
+              values_from = c(n, perc)) %>% 
+  mutate(n_All = n_Eastern + n_Southern + n_Western,
+         perc_All = n_All/nrow(trolley),
+         info = "Reason to exclude")
+  
+# Exclusion reason by region (excluded participants can overlap!)
+exclude_table <-
+  exclude_all %>% 
+  bind_rows(all_wide) %>% 
+  group_by(info) %>% 
+  gt() %>% 
+  fmt_number(vars(n_Eastern, n_Southern, n_Western, n_All), 
+             decimals = 0) %>%
+  fmt_percent(columns = vars(perc_Eastern, perc_Southern, perc_Western, perc_All), decimals = 1) %>%
+  fmt_missing(everything(), missing_text = "") %>%
+  cols_merge(columns = vars(n_Eastern, perc_Eastern), 
+             pattern = "{1} ({2})") %>% 
+  cols_merge(columns = vars(n_Southern, perc_Southern), 
+             pattern = "{1} ({2})") %>% 
+  cols_merge(columns = vars(n_Western, perc_Western), 
+           pattern = "{1} ({2})") %>% 
+  cols_merge(columns = vars(n_All, perc_All), 
+       pattern = "{1} ({2})") %>% 
+  cols_label(Reason = " ",
+             n_Eastern = "Eastern",
+             n_Southern = "Southern",
+             n_Western = "Western",
+             n_All = "All") %>% 
+  cols_align("left", columns = "Reason") %>%
+  cols_align("right", columns = vars(n_Eastern, n_Southern, n_Western, n_All)) %>%
+  tab_options(row.striping.include_table_body = TRUE,
+              row.striping.background_color = "#EEEEEE", 
+              row.striping.include_stub = TRUE,
+              row_group.background.color = "#999999", 
+              column_labels.background.color = "#999999") %>% 
+  text_transform(locations = cells_body(
+                 columns = vars(n_Eastern, n_Southern, n_Western, n_All)),
+                          fn = function(x) {if_else(str_detect(x, "()"), 
+                                        str_remove(x, "\\(\\)"),
+                                        x)})
+
+exclude_table
+```
+
+# 2. Main replication analysis
+## Study 1a and 1b
+### Bayesian analysis
+
+```{r Study1a Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+studys1a_results <- calculate_study1_stat(data = study1a, vars = c(trolley_1_rate, trolley_2_rate), rscale = 0.26)
+
+kbl(
+  studys1a_results,
+  format = "latex",
+  booktabs = T,
+  escape=T,
+  caption = "The effect of personal force on moral dilemma judgements on Trolley dilemmas",
+  centering=T,
+  position="H"
+  )%>%
+  kable_styling( full_width = F,  position="left")%>%
+  row_spec(row=0, bold=TRUE)%>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
+```
+
+```{r Study1a excl graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. Black full circles indicate group level means.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study1(study1a, "trolley")
+
+plot_data_summarised <- summarise_plot_data(plot_data)
+
+# Create plot
+create_plot_study1(plot_data, plot_data_summarised)
+```
+
+```{r Study1a w/o excl graph, fig.pos = "H",out.width = "80%",fig.cap = "Results on Trolley dilemmas in Study 1 with no exclusion criteria applied. Black full circles indicate group level means.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study1(study1a_nf, "trolley")
+
+plot_data_summarised <- summarise_plot_data(plot_data)
+
+# Create plot
+create_plot_study1(plot_data, plot_data_summarised)
+```
+
+```{r Study1b Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+studys1b_results <- calculate_study1_stat(data = study1b, vars = c(trolley_1_rate, trolley_2_rate), rscale = 0.26)
+
+kbl(
+  studys1b_results,
+  format = "latex",
+  booktabs = T,
+  escape=T,
+  caption = " The effect of personal force on moral dilemma judgements on Speedboat dilemmas",
+  centering=T,
+  position="H"
+  )%>%
+  kable_styling( full_width = F,  position="left")%>%
+  row_spec(row=0, bold=TRUE)%>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
+```
+
+```{r Study1b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. Black full circles indicate group level means.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study1(study1b, "speedboat")
+
+plot_data_summarised <- summarise_plot_data(plot_data)
+
+# Create plot
+create_plot_study1(plot_data, plot_data_summarised)
+```
+
+```{r Study1b w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with no exclusion criteria applied. Black full circles indicate group level means.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study1(study1b_nf, "speedboat")
+
+plot_data_summarised <- summarise_plot_data(plot_data)
+
+# Create plot
+create_plot_study1(plot_data, plot_data_summarised)
+```
+
+## Study 2a and 2b
+
+```{r Study2a Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+studys2a_results <- calculate_study2_stat(data = study2a, vars = c(trolley_3_rate, trolley_4_rate, trolley_5_rate, trolley_6_rate), rscale = 0.26)
+
+kbl(
+  studys2a_results,
+  format = "latex",
+  booktabs = T,
+  escape=T,
+  caption = "Do personal force interact with intention on Trolley dilemmas?",
+  centering=T,
+  position="H"
+  )%>%
+  kable_styling( full_width = F,  position="left", latex_options = "scale_down")%>%
+  row_spec(row=0, bold=TRUE)%>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
+```
+
+```{r Study2a excl graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study2(study2a, "trolley")
+
+# Create plot
+create_plot_study2(plot_data)
+```
+
+```{r Study2a w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean. ",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study2(study2a_nf, "trolley")
+
+# Create plot
+create_plot_study2(plot_data)
+```
+
+```{r study2b Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+studys2b_results <- calculate_study2_stat(data = study2b, vars = c(trolley_3_rate, trolley_4_rate, trolley_5_rate, trolley_6_rate), rscale = 0.26)
+
+kbl(
+  studys2b_results,
+  format = "latex",
+  booktabs = T,
+  escape=T,
+  caption = "Do personal force interact with intention on Speedboat dilemmas?",
+  centering=T,
+  position="H"
+  )%>%
+  kable_styling( full_width = F,  position="left", latex_options = "scale_down")%>%
+  row_spec(row=0, bold=TRUE)%>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
+```
+
+```{r study2b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study2(study2b, "speedboat")
+
+# Create plot
+create_plot_study2(plot_data)
+```
+
+```{r study2b w/o excl graph,fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when no exclusion criteria is applied. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study2(study2b_nf, "speedboat")
+
+# Create plot
+create_plot_study2(plot_data)
+```
+
+# 3. Individualism-collectivism analysis
+## With all exclusions
+
+```{r analysis individual + country level study 2a, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+
+```
+
+```{r study2a overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data_country <- prepare_plot_data_country(study2a, "study2a")
+
+# Create plot
+create_plot_country(plot_data_country)
+```
+
+```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# create_plot_ind_col()
+```
+
+```{r analysis individual + country level study 2b, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```
+
+```{r study2b overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data_country <- prepare_plot_data_country(study2b, "study2b")
+
+# Create plot
+create_plot_country(plot_data_country)
+```
+
+```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# create_plot_ind_col()
+```
+
+## Including familiar participants
+
+```{r analysis individual + country level study 2a w familiar, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+
+```
+
+```{r study2a overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data_country <- prepare_plot_data_country(study2a_nf, "study2a")
+
+# Create plot
+create_plot_country(plot_data_country)
+```
+
+```{r study2a vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# create_plot_ind_col()
+```
+
+```{r analysis individual + country level study 2b w familiar, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+
+```
+
+```{r study2b overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data_country <- prepare_plot_data_country(study2b_nf, "study2b")
+
+# Create plot
+create_plot_country(plot_data_country)
+```
+
+```{r study2b vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+
+```
+
+# Table 1
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+### Some country codes are not standard iso codes; replace
+custom_countries <- 
+  c("LEB" = "LBN", 
+    "BUL" = "BGR", 
+    "SPA" = "ESP", 
+    "SWT" = "CHE",
+    "PSA" = "USA")
+
+# Transform data for the table
+## Table 1 represents the countries who collected data for the study
+## in the three investigated clusters
+table_data <- 
+  trolley %>% 
+  select(survey_name, lab) %>%
+  drop_na(lab) %>% 
+  mutate(country3 = str_extract(lab, "[A-Z]+") %>% 
+              recode(., !!!custom_countries),
+         region = str_remove(survey_name, "PSA006_"),
+         Country = countrycode(sourcevar = country3, 
+                                      origin = "iso3c",
+                                      destination = "country.name"))
+# GBR_001!
+# Check the number of countries per region
+table_data %>% 
+  distinct(region, Country) %>% 
+  count(region)
+
+# Check the number of countries
+table_data %>% 
+  distinct(Country) %>% 
+  count()
+
+# Missing coutnries since the Stage 1 manuscript:
+# Western: South Africa
+# Southern: El Salvador
+# Eastern: Indonesia
+
+table_data <- 
+  table_data %>% 
+  distinct(region, Country) %>% 
+  group_by(region) %>% 
+  arrange(Country) %>% 
+  filter(!(region == "Eastern" & Country == "United Kingdom")) %>% 
+  summarise(countries = str_c(Country, collapse = ", ")) %>% 
+  pivot_wider(names_from = region, values_from = countries)
+
+table_data$Eastern
+table_data$Western
+table_data$Southern
+
+# Create APA formatted table
+papaja::apa_table(
+  table_data,
+  caption = "The Cultural Classification of Countries of Participating Labs Following Awad et al.",
+  escape = TRUE
+)
 ```

@@ -49,31 +49,43 @@ trolley <-
          include_withoutfamiliarity = include_nocareless &
            include_noconfusion &
            include_notechproblem &
+           include_nonativelang,
+         # Flag those who pass all exclusion criterion but they are familiar with the tasks
+         include_familiar = include_nocareless &
+           include_noconfusion &
+           !include_nofamiliarity &
+           include_notechproblem &
            include_nonativelang) %>%
   # Flag those that are eligible to analysis in each study
   left_join(select(correct_answers, -scenario2) %>% drop_na(scenario1),
             by = c("scenario1")) %>%
-  mutate(include_study1a = (trolley_attention == trolley_answer) & include_noproblem,
-         include_study1b = (speedboat_attention == speedboat_answer) & include_noproblem,
-         include_study1a_withoutfamiliarity = (trolley_attention == trolley_answer) & include_withoutfamiliarity,
-         include_study1b_withoutfamiliarity = (speedboat_attention == speedboat_answer) & include_withoutfamiliarity) %>%
+  # Flag responses where respondents pass the attention check but none of the other criteria are applied
+  mutate(include_study1a_attention = trolley_attention == trolley_answer,
+         include_study1b_attention = speedboat_attention == speedboat_answer,
+         # Flag responses where respondents pass all of the checks
+         include_study1a = include_study1a_attention & include_noproblem,
+         include_study1b = include_study1b_attention & include_noproblem,
+         # Flag responses where participants pass all the checks but both familiar and not familiar respondents are included
+         include_study1a_withoutfamiliarity = include_study1a_attention & include_withoutfamiliarity,
+         include_study1b_withoutfamiliarity = include_study1b_attention & include_withoutfamiliarity,
+         # Flag responses where participants pass all the checks but only familiar respondents are included
+         include_study1a_familiar = include_study1a_attention & include_familiar,
+         include_study1b_familiar = include_study1b_attention & include_familiar) %>%
   select(-trolley_answer, -speedboat_answer) %>%
   left_join(select(correct_answers, -scenario1) %>% drop_na(scenario2),
             by = c("scenario2")) %>%
-  mutate(include_study2a = (trolley_attention == trolley_answer) & include_noproblem,
-         include_study2b = (speedboat_attention == speedboat_answer) & include_noproblem,
-         include_study2a_withoutfamiliarity = (trolley_attention == trolley_answer) & include_withoutfamiliarity,
-         include_study2b_withoutfamiliarity = (speedboat_attention == speedboat_answer) & include_withoutfamiliarity,
-         # Flag rows that can be included to any of the studies
-         include_allstudy = include_study1a |
-           include_study1b |
-           include_study2a |
-           include_study2b,
-         # Flag rows that have all the exclusion expect familiriaty because that is not applied
-         include_allstudy_withoutfamiliarity = include_study1a_withoutfamiliarity |
-           include_study1b_withoutfamiliarity |
-           include_study2a_withoutfamiliarity |
-           include_study2b_withoutfamiliarity) %>%
+  # Flag responses where respondents pass the attention check but none of the other criteria are applied
+  mutate(include_study2a_attention = trolley_attention == trolley_answer,
+         include_study2b_attention = speedboat_attention == speedboat_answer,
+         # Flag responses where respondents pass all of the checks
+         include_study2a = include_study2a_attention & include_noproblem,
+         include_study2b = include_study2b_attention & include_noproblem,
+         # Flag responses where participants pass all the checks but both familiar and not familiar respondents are included
+         include_study2a_withoutfamiliarity = include_study2a_attention & include_withoutfamiliarity,
+         include_study2b_withoutfamiliarity = include_study2b_attention & include_withoutfamiliarity,
+         # Flag responses where participants pass all the checks but only familiar respondents are included
+         include_study2a_familiar = include_study2a_attention & include_familiar,
+         include_study2b_familiar = include_study2b_attention & include_familiar) %>%
   select(-trolley_answer, -speedboat_answer) %>%
   # Add processed variables
   mutate(country3 = str_extract(lab, "[A-Z]+") %>%
@@ -96,5 +108,30 @@ trolley <-
          `Higher education` = case_when(country3 %in% c("AUT", "DEU") ~ edu_high_ger,
                                         TRUE ~ edu_high)) %>%
   select(-edu_high, -edu_high_ger)
+
+# Testing the dataset
+trolley %>%
+  filter(include_study2a_withoutfamiliarity) %>%
+  nrow()
+
+trolley %>%
+  filter(include_allstudy_withoutfamiliarity) %>%
+  nrow()
+
+trolley %>%
+  filter(include_study2a) %>%
+  nrow()
+
+trolley %>%
+  filter(include_study2a_withoutfamiliarity) %>%
+  select(trolley_3_rate, trolley_4_rate, trolley_5_rate, trolley_6_rate) %>%
+  filter(!all(is.na(trolley_3_rate), is.na(trolley_4_rate), is.na(trolley_5_rate), is.na(trolley_6_rate))) %>%
+  nrow()
+
+trolley %>%
+  filter(include_allstudy_withoutfamiliarity) %>%
+  select(trolley_3_rate, trolley_4_rate, trolley_5_rate, trolley_6_rate) %>%
+  filter(!all(is.na(trolley_3_rate), is.na(trolley_4_rate), is.na(trolley_5_rate), is.na(trolley_6_rate))) %>%
+  nrow()
 
 usethis::use_data(trolley, overwrite = TRUE)

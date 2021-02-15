@@ -1,0 +1,31 @@
+#' Create a plot to visualize the effect of individualism/collectivism scale on moral dilemmas
+#'
+#' This function ...
+#'
+#' @param data datatable to be plotted
+#'
+#' @return The function returns a ggplot2 list object.
+#' @export
+create_plot_ind_col <- function(data) {
+  data %>%
+    ggplot() +
+    aes(
+      x = variable,
+      y = b,
+      width = 0.7) +
+    geom_bar(
+      stat = "identity",
+      position = "dodge",
+      colour = "Black",
+      width = 1.2) +
+    geom_errorbar(
+      aes(
+        ymin = lower,
+        ymax = higher),
+      position = position_dodge(width = 0.7),
+      colour = "Black",
+      width = 0.2) +
+    labs(y = "Beta effect size") +
+    geom_hline(yintercept = 0) +
+    theme_trolley()
+}

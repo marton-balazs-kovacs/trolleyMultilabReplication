@@ -35,12 +35,10 @@ study2b <- filter(trolley, include_study2b)
 
 # Save trolley data where all participants whether they were familiar or not are included
 # Every other exclusion criteria is applied
-# TODO: Rename the object
-trolley_proc <- filter(trolley, include_allstudy_withoutfamiliarity)
+
 
 # Save data where all exclusion criteria is applied
-# TODO: Rename the object, use the include_noproblem variable
-trolley_familiar <- filter(trolley_proc, !include_nofamiliarity)
+
 
 # Calculate individualism and collectivism overall scores for each respondent
 trolley_proc <- add_ind_col_scale(trolley_proc)
@@ -156,166 +154,216 @@ demo_table <-
 demo_table
 ```
 
-## Exclusion
+# 2. Additional analysis
+## Effect of physical contact and intention
 
-```{r exclusion,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-all_responses <- 
-  trolley %>% 
-  count(Region, name = "all", .drop = TRUE)
+In every cluster and for both types of dilemma we found good enough evidence supporting the alternative hypothesis when testing the effect of physical contact and the effect of intention. The summary of the results can be found in the tables below.
 
-exclude_careless <- 
-  trolley %>% 
-  filter(!include_nocareless) %>% 
-  group_by(Region) %>% 
-  summarise(Reason = "Careless responding", 
-            n = n(), 
-            .groups = "drop")
+```{r physical contact , echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Tidy Bf extractor function
+my_bf_extractor <- function(bf_obj) {
+  BayesFactor::extractBF(bf_obj) %>% 
+    tibble::rownames_to_column(var = "scale") %>% 
+    dplyr::mutate(scale = stringr::str_extract(scale, "(?<=\\s)(.*)(?=\\s)"))
+}
 
-exclude_confusion <- 
-  trolley %>% 
-  filter(!include_noconfusion) %>% 
-  group_by(Region) %>% 
-  summarise(Reason = "Confusion",
-            n = n(), 
-            .groups = "drop")
+# Comparing standard footbridge with footbridge pole in every cluster
+additional_res_1 <- 
+  trolley_proc %>% 
+  select(survey_name, survey_id, matches("trolley_[0-9]_rate|speedboat_[0-9]_rate")) %>% 
+  pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
+  mutate(comparison = case_when(task %in% c("trolley_1", "trolley_4") ~ "trolley_physical",
+                                task %in% c("speedboat_1", "speedboat_4") ~ "speedboat_physical",
+                                task %in% c("trolley_3", "trolley_2") ~ "trolley_intention",
+                                task %in% c("speedboat_3", "speedboat_2") ~ "speedboat_intention",
+                                TRUE ~ NA_character_)) %>% 
+  drop_na(rate, comparison) %>% 
+  nest(data = c(survey_id, task, rate)) %>% 
+  mutate(bf_res = map(data, ~ ttestBF(formula = rate ~ task, data = .x, rscale=0.26)),
+         bf = map_dbl(bf_res, ~ round(my_bf_extractor(.x)$bf, 2)),
+         freq_res = map(data, ~ t.test(rate ~ task, data = .x,  paired = FALSE) %>% broom::tidy()),
+         t = map_dbl(freq_res, ~ round(.x$statistic, 2)),
+         p = map_dbl(freq_res, ~ round(.x$p.value, 2)),
+         df = map_dbl(freq_res, ~ round(.x$parameter, 2)))
 
-exclude_familiar <- 
-  trolley %>% 
-  filter(!include_nofamiliarity) %>% 
-  group_by(Region) %>% 
-  summarise(Reason = "Familiarity of the research question",
-            n = n(), 
-            .groups = "drop")
+additional_res_1 %>% 
+  filter(str_detect(comparison, "intention|physical")) %>% 
+  separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
+  transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
+            Dilemma = str_to_title(Dilemma),
+            Comparison = case_when(Comparison == "physical" ~ "Physical Contact",
+                                   Comparison == "intention" ~ "Intention"),
+            t,
+            `Bf` = scales::scientific(bf),
+            df,
+            p = as.character(p),
+            p = if_else(as.numeric(p) < .001, "< .001", p)) %>% 
+  papaja::apa_table(
+    caption = "Effect of Physical Contact and Intention",
+    escape = TRUE)
+```
 
-exclude_techproblem <- 
-  trolley %>% 
-  filter(!include_notechproblem) %>% 
-  group_by(Region) %>%   
-  summarise(Reason = "Technical problem",
-            n = n(), 
-            .groups = "drop")
-
-exclude_nonnative <- 
-  trolley %>% 
-  filter(!include_nonativelang) %>% 
-  group_by(Region) %>%   
-  summarise(Reason = "Non-native speaker",
-            n = n(), 
-            .groups = "drop")
-
-exclude_study1a <- 
+```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Additional analysis after all exclusions
+additional_res_1_excluded <- 
   trolley %>%
-  filter(!include_study1a) %>% 
-  group_by(Region) %>%   
-  summarise(Reason = "Failed attention check (Study1a)",
-            n = n(), 
-            .groups = "drop")
+  filter(include_study1a | include_study1b | include_study2a | include_study2b) %>% 
+  select(survey_name, survey_id, matches("trolley_[0-9]_rate|speedboat_[0-9]_rate")) %>% 
+  pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
+  mutate(comparison = case_when(task %in% c("trolley_1", "trolley_4") ~ "trolley_physical",
+                                task %in% c("speedboat_1", "speedboat_4") ~ "speedboat_physical",
+                                task %in% c("trolley_3", "trolley_2") ~ "trolley_intention",
+                                task %in% c("speedboat_3", "speedboat_2") ~ "speedboat_intention",
+                                TRUE ~ NA_character_)) %>% 
+  drop_na(rate, comparison) %>% 
+  nest(data = c(survey_id, task, rate)) %>% 
+  mutate(bf_res = map(data, ~ ttestBF(formula = rate ~ task, data = .x, rscale=0.26)),
+         bf = map_dbl(bf_res, ~ round(my_bf_extractor(.x)$bf, 2)),
+         freq_res = map(data, ~ t.test(rate ~ task, data = .x,  paired = FALSE) %>% broom::tidy()),
+         t = map_dbl(freq_res, ~ round(.x$statistic, 2)),
+         p = map_dbl(freq_res, ~ round(.x$p.value, 2)),
+         df = map_dbl(freq_res, ~ round(.x$parameter, 2)))
 
-exclude_study1b <- 
-  trolley %>% 
-  filter(!include_study1b) %>% 
-  group_by(Region) %>%   
-  summarise(Reason = "Failed attention check (Study1b)",
-            n = n(), 
-            .groups = "drop")
+additional_res_1_excluded %>% 
+  filter(str_detect(comparison, "intention|physical")) %>% 
+  separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
+  transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
+            Dilemma = str_to_title(Dilemma),
+            Comparison = case_when(Comparison == "physical" ~ "Physical Contact",
+                                   Comparison == "intention" ~ "Intention"),
+            t,
+            `Bf` = scales::scientific(bf),
+            df,
+            p = as.character(p),
+            p = if_else(as.numeric(p) < .001, "< .001", p)) %>% 
+  papaja::apa_table(
+    caption = "Effect of Physical Contact and Intention",
+    escape = TRUE)
+```
 
-exclude_study2a <-
-  trolley %>% 
-  filter(!include_study2a) %>% 
-  group_by(Region) %>% 
-  summarise(Reason = "Failed attention check (Study2a)",
-            n = n(), 
-            .groups = "drop")
+## Comparing the standard switch and standard footbridge dilemmas
 
-exclude_study2b <-
-  trolley %>% 
-  filter(!include_study2b) %>% 
-  group_by(Region) %>%   
-  summarise(Reason = "Failed attention check (Study2b)",
-            n = n(), 
-            .groups = "drop")
+When comparing the standard switch and standard footbridge dilemmas in all clusters for the trolley and the speedboat tasks we found good enough evidence in every case for the support of the alternative hypothesis. The summary results of each comparison separately can be found in Tables below.
 
-# Create a table with all included studies in 
-all_wide <-
-  bind_rows(tibble(study = "study1a", count(study1a, Region)),
-            tibble(study = "study1b", count(study1b, Region)),
-            tibble(study = "study2a", count(study2a, Region)),
-            tibble(study = "study2b", count(study2b, Region))) %>% 
-  pivot_wider(names_from = "Region", 
-              values_from = "n", 
-              names_prefix = "n_") %>% 
-  mutate(info = "Final sample",
-         n_All = n_Eastern + n_Southern + n_Western,
-         Reason = str_glue("{str_to_sentence(study)}")) %>% 
-  select(-study)
+```{r, standard switch and footbridge, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+additional_res_2 <- 
+  trolley_proc %>% 
+  select(survey_name, survey_id, matches("trolley_[0-9]_rate|speedboat_[0-9]_rate")) %>% 
+  pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
+  mutate(comparison = case_when(task %in% c("trolley_3", "trolley_4") ~ "trolley_standard",
+                                task %in% c("speedboat_3", "speedboat_4") ~ "speedboat_standard",
+                                TRUE ~ NA_character_)) %>% 
+  drop_na(rate, comparison) %>% 
+  nest(data = c(survey_id, task, rate)) %>% 
+  mutate(bf_res = map(data, ~ ttestBF(formula = rate ~ task, data = .x, rscale=0.26)),
+         bf = map_dbl(bf_res, ~ round(my_bf_extractor(.x)$bf, 2)),
+         freq_res = map(data, ~ t.test(rate ~ task, data = .x,  paired = FALSE) %>% broom::tidy()),
+         t = map_dbl(freq_res, ~ round(.x$statistic, 2)),
+         p = map_dbl(freq_res, ~ round(.x$p.value, 2)),
+         df = map_dbl(freq_res, ~ round(.x$parameter, 2)))
 
-all_wide_wofamiliarity <-
-  bind_rows(tibble(study = "study1a", count(study1a, Region)),
-            tibble(study = "study1b", count(study1b, Region)),
-            tibble(study = "study2a", count(study2a, Region)),
-            tibble(study = "study2b", count(study2b, Region))) %>% 
-  pivot_wider(names_from = "Region", 
-              values_from = "n", 
-              names_prefix = "n_") %>% 
-  mutate(info = "Final sample",
-         n_All = n_Eastern + n_Southern + n_Western,
-         Reason = str_glue("{str_to_sentence(study)}")) %>% 
-  select(-study)
+additional_res_2 %>% 
+  filter(str_detect(comparison, "standard")) %>% 
+  separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
+  transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
+            Dilemma = str_to_title(Dilemma),
+            t,
+            `Bf` = scales::scientific(bf),
+            df,
+            p = as.character(p),
+            p = if_else(as.numeric(p) < .001, "< .001", p)) %>% 
+  papaja::apa_table(
+    caption = "Comparing the Standard Switch and Standard Footbridge Dilemmas",
+    escape = TRUE)
+```
 
-exclude_all <-
-  bind_rows(exclude_careless,
-            exclude_confusion,
-            exclude_familiar,
-            exclude_techproblem,
-            exclude_nonnative,
-            exclude_study1a,
-            exclude_study1b,
-            exclude_study2a,
-            exclude_study2b) %>% 
-  left_join(all_responses, by = "Region") %>% 
-  mutate(perc = n / all) %>% 
-  select(-all) %>% 
-  pivot_wider(names_from = "Region", 
-              values_from = c(n, perc)) %>% 
-  mutate(n_All = n_Eastern + n_Southern + n_Western,
-         perc_All = n_All/nrow(trolley),
-         info = "Reason to exclude")
-  
-# Exclusion reason by region (excluded participants can overlap!)
-exclude_table <-
-  exclude_all %>% 
-  bind_rows(all_wide) %>% 
-  group_by(info) %>% 
-  gt() %>% 
-  fmt_number(vars(n_Eastern, n_Southern, n_Western, n_All), 
-             decimals = 0) %>%
-  fmt_percent(columns = vars(perc_Eastern, perc_Southern, perc_Western, perc_All), decimals = 1) %>%
-  fmt_missing(everything(), missing_text = "") %>%
-  cols_merge(columns = vars(n_Eastern, perc_Eastern), 
-             pattern = "{1} ({2})") %>% 
-  cols_merge(columns = vars(n_Southern, perc_Southern), 
-             pattern = "{1} ({2})") %>% 
-  cols_merge(columns = vars(n_Western, perc_Western), 
-           pattern = "{1} ({2})") %>% 
-  cols_merge(columns = vars(n_All, perc_All), 
-       pattern = "{1} ({2})") %>% 
-  cols_label(Reason = " ",
-             n_Eastern = "Eastern",
-             n_Southern = "Southern",
-             n_Western = "Western",
-             n_All = "All") %>% 
-  cols_align("left", columns = "Reason") %>%
-  cols_align("right", columns = vars(n_Eastern, n_Southern, n_Western, n_All)) %>%
-  tab_options(row.striping.include_table_body = TRUE,
-              row.striping.background_color = "#EEEEEE", 
-              row.striping.include_stub = TRUE,
-              row_group.background.color = "#999999", 
-              column_labels.background.color = "#999999") %>% 
-  text_transform(locations = cells_body(
-                 columns = vars(n_Eastern, n_Southern, n_Western, n_All)),
-                          fn = function(x) {if_else(str_detect(x, "()"), 
-                                        str_remove(x, "\\(\\)"),
-                                        x)})
+```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+#Additional analysis after all exclusions
+additional_res_2_excluded <- 
+  trolley %>%
+  filter(include_study1a | include_study1b | include_study2a | include_study2b) %>% 
+  select(survey_name, survey_id, matches("trolley_[0-9]_rate|speedboat_[0-9]_rate")) %>% 
+  pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
+  mutate(comparison = case_when(task %in% c("trolley_3", "trolley_4") ~ "trolley_standard",
+                                task %in% c("speedboat_3", "speedboat_4") ~ "speedboat_standard",
+                                TRUE ~ NA_character_)) %>% 
+  drop_na(rate, comparison) %>% 
+  nest(data = c(survey_id, task, rate)) %>% 
+  mutate(bf_res = map(data, ~ ttestBF(formula = rate ~ task, data = .x, rscale=0.26)),
+         bf = map_dbl(bf_res, ~ round(my_bf_extractor(.x)$bf, 2)),
+         freq_res = map(data, ~ t.test(rate ~ task, data = .x,  paired = FALSE) %>% broom::tidy()),
+         t = map_dbl(freq_res, ~ round(.x$statistic, 2)),
+         p = map_dbl(freq_res, ~ round(.x$p.value, 2)),
+         df = map_dbl(freq_res, ~ round(.x$parameter, 2)))
 
-exclude_table
+additional_res_2_excluded %>% 
+  filter(str_detect(comparison, "standard")) %>% 
+  separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
+  transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
+            Dilemma = str_to_title(Dilemma),
+            t,
+            `Bf` = scales::scientific(bf),
+            df,
+            p = as.character(p),
+            p = if_else(as.numeric(p) < .001, "< .001", p)) %>% 
+  papaja::apa_table(
+    caption = "Comparing the Standard Switch and Standard Footbridge Dilemmas",
+    escape = TRUE)
+```
+
+## Oxford utilitarianism Scale
+
+As we registered, we simply publish descriptive statistics of the Oxford Utilitarianism Scale in each cultural clusters.
+
+```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <-
+  trolley %>%
+  filter(include_noproblem) %>% 
+  select(survey_name, lab, ResponseId, contains("oxford_")) %>%
+  pivot_longer(
+    contains("oxford_"),
+    names_to = "item_no",
+    values_to = "rate",
+    names_prefix = "oxford_utilitarian_") %>%
+  mutate(item_no = as.integer(item_no),
+         subscale = case_when(item_no == 1L ~ "Impartial Beneficence",
+                              item_no == 2L ~ "Instrumental Harm",
+                              item_no == 3L ~ "Impartial Beneficence",
+                              item_no == 4L ~ "Instrumental Harm",
+                              item_no == 5L ~ "Impartial Beneficence",
+                              item_no == 6L ~ "Instrumental Harm",
+                              item_no == 7L ~ "Impartial Beneficence",
+                              item_no == 8L ~ "Instrumental Harm",
+                              item_no == 9L ~ "Impartial Beneficence",
+                              TRUE ~ NA_character_),
+         survey_name = str_remove(survey_name, "PSA006_")) %>% 
+  drop_na(rate)
+
+# Create plot
+plot_data %>% 
+  ggplot() +
+  aes(
+    x = subscale,
+    y = rate,
+    width = 0.7) +
+  geom_boxplot() +
+  facet_wrap(facets = vars(survey_name)) +
+  labs(
+    y = "Rating",
+    x = "Subscale") +
+  scale_y_continuous(
+    breaks = 1:7,
+    labels = as.character(1:7)) + 
+  theme_bw() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(hjust = 0.5, vjust = 0.5, face = "bold", size = 17),
+    axis.title.x = element_blank(),
+    axis.title.y = element_text(face = "bold", size = 10),
+    axis.text.x = element_text(face = "bold", size = 7, colour = "Black"),
+    axis.text.y = element_text(face = "bold", size = 12, colour = "Black"),
+    legend.title = element_blank(),
+    legend.text = element_text(size = 9))
 ```
