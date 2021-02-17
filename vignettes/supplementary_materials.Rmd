@@ -156,7 +156,7 @@ additional_trolley <-
                                 TRUE ~ NA_character_)) %>% 
   calculate_additional_table(.)
 
-additional_speeedboat <- 
+additional_speedboat <- 
   trolley %>% 
   filter(include_study1b | include_study2b) %>% 
   select(survey_name, survey_id, matches("speedboat_[0-9]_rate")) %>% 
@@ -166,7 +166,7 @@ additional_speeedboat <-
                                 TRUE ~ NA_character_)) %>% 
   calculate_additional_table(.)
 
-bind_rows(additional_trolley, additional_speeedboat) %>% 
+bind_rows(additional_trolley, additional_speedboat) %>% 
   filter(str_detect(comparison, "intention|physical")) %>% 
   separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
   transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
@@ -185,26 +185,28 @@ bind_rows(additional_trolley, additional_speeedboat) %>%
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Additional analysis after all exclusions
-additional_res_1_excluded <- 
-  trolley %>%
-  filter(include_study1a | include_study1b | include_study2a | include_study2b) %>% 
-  select(survey_name, survey_id, matches("trolley_[0-9]_rate|speedboat_[0-9]_rate")) %>% 
+# Comparing standard footbridge with footbridge pole in every cluster
+additional_trolley <- 
+  trolley %>% 
+  filter(include_study1a_nf | include_study2a_nf) %>% 
+  select(survey_name, survey_id, matches("trolley_[0-9]_rate")) %>% 
   pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
   mutate(comparison = case_when(task %in% c("trolley_1", "trolley_4") ~ "trolley_physical",
-                                task %in% c("speedboat_1", "speedboat_4") ~ "speedboat_physical",
                                 task %in% c("trolley_3", "trolley_2") ~ "trolley_intention",
+                                TRUE ~ NA_character_)) %>% 
+  calculate_additional_table(.)
+
+additional_speedboat <- 
+  trolley %>% 
+  filter(include_study1b_nf | include_study2b_nf) %>% 
+  select(survey_name, survey_id, matches("speedboat_[0-9]_rate")) %>% 
+  pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
+  mutate(comparison = case_when(task %in% c("speedboat_1", "speedboat_4") ~ "speedboat_physical",
                                 task %in% c("speedboat_3", "speedboat_2") ~ "speedboat_intention",
                                 TRUE ~ NA_character_)) %>% 
-  drop_na(rate, comparison) %>% 
-  nest(data = c(survey_id, task, rate)) %>% 
-  mutate(bf_res = map(data, ~ ttestBF(formula = rate ~ task, data = .x, rscale=0.26)),
-         bf = map_dbl(bf_res, ~ round(my_bf_extractor(.x)$bf, 2)),
-         freq_res = map(data, ~ t.test(rate ~ task, data = .x,  paired = FALSE) %>% broom::tidy()),
-         t = map_dbl(freq_res, ~ round(.x$statistic, 2)),
-         p = map_dbl(freq_res, ~ round(.x$p.value, 2)),
-         df = map_dbl(freq_res, ~ round(.x$parameter, 2)))
+  calculate_additional_table(.)
 
-additional_res_1_excluded %>% 
+bind_rows(additional_trolley, additional_speedboat) %>% 
   filter(str_detect(comparison, "intention|physical")) %>% 
   separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
   transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
@@ -226,23 +228,25 @@ additional_res_1_excluded %>%
 When comparing the standard switch and standard footbridge dilemmas in all clusters for the trolley and the speedboat tasks we found good enough evidence in every case for the support of the alternative hypothesis. The summary results of each comparison separately can be found in Tables below.
 
 ```{r, standard switch and footbridge, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-additional_res_2 <- 
-  trolley_proc %>% 
-  select(survey_name, survey_id, matches("trolley_[0-9]_rate|speedboat_[0-9]_rate")) %>% 
+additional_trolley <- 
+  trolley %>% 
+  filter(include_study1a | include_study2a) %>% 
+  select(survey_name, survey_id, matches("trolley_[0-9]_rate")) %>% 
   pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
   mutate(comparison = case_when(task %in% c("trolley_3", "trolley_4") ~ "trolley_standard",
-                                task %in% c("speedboat_3", "speedboat_4") ~ "speedboat_standard",
                                 TRUE ~ NA_character_)) %>% 
-  drop_na(rate, comparison) %>% 
-  nest(data = c(survey_id, task, rate)) %>% 
-  mutate(bf_res = map(data, ~ ttestBF(formula = rate ~ task, data = .x, rscale=0.26)),
-         bf = map_dbl(bf_res, ~ round(my_bf_extractor(.x)$bf, 2)),
-         freq_res = map(data, ~ t.test(rate ~ task, data = .x,  paired = FALSE) %>% broom::tidy()),
-         t = map_dbl(freq_res, ~ round(.x$statistic, 2)),
-         p = map_dbl(freq_res, ~ round(.x$p.value, 2)),
-         df = map_dbl(freq_res, ~ round(.x$parameter, 2)))
+  calculate_additional_table(.)
 
-additional_res_2 %>% 
+additional_speedboat <- 
+  trolley %>% 
+  filter(include_study1b | include_study2b) %>% 
+  select(survey_name, survey_id, matches("speedboat_[0-9]_rate")) %>% 
+  pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
+  mutate(comparison = case_when(task %in% c("speedboat_3", "speedboat_4") ~ "speedboat_standard",
+                                TRUE ~ NA_character_)) %>% 
+  calculate_additional_table(.)
+
+bind_rows(additional_trolley, additional_speedboat) %>% 
   filter(str_detect(comparison, "standard")) %>% 
   separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
   transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
@@ -259,24 +263,25 @@ additional_res_2 %>%
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 #Additional analysis after all exclusions
-additional_res_2_excluded <- 
-  trolley %>%
-  filter(include_study1a | include_study1b | include_study2a | include_study2b) %>% 
-  select(survey_name, survey_id, matches("trolley_[0-9]_rate|speedboat_[0-9]_rate")) %>% 
+additional_trolley <- 
+  trolley %>% 
+  filter(include_study1a_nf | include_study2a_nf) %>% 
+  select(survey_name, survey_id, matches("trolley_[0-9]_rate")) %>% 
   pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
   mutate(comparison = case_when(task %in% c("trolley_3", "trolley_4") ~ "trolley_standard",
-                                task %in% c("speedboat_3", "speedboat_4") ~ "speedboat_standard",
                                 TRUE ~ NA_character_)) %>% 
-  drop_na(rate, comparison) %>% 
-  nest(data = c(survey_id, task, rate)) %>% 
-  mutate(bf_res = map(data, ~ ttestBF(formula = rate ~ task, data = .x, rscale=0.26)),
-         bf = map_dbl(bf_res, ~ round(my_bf_extractor(.x)$bf, 2)),
-         freq_res = map(data, ~ t.test(rate ~ task, data = .x,  paired = FALSE) %>% broom::tidy()),
-         t = map_dbl(freq_res, ~ round(.x$statistic, 2)),
-         p = map_dbl(freq_res, ~ round(.x$p.value, 2)),
-         df = map_dbl(freq_res, ~ round(.x$parameter, 2)))
+  calculate_additional_table(.)
 
-additional_res_2_excluded %>% 
+additional_speedboat <- 
+  trolley %>% 
+  filter(include_study1b_nf | include_study2b_nf) %>% 
+  select(survey_name, survey_id, matches("speedboat_[0-9]_rate")) %>% 
+  pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
+  mutate(comparison = case_when(task %in% c("speedboat_3", "speedboat_4") ~ "speedboat_standard",
+                                TRUE ~ NA_character_)) %>% 
+  calculate_additional_table(.)
+
+bind_rows(additional_trolley, additional_speedboat) %>% 
   filter(str_detect(comparison, "standard")) %>% 
   separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
   transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
