@@ -16,27 +16,18 @@ create_plot_study1 <- function(data, data_sum) {
       x = condition,
       y = rate,
       fill = condition) +
-    # geom_flat_violin(
-    #   position = position_nudge(x = 0, y = 0),
-    #   alpha = .8) +
     stat_summary(
       fun = mean,
-      geom = "line",
-      aes(group = 1),
-      position = position_nudge(x = 0.1),
-      size = 1) +
-    geom_line(
-      data = data_sum,
-      aes(x = condition, y = mean),
-      position = position_nudge(x = 0.1),
-      size = 2.5) +
-    geom_point(
-      data = data_sum,
-      aes(x = condition, y = mean),
-      position = position_nudge(x = 0.1),
-      size = 2.5) +
-    guides(fill = FALSE) +
-    guides(color = FALSE) +
+      geom = "bar",
+      position = "dodge",
+      colour = "Black",
+      width = 1.2) +
+    stat_summary(
+      fun.data = mean_cl_boot,
+      geom = "errorbar",
+      position = position_dodge(width = 0.7),
+      colour = "Black",
+      width = 0.2) +
     scale_fill_viridis_d() +
     facet_wrap(facets = vars(survey_name)) +
     labs(y = "To what extent is this action morally acceptable?") +
