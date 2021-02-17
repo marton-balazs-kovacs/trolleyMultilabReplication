@@ -4,12 +4,10 @@
 \alias{create_plot_study1}
 \title{Create a plot for study1}
 \usage{
-create_plot_study1(data, data_sum)
+create_plot_study1(data)
 }
 \arguments{
 \item{data}{the datatable to be plotted}
-
-\item{data_sum}{summarised plot data}
 }
 \value{
 The function returns a ggplot2 list object.

@@ -18,7 +18,7 @@ usethis::use_package("tibble")
 usethis::use_package("msm")
 usethis::use_package("rlang")
 usethis::use_package("BayesFactor")
-usethis::use_package("")
+usethis::use_package("broom")
 usethis::use_package("")
 
 # Add pipe
@@ -61,8 +61,9 @@ usethis::use_r("prepare_plot_data_country")
 usethis::use_r("calculate_study1_stat")
 usethis::use_r("calculate_study2_stat")
 usethis::use_r("create_plot_country")
-usethis::use_r("")
-usethis::use_r("")
+usethis::use_r("my_bf_extractor")
+usethis::use_r("calculate_interaction_stats")
+usethis::use_r("calculate_additional_table")
 
 # Add vignettes
 usethis::use_vignette("supplementary_materials")

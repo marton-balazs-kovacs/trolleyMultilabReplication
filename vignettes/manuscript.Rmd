@@ -20,20 +20,28 @@ library(tidyverse)
 library(countrycode)
 
 # Save data for each study separately
-study1a <- filter(trolley, include_study1a)
-study1b <- filter(trolley, include_study1b)
-study2a <- filter(trolley, include_study2a)
-study2b <- filter(trolley, include_study2b)
+study1a <- dplyr::filter(trolley, include_study1a)
+study1b <- dplyr::filter(trolley, include_study1b)
+study2a <- dplyr::filter(trolley, include_study2a)
+study2b <- dplyr::filter(trolley, include_study2b)
 
-# Save data but wihtouth the familiarity filter for each study
-study1a_nf <- filter(trolley, include_study1a_withoutfamiliarity)
-study1b_nf <- filter(trolley, include_study1b_withoutfamiliarity)
-study2a_nf <- filter(trolley, include_study2a_withoutfamiliarity)
-study2b_nf <- filter(trolley, include_study2b_withoutfamiliarity)
+# Save data but without the familiarity filter for each study
+study1a_nf <- dplyr::filter(trolley, include_study1a_withoutfamiliarity)
+study1b_nf <- dplyr::filter(trolley, include_study1b_withoutfamiliarity)
+study2a_nf <- dplyr::filter(trolley, include_study2a_withoutfamiliarity)
+study2b_nf <- dplyr::filter(trolley, include_study2b_withoutfamiliarity)
+
+# Save data but with only those who failed the familiar exclusion criteria
+study1a_f <- dplyr::filter(trolley, include_study1a_familiar)
+study1b_f <- dplyr::filter(trolley, include_study1b_familiar)
+study2a_f <- dplyr::filter(trolley, include_study2a_familiar)
+study2b_f <- dplyr::filter(trolley, include_study2b_familiar)
 
 # Add individualism and collectivism scales
 study2a <- add_ind_col_scale(study2a)
 study2b <- add_ind_col_scale(study2b)
+study2a_f <- add_ind_col_scale(study2a_f)
+study2b_f <- add_ind_col_scale(study2b_f)
 ```
 
 ## 1. Exclusion
@@ -392,92 +400,10 @@ create_plot_study2(plot_data)
 ## With all exclusions
 
 ```{r analysis individual + country level study 2a, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-# Create a tibble that contains the labels for the cultural variables
-cultural_vars <-
-  tibble(var = c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col"),
-         variable = c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"))
-
-# Create a nested tibble that can be mapped through
-dat_long <-
+tabledata_s2a_ind <-  
   study2a %>% 
-  select(country3, trolley_3_rate, trolley_4_rate, 
-         trolley_5_rate, trolley_6_rate,
-         all_of(cultural_vars$var)) %>% 
-  # Collapse conditions
-  pivot_longer(cols = c(trolley_3_rate, trolley_4_rate, 
-                        trolley_5_rate, trolley_6_rate),
-               names_to = "condition", 
-               values_to = "rate",
-               values_drop_na = TRUE) %>% 
-  # Creating predictors based on the condition
-  mutate(personal_force = if_else(str_detect(condition, "3|5"), 0, 1),
-         intention = if_else(str_detect(condition, "4|5"), 1, 0),
-  # What is this??? lmBF doesn't run without it?!?!?
-         country0 = paste0("0", country3)
-         ) %>% 
-  drop_na() %>% 
-  # Create separate nested datasets to all cultural variables
-  pivot_longer(cols = cultural_vars$var, names_to = "var") %>% 
-  group_by(var) %>%
-  nest() %>% 
-  ungroup()
-
-# Map through the datasets and create stat models using a specific cultural variable
-results <-
-  dat_long %>% 
-  mutate(
-         datt = map2(data, var,
-                     ~lmBF(rate ~ personal_force*intention*value +
-                                  country0,
-                           whichRandom = "country0",
-                           data = as.data.frame(.x),
-  # Set prior dynamically, based on the interaction with a specific variable
-                           rscaleCont = set_names(0.19, str_glue("personal_force:intention:{.y}")))),
-         datt2 = map(data,
-                     ~lmBF(rate ~ personal_force + intention + value +
-                           personal_force:value +
-                           personal_force:intention + intention:value +
-                           country0,
-                           whichRandom = "country0",
-                           data = as.data.frame(.x))),
-         datt3 = map2(datt, datt2, ~recompute((.x/.y), iterations = 50000) %>% 
-                                    as_tibble()),
-         frequentist = map(data, 
-                           ~lmer(rate ~ personal_force*intention*value +
-                                       (1|country3),
-                                 data = .x) %>% 
-                            tidy(conf.int = TRUE)))
-
-# Create a summary table from the models
-tabledata_s2a_ind <-
-  results %>% 
-  left_join(cultural_vars, by = "var") %>% 
-  transmute(variable, 
-            BF = map_dbl(datt3, ~slice(.x) %>% 
-                                 pull(bf) %>% 
-                                 round(4)),
-            b = map_dbl(frequentist, 
-                        ~filter(.x, term == "personal_force:intention:value") %>% 
-                          pull(estimate) %>% 
-                          round(4)),
-            lower = map_dbl(frequentist, 
-                             ~filter(.x, term == "personal_force:intention:value") %>% 
-                              pull(conf.low) %>% 
-                              round(4)),
-            higher = map_dbl(frequentist, 
-                             ~filter(.x, term == "personal_force:intention:value") %>% 
-                              pull(conf.high) %>% 
-                              round(4)),
-            p = map_dbl(frequentist, 
-                        ~filter(.x, term == "personal_force:intention:value") %>% 
-                         pull(p.value) %>% 
-                         round(4))
-  )
-
-graphdata <- 
-  tabledata_s2a_ind %>% 
-  filter(variable != "Country-level collectivism") %>% 
-  select(variable, b, lower, higher)
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_interaction_stats(.)
 
 kbl(
   tabledata_s2a_ind,
@@ -500,10 +426,30 @@ create_plot_country(plot_data_country)
 ```
 
 ```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-# create_plot_ind_col()
+graphdata <- 
+  tabledata_s2a_ind %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
+
+create_plot_ind_col(graphdata)
 ```
 
 ```{r analysis individual + country level study 2b, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+tabledata_s2b_ind <-  
+  study2b %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_interaction_stats(.)
+
+kbl(
+  tabledata_s2b_ind,
+  format = "latex",
+  booktabs = TRUE,
+  escape = TRUE,
+  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
+  centering = TRUE,
+  position = "H") %>%
+  kable_styling(full_width = FALSE,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE)
 ```
 
 ```{r study2b overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -515,13 +461,32 @@ create_plot_country(plot_data_country)
 ```
 
 ```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-# create_plot_ind_col()
+graphdata <- 
+  tabledata_s2b_ind %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
+
+create_plot_ind_col(graphdata)
 ```
 
 ## Including familiar participants
 
 ```{r analysis individual + country level study 2a w familiar, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+tabledata_s2a_f_ind <-  
+  study2a_f %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_interaction_stats(.)
 
+kbl(
+  tabledata_s2a_f_ind,
+  format = "latex",
+  booktabs = TRUE,
+  escape = TRUE,
+  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
+  centering = TRUE,
+  position = "H") %>%
+  kable_styling(full_width = FALSE,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE)
 ```
 
 ```{r study2a overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -533,11 +498,30 @@ create_plot_country(plot_data_country)
 ```
 
 ```{r study2a vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-# create_plot_ind_col()
+graphdata <- 
+  tabledata_s2a_f_ind %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
+
+create_plot_ind_col(graphdata)
 ```
 
 ```{r analysis individual + country level study 2b w familiar, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+tabledata_s2b_f_ind <-  
+  study2a_f %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_interaction_stats(.)
 
+kbl(
+  tabledata_s2b_f_ind,
+  format = "latex",
+  booktabs = TRUE,
+  escape = TRUE,
+  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
+  centering = TRUE,
+  position = "H") %>%
+  kable_styling(full_width = FALSE,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE)
 ```
 
 ```{r study2b overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -549,7 +533,12 @@ create_plot_country(plot_data_country)
 ```
 
 ```{r study2b vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+graphdata <- 
+  tabledata_s2b_f_ind %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
 
+create_plot_ind_col(graphdata)
 ```
 
 # Table 1
