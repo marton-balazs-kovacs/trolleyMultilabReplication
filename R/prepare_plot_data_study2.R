@@ -21,10 +21,8 @@ prepare_plot_data_study2 <- function(data, study_type) {
       -survey_name,
       names_to = "condition",
       values_to = "rate") %>%
-    mutate(personal_force = if_else(str_detect(condition, "4|6"), 1, 0),
-           intention = if_else(str_detect(condition, "3|6"), 1, 0),
-           personal_force = factor(personal_force , levels = c("Personal Force", "No personal force")),
-           intention = factor(intention, levels = c("No Intention", "Intention")),
+    mutate(personal_force = if_else(str_detect(condition, "4|6"), "Personal Force", "No personal force"),
+           intention = if_else(str_detect(condition, "3|6"), "No Intention", "Intention"),
            survey_name = str_remove(survey_name, "PSA006_")) %>%
     drop_na(rate)
 }
