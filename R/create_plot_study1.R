@@ -21,7 +21,7 @@ create_plot_study1 <- function(data, data_sum) {
       geom = "bar",
       position = "dodge",
       colour = "Black",
-      width = 1.2) +
+      width = 0.8) +
     stat_summary(
       fun.data = mean_cl_boot,
       geom = "errorbar",
@@ -31,7 +31,8 @@ create_plot_study1 <- function(data, data_sum) {
     scale_fill_viridis_d() +
     facet_wrap(facets = vars(survey_name)) +
     labs(y = "To what extent is this action morally acceptable?") +
-    expand_limits(y = c(1,9)) +
-    scale_y_continuous(breaks = 1:9) +
-    theme_trolley()
+    coord_cartesian(ylim = c(1, 9)) +
+    scale_y_continuous(breaks = 1:9, expand=c(0,0)) +
+    theme_trolley()+
+    theme(legend.position = "none")
 }

@@ -21,8 +21,8 @@ prepare_plot_data_study1 <- function(data, study_type) {
       - survey_name,
       names_to = "condition",
       values_to = "rate") %>%
-    mutate(condition = if_else(str_detect(condition, "1"), "Personal Force", "No personal force"),
-           condition = factor(condition, levels = c("Personal Force", "No personal force")),
+    mutate(condition = if_else(str_detect(condition, "2"),"No personal force", "Personal Force" ),
+           condition = factor(condition, levels = c("No personal force","Personal Force")),
            survey_name = str_remove(survey_name, "PSA006_")) %>%
     drop_na(rate)
 }

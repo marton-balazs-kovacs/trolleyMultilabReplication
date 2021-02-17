@@ -31,7 +31,8 @@ create_plot_study2 <- function(data) {
     scale_fill_viridis_d() +
     facet_wrap(facets=vars(survey_name)) +
     labs(y = "To what extent is this action morally acceptable?") +
-    expand_limits(y = c(1,9)) +
-    scale_y_continuous(breaks = 1:9) +
-    theme_trolley()
+    coord_cartesian(ylim = c(1, 9)) +
+    scale_y_continuous(breaks = 1:9, expand=c(0,0)) +
+    theme_trolley()+
+    theme(legend.position = c(0.8, 0.9))
 }
