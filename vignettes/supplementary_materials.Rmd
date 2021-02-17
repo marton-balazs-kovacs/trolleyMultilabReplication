@@ -42,10 +42,6 @@ study2b <- filter(trolley, include_study2b)
 
 # Calculate individualism and collectivism overall scores for each respondent
 trolley_proc <- add_ind_col_scale(trolley_proc)
-
-study2a <- add_ind_col_scale(study2a)
-
-study2b <- add_ind_col_scale(study2b)
 ```
 
 ```{r background information, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
