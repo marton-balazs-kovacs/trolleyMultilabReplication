@@ -12,7 +12,7 @@ summarise_study <- function(data = NULL){
   stopifnot(!is.null(data))
 
   data %>%
-    summarise(N = n(),
+    dplyr::summarise(N = dplyr::n(),
               `Age Mean` = mean(Age, na.rm = TRUE),
               `Age SD` = sd(Age, na.rm = TRUE),
               `Male %` = mean(Gender == 1, na.rm = TRUE),

@@ -16,20 +16,20 @@ prepare_plot_data_country <- function(data, study_name) {
            "study2b" = c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate"))
 
   data%>%
-    select(country3, Region, response_cols) %>%
-    pivot_longer(matches("_rate"), names_to = "condition", names_pattern = "(.*)_rate", values_to = "rate", values_drop_na = TRUE) %>%
-    mutate(personal_force = if_else(str_detect(condition, "4|6"), 1, 0),
-           intention = if_else(str_detect(condition, "4|5"), 1, 0)) %>%
-    nest(data = c(condition, rate, personal_force, intention)) %>%
-    left_join(., select(cultural_distance, Collectivism, country3), by = "country3") %>%
-    mutate(N = map_int(data, nrow)) %>%
-    mutate(cohend =  if_else(N >= 10,
-                           map_dbl(data,
-                                   possibly(
+    dplyr::select(country3, Region, response_cols) %>%
+    tidyr::pivot_longer(matches("_rate"), names_to = "condition", names_pattern = "(.*)_rate", values_to = "rate", values_drop_na = TRUE) %>%
+    dplyr::mutate(personal_force = dplyr::if_else(stringr::str_detect(condition, "4|6"), 1, 0),
+           intention = dplyr::if_else(stringr::str_detect(condition, "4|5"), 1, 0)) %>%
+    tidyr::nest(data = c(condition, rate, personal_force, intention)) %>%
+    dplyr::left_join(., select(cultural_distance, Collectivism, country3), by = "country3") %>%
+    dplyr::mutate(N = map_int(data, nrow)) %>%
+    dplyr::mutate(cohend =  dplyr::if_else(N >= 10,
+                                    purrr::map_dbl(data,
+                                   purrr::possibly(
                                      ~ effectsize::eta_squared(aov(rate ~ intention : personal_force, data = .x))$Eta2,
                                      NA_real_)),
                            NA_real_)) %>%
-    rename(country = country3) %>%
-    select(-data) %>%
-    drop_na(Collectivism, cohend)
+    dplyr::rename(country = country3) %>%
+    dplyr::select(-data) %>%
+    tidyr::drop_na(Collectivism, cohend)
 }
