@@ -15,56 +15,56 @@ calculate_study2_stat <- function(data = NULL,
 
   data %>%
     as_tibble() %>%
-    select(Region, {{vars}}) %>%
-    group_by(Region) %>%
+    dplyr::select(Region, {{vars}}) %>%
+    dplyr::group_by(Region) %>%
     nest() %>%
-    arrange(Region) %>%
-    mutate(data_long = map(data,
+    dplyr::arrange(Region) %>%
+    dplyr::mutate(data_long = purrr::map(data,
                            ~pivot_longer(.x,
                                          cols = everything(),
                                          names_to = "condition",
                                          values_to = "rate",
                                          values_drop_na = TRUE) %>%
-                             mutate(personal_force = if_else(str_detect(condition, "3|5"), 1, 0),
+                             dplyr::mutate(personal_force = if_else(str_detect(condition, "3|5"), 1, 0),
                                     intention = if_else(str_detect(condition, "4|5"), 1, 0)) %>%
                              as.data.frame()),
-           bmod_1 = map(data_long,
-                        ~lmBF(rate ~ personal_force * intention,
+           bmod_1 = purrr::map(data_long,
+                        ~BayesFactor::lmBF(rate ~ personal_force * intention,
                               data = .x,
                               rscaleFixed = rscaleFixed)),
 
-           bmod_2 = map(data_long,
-                        ~lmBF(rate ~ personal_force + intention,
+           bmod_2 = purrr::map(data_long,
+                        ~BayesFactor::lmBF(rate ~ personal_force + intention,
                               data = .x,
                               rscaleFixed = rscaleFixed)),
-           bmod = map2(bmod_1, bmod_2,
-                       ~recompute(.x / .y, iterations = 50000) %>%
+           bmod = purrr::map2(bmod_1, bmod_2,
+                       ~BayesFactor::recompute(.x / .y, iterations = 50000) %>%
                          as_tibble()),
-           fmod = map(data_long,
+           fmod = purrr::map(data_long,
                       ~aov(rate ~ personal_force * intention, data=.x) %>%
                         broom::tidy())) %>%
-    ungroup() %>%
-    transmute(
+    dplyr::ungroup() %>%
+    dplyr::transmute(
       Exclusion = label,
       Cluster = Region,
-      BF = map_chr(bmod,
+      BF = purrr::map_chr(bmod,
                    ~slice(.x, 1) %>%
                      pull(bf) %>%
                      scales::scientific()),
       RR = NA_character_,
-      `F` = map_dbl(fmod,
+      `F` = purrr::map_dbl(fmod,
                     ~filter(.x, term == "personal_force:intention") %>%
                       pull(statistic) %>%
                       round(3)),
-      df = map_chr(fmod,
+      df = purrr::map_chr(fmod,
                    ~filter(.x, term == "Residuals") %>%
                      pull(df) %>%
                      paste0("1, ", .)),
-      p = map_chr(fmod,
+      p = purrr::map_chr(fmod,
                   ~filter(.x, term == "personal_force:intention") %>%
                     pull(p.value) %>%
                     scales::scientific()),
-      `Eta squared` = map_dbl(data_long,
+      `Eta squared` = purrr::map_dbl(data_long,
                               ~aov(rate ~ personal_force*intention,
                                    data=.x) %>%
                                 effectsize::eta_squared() %>%
@@ -72,7 +72,7 @@ calculate_study2_stat <- function(data = NULL,
                                 filter(Parameter == "personal_force:intention") %>%
                                 pull(Eta2_partial) %>%
                                 round(3)),
-      `Raw effect` = map_dbl(data_long,
+      `Raw effect` = purrr::map_dbl(data_long,
                              ~group_by(.x, personal_force, intention) %>%
                                summarise(avg_rate = mean(rate, na.rm = TRUE),
                                          .groups = "drop") %>%
