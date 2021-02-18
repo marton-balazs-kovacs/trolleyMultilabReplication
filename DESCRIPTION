@@ -39,7 +39,8 @@ Imports:
     tidyr,
     rlang,
     magrittr,
-    BayesFactor
+    BayesFactor,
+    broom
 Depends: 
     R (>= 2.10)
 Suggests: 

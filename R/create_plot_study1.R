@@ -5,11 +5,10 @@
 #' data.
 #'
 #' @param data the datatable to be plotted
-#' @param data_sum summarised plot data
 #'
 #' @return The function returns a ggplot2 list object.
 #' @export
-create_plot_study1 <- function(data, data_sum) {
+create_plot_study1 <- function(data) {
   data %>%
     ggplot() +
     aes(
