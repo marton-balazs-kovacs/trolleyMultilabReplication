@@ -33,7 +33,7 @@ get_ttestbf_inference <- function(df,
                                                              data = as.data.frame(.x)) %>%
                                          BayesFactor::extractBF(onlybf = TRUE)) %>%
                          # Get the second BF of the two
-                         map_dbl(2),
+                         purrr::map_dbl(2),
                        inference = dplyr::case_when(bf > bf_thresholds[1] ~ "replicated",
                                                     bf < bf_thresholds[2] ~ "not replicated",
                                                     TRUE ~ "inconclusive"))

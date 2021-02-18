@@ -15,14 +15,14 @@ prepare_plot_data_study1 <- function(data, study_type) {
            "speedboat" = c("speedboat_1_rate", "speedboat_2_rate"))
 
   data %>%
-    select(survey_name, response_cols) %>%
-    mutate(survey_name = factor(survey_name)) %>%
-    pivot_longer(
+    dplyr::select(survey_name, response_cols) %>%
+    dplyr::mutate(survey_name = factor(survey_name)) %>%
+    tidyr::pivot_longer(
       - survey_name,
       names_to = "condition",
       values_to = "rate") %>%
-    mutate(condition = if_else(str_detect(condition, "2"),"No personal force", "Personal Force" ),
+    dplyr::mutate(condition = dplyr::if_else(stringr::str_detect(condition, "2"),"No personal force", "Personal Force" ),
            condition = factor(condition, levels = c("No personal force","Personal Force")),
-           survey_name = str_remove(survey_name, "PSA006_")) %>%
-    drop_na(rate)
+           survey_name = stringr::str_remove(survey_name, "PSA006_")) %>%
+    tidyr::drop_na(rate)
 }

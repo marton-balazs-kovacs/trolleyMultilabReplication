@@ -8,8 +8,8 @@
 #' @export
 summarise_plot_data <- function(data) {
   data %>%
-    group_by(survey_name, condition) %>%
-    summarise(mean = mean(rate, na.rm = T),
+    dplyr::group_by(survey_name, condition) %>%
+    dplyr::summarise(mean = mean(rate, na.rm = T),
               median = median(rate, na.rm = T),
               sd = sd(rate, na.rm = T),
               lower = mean - sd,

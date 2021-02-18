@@ -16,44 +16,44 @@ calculate_study1_stat <- function(data = NULL,
                                   rscale){
 
   data %>%
-    as_tibble() %>%
-    select(Region, {{vars}}) %>%
-    group_by(Region) %>%
-    nest() %>%
-    arrange(Region) %>%
-    mutate(data_long = map(data,
-                           ~pivot_longer(.x,
+    tibble::as_tibble() %>%
+    dplyr::select(Region, {{vars}}) %>%
+    dplyr::group_by(Region) %>%
+    tidyr::nest() %>%
+    dplyr::arrange(Region) %>%
+    dplyr::mutate(data_long = purrr::map(data,
+                           ~tidyr::pivot_longer(.x,
                                          cols = everything(),
                                          names_to = "condition",
                                          values_to = "rate",
                                          values_drop_na = TRUE) %>%
                              as.data.frame()),
-           bttest = map(data_long,
+           bttest = purrr::map(data_long,
                         ~BayesFactor::ttestBF(formula = rate ~ condition, data = .x,
                                  rscale = rscale, nullInterval = c(0, Inf)) %>%
-                          as_tibble()),
-           fttest = map(data_long,
+                          tibble::as_tibble()),
+           fttest = purrr::map(data_long,
                         ~t.test(rate ~ condition, data = .x) %>%
                           broom::tidy())) %>%
-    ungroup() %>%
-    transmute(
+    dplyr::ungroup() %>%
+    dplyr::transmute(
       Exclusion = label,
       Cluster = Region,
-      BF = map_chr(bttest,
-                   ~slice(.x, 2) %>%
-                     pull(bf) %>%
+      BF = purrr::map_chr(bttest,
+                   ~dplyr::slice(.x, 2) %>%
+                     dplyr::pull(bf) %>%
                      scales::scientific()),
       RR = NA_character_,
-      t = map_dbl(fttest,
-                  ~pull(.x, statistic) %>%
+      t = purrr::map_dbl(fttest,
+                  ~dplyr::pull(.x, statistic) %>%
                     round(2)),
-      df = map_dbl(fttest,
-                   ~pull(.x, parameter) %>%
+      df = purrr::map_dbl(fttest,
+                   ~dplyr::pull(.x, parameter) %>%
                      round(2)),
-      p = map_chr(fttest,
-                  ~pull(.x, p.value) %>%
+      p = purrr::map_chr(fttest,
+                  ~dplyr::pull(.x, p.value) %>%
                     scales::scientific()),
-      `Cohen's d` = map_dbl(data_long,
+      `Cohen's d` = purrr::map_dbl(data_long,
                             ~effsize::cohen.d(rate ~ condition,
                                               data = .x)$estimate %>%
                               round(2)))

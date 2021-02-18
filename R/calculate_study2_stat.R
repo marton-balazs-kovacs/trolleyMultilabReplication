@@ -14,13 +14,13 @@ calculate_study2_stat <- function(data = NULL,
                                   label = NULL){
 
   data %>%
-    as_tibble() %>%
+    tibble::as_tibble() %>%
     dplyr::select(Region, {{vars}}) %>%
     dplyr::group_by(Region) %>%
-    nest() %>%
+    tidyr::nest() %>%
     dplyr::arrange(Region) %>%
     dplyr::mutate(data_long = purrr::map(data,
-                           ~pivot_longer(.x,
+                           ~tidyr::pivot_longer(.x,
                                          cols = everything(),
                                          names_to = "condition",
                                          values_to = "rate",
@@ -39,7 +39,7 @@ calculate_study2_stat <- function(data = NULL,
                               rscaleFixed = rscaleFixed)),
            bmod = purrr::map2(bmod_1, bmod_2,
                        ~BayesFactor::recompute(.x / .y, iterations = 50000) %>%
-                         as_tibble()),
+                         tibble::as_tibble()),
            fmod = purrr::map(data_long,
                       ~aov(rate ~ personal_force * intention, data=.x) %>%
                         broom::tidy())) %>%
@@ -48,38 +48,38 @@ calculate_study2_stat <- function(data = NULL,
       Exclusion = label,
       Cluster = Region,
       BF = purrr::map_chr(bmod,
-                   ~slice(.x, 1) %>%
-                     pull(bf) %>%
+                   ~dplyr::slice(.x, 1) %>%
+                     dplyr::pull(bf) %>%
                      scales::scientific()),
       RR = NA_character_,
       `F` = purrr::map_dbl(fmod,
-                    ~filter(.x, term == "personal_force:intention") %>%
-                      pull(statistic) %>%
+                    ~dplyr::filter(.x, term == "personal_force:intention") %>%
+                      dplyr::pull(statistic) %>%
                       round(3)),
       df = purrr::map_chr(fmod,
-                   ~filter(.x, term == "Residuals") %>%
-                     pull(df) %>%
+                   ~dplyr::filter(.x, term == "Residuals") %>%
+                     dplyr::pull(df) %>%
                      paste0("1, ", .)),
       p = purrr::map_chr(fmod,
-                  ~filter(.x, term == "personal_force:intention") %>%
-                    pull(p.value) %>%
+                  ~dplyr::filter(.x, term == "personal_force:intention") %>%
+                    dplyr::pull(p.value) %>%
                     scales::scientific()),
       `Eta squared` = purrr::map_dbl(data_long,
                               ~aov(rate ~ personal_force*intention,
                                    data=.x) %>%
                                 effectsize::eta_squared() %>%
-                                as_tibble() %>%
-                                filter(Parameter == "personal_force:intention") %>%
-                                pull(Eta2_partial) %>%
+                                tibble::as_tibble() %>%
+                                dplyr::filter(Parameter == "personal_force:intention") %>%
+                                dplyr::pull(Eta2_partial) %>%
                                 round(3)),
       `Raw effect` = purrr::map_dbl(data_long,
-                             ~group_by(.x, personal_force, intention) %>%
-                               summarise(avg_rate = mean(rate, na.rm = TRUE),
+                             ~dplyr::group_by(.x, personal_force, intention) %>%
+                               dplyr::summarise(avg_rate = mean(rate, na.rm = TRUE),
                                          .groups = "drop") %>%
-                               pivot_wider(names_from = c(personal_force, intention),
+                               tidyr::pivot_wider(names_from = c(personal_force, intention),
                                            values_from = avg_rate) %>%
-                               mutate(raw_diff = (`0_0`-`1_0`) - (`0_1` - `1_1`)) %>%
-                               pull(raw_diff) %>%
+                               dplyr::mutate(raw_diff = (`0_0`-`1_0`) - (`0_1` - `1_1`)) %>%
+                               dplyr::pull(raw_diff) %>%
                                round(2))
     )
 }

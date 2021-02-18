@@ -24,6 +24,7 @@ usethis::use_package("lme4")
 usethis::use_package("tidyr")
 usethis::use_package("broomExtra")
 usethis::use_package("lmerTest")
+usethis::use_package("stringr")
 
 # Add pipe
 usethis::use_pipe(export = TRUE)
