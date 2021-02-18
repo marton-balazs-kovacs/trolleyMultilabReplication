@@ -6,7 +6,7 @@ theme_trolley <- function() {
     plot.title = element_text(hjust = 0.5, vjust = 0.5, face = "bold", size = 17),
     axis.title.x = element_blank(),
     axis.title.y = element_text(face = "bold", size = 10),
-    axis.text.x = element_text(face = "bold", size = 7, colour = "Black"),
+    axis.text.x = element_text(face = "bold", size = 10, colour = "Black"),
     axis.text.y = element_text(face = "bold", size = 12, colour = "Black"),
     legend.title = element_blank(),
     legend.text = element_text(size = 9))

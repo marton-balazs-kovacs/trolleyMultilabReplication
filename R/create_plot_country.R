@@ -13,7 +13,8 @@ create_plot_country <- function(data) {
       x = cohend,
       y = Collectivism,
       label = country) +
-    geom_point(aes(size =N )) +
+    geom_point(aes(size =N,color=Region )) +
+    guides(size = FALSE)+
     geom_text(hjust = -0.2, size = 3) +
     geom_smooth(
       method = "lm",
@@ -22,5 +23,7 @@ create_plot_country <- function(data) {
       show.legend = FALSE,
       se = F) +
     xlab("Effect size") +
+    scale_y_continuous(breaks = c(0, 0.05, 0.1, 0.15), limits=c(0,0.15)) +
+    scale_x_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8))+
     theme_trolley()
 }
