@@ -16,7 +16,7 @@ prepare_plot_data_country <- function(data, study_name) {
            "study2b" = c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate"))
 
   data%>%
-    select(country3, response_cols) %>%
+    select(country3, Region, response_cols) %>%
     pivot_longer(matches("_rate"), names_to = "condition", names_pattern = "(.*)_rate", values_to = "rate", values_drop_na = TRUE) %>%
     mutate(personal_force = if_else(str_detect(condition, "4|6"), 1, 0),
            intention = if_else(str_detect(condition, "4|5"), 1, 0)) %>%
