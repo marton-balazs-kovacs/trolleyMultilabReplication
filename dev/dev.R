@@ -19,7 +19,11 @@ usethis::use_package("msm")
 usethis::use_package("rlang")
 usethis::use_package("BayesFactor")
 usethis::use_package("broom")
-usethis::use_package("")
+usethis::use_package("broom.mixed")
+usethis::use_package("lme4")
+usethis::use_package("tidyr")
+usethis::use_package("broomExtra")
+usethis::use_package("lmerTest")
 
 # Add pipe
 usethis::use_pipe(export = TRUE)
