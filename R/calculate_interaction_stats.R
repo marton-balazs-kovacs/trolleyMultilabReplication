@@ -33,19 +33,21 @@ calculate_interaction_stats <- function(df = NULL){
       intention = factor(intention),
       # What is this??? lmBF doesn't run without it?!?!?
       country0 = factor(paste0("0", country3))) %>%
-    tidyr::drop_na() %>%
+    # tidyr::drop_na() %>%
     # Create separate nested datasets to all cultural variables
     tidyr::pivot_longer(cols = cultural_vars$var, names_to = "var") %>%
     dplyr::group_by(var) %>%
     tidyr::nest() %>%
     dplyr::ungroup() %>%
     # Map through the datasets and create stat models using a specific cultural variable
-    dplyr::mutate(datt = purrr::map2(data, var,
+    dplyr::mutate(
+      data = dplyr::if_else(var == "Collectivism", purrr::map(data, drop_na), data),
+      datt = purrr::map2(data, var,
                        ~BayesFactor::lmBF(rate ~ personal_force*intention*value + country0,
                              whichRandom = "country0",
                              data = as.data.frame(.x),
                              # Set prior dynamically, based on the interaction with a specific variable
-                             rscaleCont = set_names(0.19, str_glue("personal_force:intention:{.y}")))),
+                             rscaleCont = purrr::set_names(0.19, stringr::str_glue("personal_force:intention:{.y}")))),
            datt2 = purrr::map(data,
                        ~BayesFactor::lmBF(rate ~ personal_force + intention + value +
                                personal_force:value +
@@ -58,29 +60,9 @@ calculate_interaction_stats <- function(df = NULL){
            frequentist = purrr::map(data,
                              ~lmerTest::lmer(rate ~ personal_force*intention*value + (1|country3),
                                    data = .x) %>%
-                               broom.mixed::tidy(conf.int = TRUE))) %>%
+                               broom.mixed::tidy(conf.int = TRUE)),
+      n = map_dbl(data, nrow)) %>%
     #
     dplyr::left_join(cultural_vars, by = "var")
-    # dplyr::transmute(variable,
-    #           BF = purrr::map_dbl(datt3, ~dplyr::slice(.x) %>%
-    #                                 dplyr::pull(bf) %>%
-    #                          round(4)),
-    #           b = purrr::map_dbl(frequentist,
-    #                       ~dplyr::filter(.x, term == "personal_force:intention:value") %>%
-    #                         dplyr::pull(estimate) %>%
-    #                         round(4)),
-    #           lower = purrr::map_dbl(frequentist,
-    #                           ~dplyr::filter(.x, term == "personal_force:intention:value") %>%
-    #                             dplyr::pull(conf.low) %>%
-    #                             round(4)),
-    #           higher = purrr::map_dbl(frequentist,
-    #                            ~dplyr::filter(.x, term == "personal_force:intention:value") %>%
-    #                              dplyr::pull(conf.high) %>%
-    #                              round(4)),
-    #           p = purrr::map_dbl(frequentist,
-    #                       ~dplyr::filter(.x, term == "personal_force:intention:value") %>%
-    #                         dplyr::pull(p.value) %>%
-    #                         round(4))
-    # )
 
 }
