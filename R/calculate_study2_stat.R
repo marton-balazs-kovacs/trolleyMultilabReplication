@@ -28,7 +28,7 @@ calculate_study2_stat <- function(data = NULL,
                                          values_to = "rate",
                                          values_drop_na = TRUE) %>%
                              dplyr::mutate(
-                               personal_force = dplyr::if_else(stringr::str_detect(condition, "3|5"), 1, 0),
+                               personal_force = dplyr::if_else(stringr::str_detect(condition, "3|5"), 0, 1),
                                intention = dplyr::if_else(stringr::str_detect(condition, "4|5"), 1, 0),
                                personal_force = factor(personal_force),
                                intention = factor(intention)) %>%
@@ -39,8 +39,7 @@ calculate_study2_stat <- function(data = NULL,
                               rscaleFixed = rscaleFixed)),
            bmod_2 = purrr::map(data_long,
                         ~BayesFactor::lmBF(rate ~ personal_force + intention,
-                              data = .x,
-                              rscaleFixed = rscaleFixed)),
+                              data = .x)),
            bmod = purrr::map2(bmod_1, bmod_2,
                        ~BayesFactor::recompute(.x / .y, iterations = 50000) %>%
                          tibble::as_tibble()),

@@ -68,6 +68,7 @@ usethis::use_r("calculate_study2_stat")
 usethis::use_r("create_plot_country")
 usethis::use_r("my_bf_extractor")
 usethis::use_r("calculate_interaction_stats")
+usethis::use_r("tidy_interaction_stats")
 usethis::use_r("calculate_additional_table")
 
 # Add vignettes

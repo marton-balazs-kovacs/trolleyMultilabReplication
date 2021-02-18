@@ -405,8 +405,10 @@ tabledata_s2a_ind <-
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_interaction_stats(.)
 
+tabledata_s2a_ind_tidy <- tidy_interaction_stats(tabledata_s2a_ind)
+
 kbl(
-  tabledata_s2a_ind,
+  tabledata_s2a_ind_tidy,
   format = "latex",
   booktabs = TRUE,
   escape = TRUE,
@@ -427,7 +429,7 @@ create_plot_country(plot_data_country)
 
 ```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
-  tabledata_s2a_ind %>% 
+  tabledata_s2a_ind_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
   select(variable, b, lower, higher)
 
@@ -440,8 +442,10 @@ tabledata_s2b_ind <-
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_interaction_stats(.)
 
+tabledata_s2b_ind_tidy <- tidy_interaction_stats(tabledata_s2b_ind)
+
 kbl(
-  tabledata_s2b_ind,
+  tabledata_s2b_ind_tidy,
   format = "latex",
   booktabs = TRUE,
   escape = TRUE,
@@ -462,7 +466,7 @@ create_plot_country(plot_data_country)
 
 ```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
-  tabledata_s2b_ind %>% 
+  tabledata_s2b_ind_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
   select(variable, b, lower, higher)
 
