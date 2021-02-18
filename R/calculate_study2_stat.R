@@ -25,8 +25,8 @@ calculate_study2_stat <- function(data = NULL,
                                          names_to = "condition",
                                          values_to = "rate",
                                          values_drop_na = TRUE) %>%
-                             dplyr::mutate(personal_force = if_else(str_detect(condition, "3|5"), 1, 0),
-                                    intention = if_else(str_detect(condition, "4|5"), 1, 0)) %>%
+                             dplyr::mutate(personal_force = factor(if_else(str_detect(condition, "3|5")), 1, 0),
+                                    intention = factor(if_else(str_detect(condition, "4|5"), 1, 0))) %>%
                              as.data.frame()),
            bmod_1 = purrr::map(data_long,
                         ~BayesFactor::lmBF(rate ~ personal_force * intention,

@@ -12,7 +12,7 @@ calculate_interaction_stats <- function(df = NULL){
   # Create a tibble that contains the labels for the cultural variables
   cultural_vars <-
     tibble::tibble(var = c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col"),
-           variable = c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"))
+           variable = c("Country-level collectivism", "V. Individualism", "H. Individualism", "V. Collectivism", "H. Collectivism"))
 
   # Create a nested tibble that can be mapped through
   df %>%
