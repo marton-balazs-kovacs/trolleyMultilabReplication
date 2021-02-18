@@ -32,7 +32,7 @@ calculate_interaction_stats <- function(df = NULL){
       personal_force = factor(personal_force),
       intention = factor(intention),
       # What is this??? lmBF doesn't run without it?!?!?
-      country0 = paste0("0", country3)) %>%
+      country0 = factor(paste0("0", country3))) %>%
     tidyr::drop_na() %>%
     # Create separate nested datasets to all cultural variables
     tidyr::pivot_longer(cols = cultural_vars$var, names_to = "var") %>%

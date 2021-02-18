@@ -40,8 +40,8 @@ study2b_f <- dplyr::filter(trolley, include_study2b_familiar)
 # Add individualism and collectivism scales
 study2a <- add_ind_col_scale(study2a)
 study2b <- add_ind_col_scale(study2b)
-study2a_f <- add_ind_col_scale(study2a_f)
-study2b_f <- add_ind_col_scale(study2b_f)
+study2a_nf <- add_ind_col_scale(study2a_nf)
+study2b_nf <- add_ind_col_scale(study2b_nf)
 ```
 
 ## 1. Exclusion
@@ -476,13 +476,15 @@ create_plot_ind_col(graphdata)
 ## Including familiar participants
 
 ```{r analysis individual + country level study 2a w familiar, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-tabledata_s2a_f_ind <-  
-  study2a_f %>% 
+tabledata_s2a_ind_f <-  
+  study2a_nf %>% 
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_interaction_stats(.)
 
+tabledata_s2a_ind_f_tidy <- tidy_interaction_stats(tabledata_s2a_ind_f)
+
 kbl(
-  tabledata_s2a_f_ind,
+  tabledata_s2a__ind_f_tidy,
   format = "latex",
   booktabs = TRUE,
   escape = TRUE,
@@ -512,7 +514,7 @@ create_plot_ind_col(graphdata)
 
 ```{r analysis individual + country level study 2b w familiar, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 tabledata_s2b_f_ind <-  
-  study2a_f %>% 
+  study2b_nf %>% 
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_interaction_stats(.)
 
