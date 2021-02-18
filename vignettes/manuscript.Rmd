@@ -310,14 +310,14 @@ create_plot_study1(plot_data, plot_data_summarised)
 ## Study 2a and 2b
 
 ```{r Study2a Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-rscaleFixed <- c("personal_force:intention"=0.19)
+rscaleFixed <- c("personal_force:intention" = 0.19)
 vars2a <- c("trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate")
 
 studys2a_results <- 
   bind_rows(calculate_study2_stat(study2a, vars = vars2a, 
-                                  label = "Exlusion"), 
+                                  label = "Exlusion", rscaleFixed = rscaleFixed), 
             calculate_study2_stat(study2a_nf, vars = vars2a, 
-                                  label = "Include familiar")) %>% 
+                                  label = "Include familiar", rscaleFixed = rscaleFixed)) %>% 
   # RR was calculated by manual iteration
   mutate( RR = c(c("0.03, 0.64", "0.03, 0.2", "6.00e-05, 1.80e+03", "2.50e-02, 0.91", "8.00e-05, 1.70e+03", "<1.00e-05, 2.30e+14")),
           p = if_else(as.numeric(p) < .001, "<.001", p))

@@ -2,16 +2,18 @@
 #'
 #' description...
 #'
-#' @param data: data frame or tibble that contains Region and specified variables
-#' @param vars: the variables to be collapsed
-#' @param label: what data label should be attached to the output
+#' @param data data frame or tibble that contains Region and specified variables
+#' @param vars the variables to be collapsed
+#' @param label what data label should be attached to the output
+#' @param rscaleFixed prior
 #'
 #' @return a tibble that contains the selected statistics
 #'   in a format that can be printed
 #' @export
 calculate_study2_stat <- function(data = NULL,
                                   vars = NULL,
-                                  label = NULL){
+                                  label = NULL,
+                                  rscaleFixed){
 
   data %>%
     tibble::as_tibble() %>%
@@ -35,7 +37,6 @@ calculate_study2_stat <- function(data = NULL,
                         ~BayesFactor::lmBF(rate ~ personal_force * intention,
                               data = .x,
                               rscaleFixed = rscaleFixed)),
-
            bmod_2 = purrr::map(data_long,
                         ~BayesFactor::lmBF(rate ~ personal_force + intention,
                               data = .x,
