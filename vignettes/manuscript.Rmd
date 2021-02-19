@@ -11,11 +11,12 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
-)
+) 
 ```
 
-```{r setup}
+```{r setup, ,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 #library(trolleyMultilabReplication)
+devtools::load_all()
 library(tidyverse)
 library(countrycode)
 
