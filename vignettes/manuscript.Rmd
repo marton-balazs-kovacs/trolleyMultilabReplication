@@ -429,7 +429,7 @@ kbl(
   position = "H") %>%
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE)%>%
-  add_header_above(c(" "=1, "With familiarity exclusion"=2, "No familiarity exclusion"=2))
+  add_header_above(c(" "=1, "With familiarity exclusion"=3, "No familiarity exclusion"=3))
 ```
 
 ```{r study2a overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
@@ -479,7 +479,7 @@ kbl(
   position = "H") %>%
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
-  add_header_above(c(" "=1, "With familiarity exclusion"=2, "No familiarity exclusion"=2))
+  add_header_above(c(" "=1, "With familiarity exclusion"=3, "No familiarity exclusion"=3))
 ```
 
 ```{r study2b overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -668,7 +668,7 @@ kbl(
   position = "H") %>%
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
-  add_header_above(c(" "=1, "Trolley"=2, "Speedboat"=2))
+  add_header_above(c(" "=1, "Trolley"=3, "Speedboat"=3))
 ```
 
 ```{r study2a overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
