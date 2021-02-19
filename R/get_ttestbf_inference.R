@@ -11,7 +11,7 @@
 #' @return A tibble with the grouping variables, a calculated BF,
 #' and the inference.
 #' @export
-#' @example
+#' @examples
 #' \dontrun{
 #' get_ttestbf_inference(full_data2, groups = c("study", "class"), formula = choice ~ condition, prior = "medium")
 #' }

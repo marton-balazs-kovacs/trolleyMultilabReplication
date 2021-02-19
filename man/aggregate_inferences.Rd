@@ -18,3 +18,8 @@ and incorrect inference rates for different scenarios
 \description{
 Summarize the result of several simulations.
 }
+\examples{
+\dontrun{
+aggregate_inferences(out)
+}
+}

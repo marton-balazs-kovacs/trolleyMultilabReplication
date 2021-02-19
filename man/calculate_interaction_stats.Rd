@@ -4,10 +4,12 @@
 \alias{calculate_interaction_stats}
 \title{Calculate interaction stats for study2 interaction terms}
 \usage{
-calculate_interaction_stats(df = NULL)
+calculate_interaction_stats(df = NULL, study_type)
 }
 \arguments{
 \item{df}{a dataframe, either "study2a" or "study2b"}
+
+\item{study_type}{the type of the study either "trolley" or "speedboat"}
 }
 \value{
 The function returns the Bayesian and frequentist

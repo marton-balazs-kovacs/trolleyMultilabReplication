@@ -8,7 +8,7 @@
 #' @return The function returns a tibble that shows correct
 #' and incorrect inference rates for different scenarios
 #' @export
-#' @example
+#' @examples
 #' \dontrun{
 #' aggregate_inferences(out)
 #' }

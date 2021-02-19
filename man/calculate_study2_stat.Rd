@@ -4,14 +4,16 @@
 \alias{calculate_study2_stat}
 \title{Calculates the statistics for study 2}
 \usage{
-calculate_study2_stat(data = NULL, vars = NULL, label = NULL)
+calculate_study2_stat(data = NULL, vars = NULL, label = NULL, rscaleFixed)
 }
 \arguments{
-\item{data:}{data frame or tibble that contains Region and specified variables}
+\item{data}{data frame or tibble that contains Region and specified variables}
 
-\item{vars:}{the variables to be collapsed}
+\item{vars}{the variables to be collapsed}
 
-\item{label:}{what data label should be attached to the output}
+\item{label}{what data label should be attached to the output}
+
+\item{rscaleFixed}{prior}
 }
 \value{
 a tibble that contains the selected statistics

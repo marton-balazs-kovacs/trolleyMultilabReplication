@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 # Load packages
 library(trolleyMultilabReplication)
 library(tidyverse)
+library(kableExtra)
+library(gt)
 library(countrycode)
 
 # Prepare datafiles for the analysis
@@ -32,6 +34,9 @@ study1a_nf <- filter(trolley, include_study1a_withoutfamiliarity)
 study1b_nf <- filter(trolley, include_study1b_withoutfamiliarity)
 study2a_nf <- filter(trolley, include_study2a_withoutfamiliarity)
 study2b_nf <- filter(trolley, include_study2b_withoutfamiliarity)
+
+# Read raw data
+trolley_raw <- read_csv(system.file("extdata/trolley_raw.csv", package = "trolleyMultilabReplication"))
 ```
 
 ```{r background information, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -45,7 +50,7 @@ trolley %>%
 missing_labs <-
  trolley_raw %>%
  distinct(lab) %>%
- anti_join(., distinct(trolley_proc, lab), by = "lab")
+ anti_join(., distinct(trolley_preprocessed, lab), by = "lab")
 
 # Show the number of participants missing in each lab
 trolley_raw %>%
@@ -56,11 +61,11 @@ trolley_raw %>%
 
 # Show the number of participants excluded because of not finished responses
 trolley_raw %>%
- filter(str_detect(str_to_lower(practice), "false")) %>%
- filter(!(lab == "TUR_021" & StartDate < date("2020-04-22")),
-        !(lab == "AUT_003" & StartDate < date("2020-06-18")),
+ dplyr::filter(str_detect(str_to_lower(practice), "false")) %>%
+ dplyr::filter(!(lab == "TUR_021" & StartDate < lubridate::date("2020-04-22")),
+        !(lab == "AUT_003" & StartDate < lubridate::date("2020-06-18")),
         !(lab == "USA_095")) %>%
- filter(Progress < 98) %>%
+ dplyr::filter(Progress < 98) %>%
  count()
 
 # Show the number of labs
