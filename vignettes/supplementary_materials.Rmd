@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup,  echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Load packages
 library(trolleyMultilabReplication)
 library(tidyverse)
@@ -32,6 +32,22 @@ study1a_nf <- filter(trolley, include_study1a_withoutfamiliarity)
 study1b_nf <- filter(trolley, include_study1b_withoutfamiliarity)
 study2a_nf <- filter(trolley, include_study2a_withoutfamiliarity)
 study2b_nf <- filter(trolley, include_study2b_withoutfamiliarity)
+
+# Save data but with only those who failed the familiar exclusion criteria
+study1a_f <- dplyr::filter(trolley, include_study1a_familiar)
+study1b_f <- dplyr::filter(trolley, include_study1b_familiar)
+study2a_f <- dplyr::filter(trolley, include_study2a_familiar)
+study2b_f <- dplyr::filter(trolley, include_study2b_familiar)
+
+# Add individualism and collectivism scales
+study2a <- add_ind_col_scale(study2a)
+study2b <- add_ind_col_scale(study2b)
+study2a_nf <- add_ind_col_scale(study2a_nf)
+study2b_nf <- add_ind_col_scale(study2b_nf)
+
+# Add individualism and collectivism scales
+trolley <- add_ind_col_scale(trolley)
+
 ```
 
 ```{r background information, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -296,6 +312,39 @@ bind_rows(additional_trolley, additional_speedboat) %>%
     escape = TRUE)
 ```
 
+##Analysing familiar participants
+As we registered, we conducted the analysis on familiar participants, the results can be found below.
+```{r Study1ab Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+rscale <- .26
+vars1a <- c("trolley_1_rate", "trolley_2_rate")
+vars1b <- c("speedboat_1_rate", "speedboat_2_rate")
+
+studys1a_results <- 
+  bind_rows(calculate_study1_stat(study1a_f, vars = vars1a, 
+                                  label = "Trolley", rscale = rscale),
+            calculate_study1_stat(study1b_f, vars = vars1b, 
+                                  label = "Speedboat", rscale = rscale)) %>% 
+  # RR was calculated by manual iteration
+  mutate(p = if_else(as.numeric(p) < .001, "<.001", p))
+
+studys1a_results<-studys1a_results[, -4]
+
+kbl(
+  studys1a_results,
+  col.names=c("Dilemma", "Cluster", "BF", "t", "df", "p", "Cohen's d"),
+  format = "latex",
+  booktabs = T,
+  escape=T,
+  caption = "The effect of personal force on moral dilemma judgements (familiar particiapnts)",
+  centering=T,
+  position="H"
+  )%>%
+  kable_styling( full_width = F,  position="left")%>%
+  row_spec(row=0, bold=TRUE)%>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
+```
+
+
 ## Oxford utilitarianism Scale
 
 As we registered, we simply publish descriptive statistics of the Oxford Utilitarianism Scale in each cultural clusters.
@@ -352,3 +401,12 @@ plot_data %>%
     legend.title = element_blank(),
     legend.text = element_text(size = 9))
 ```
+
+
+#Exploratory analysis on overall utilitarianism and collectivism
+
+ALthough not part of the planned analysis, we hypothesized that country-level collectivism would be associated with utilitarian responding (i.e., higher morall acceptibility ratings). We found no evidence for this hypothesis, regardless of familiarity exclusion or dilemma context. Interestingly, however, we found strong evidence for the association between vertical individualism and average moral acceptibility ratings on moral dilemmas, regardless of dilemma context or exclusion criteria. The positive association means that higher levels of vertical individualism is associated with higher acceptance of the utilitarian response option. 
+
+In all of the regression models below, we added the random intercept of countries.
+
+##With all exclusions
