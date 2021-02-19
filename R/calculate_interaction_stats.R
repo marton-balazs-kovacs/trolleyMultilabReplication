@@ -3,11 +3,17 @@
 #' This is the description.
 #'
 #' @param df a dataframe, either "study2a" or "study2b"
+#' @param study_type the type of the study either "trolley" or "speedboat"
 #'
 #' @return The function returns the Bayesian and frequentist
 #'   stats for study2 3rd order interactions.
 #' @export
-calculate_interaction_stats <- function(df = NULL){
+calculate_interaction_stats <- function(df = NULL, study_type) {
+  # Get response columns
+  response_cols <-
+    switch(study_type,
+           "trolley" = c("trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate"),
+           "speedboat" = c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate"))
 
   # Create a tibble that contains the labels for the cultural variables
   cultural_vars <-
@@ -16,15 +22,16 @@ calculate_interaction_stats <- function(df = NULL){
 
   # Create a nested tibble that can be mapped through
   df %>%
-    dplyr::select(country3, trolley_3_rate, trolley_4_rate,
-           trolley_5_rate, trolley_6_rate,
-           all_of(cultural_vars$var)) %>%
+    dplyr::select(
+      country3,
+      all_of(response_cols),
+      all_of(cultural_vars$var)) %>%
     # Collapse conditions
-    tidyr::pivot_longer(cols = c(trolley_3_rate, trolley_4_rate,
-                          trolley_5_rate, trolley_6_rate),
-                 names_to = "condition",
-                 values_to = "rate",
-                 values_drop_na = TRUE) %>%
+    tidyr::pivot_longer(
+      cols = response_cols,
+      names_to = "condition",
+      values_to = "rate",
+      values_drop_na = TRUE) %>%
     # Creating predictors based on the condition
     dplyr::mutate(
       personal_force = dplyr::if_else(str_detect(condition, "3|5"), 0, 1),
