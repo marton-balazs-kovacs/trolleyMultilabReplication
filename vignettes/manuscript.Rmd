@@ -547,6 +547,196 @@ graphdata <-
 create_plot_ind_col(graphdata)
 ```
 
+# 3. No exclusion analysis
+## Study 1a and 1b
+
+```{r Study1ab Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+rscale <- .26
+vars1a <- c("trolley_1_rate", "trolley_2_rate")
+vars1b <- c("speedboat_1_rate", "speedboat_2_rate")
+
+studys1a_results <- 
+  bind_rows(calculate_study1_stat(trolley, vars = vars1a, 
+                                  label = "Trolley", rscale = rscale),
+            calculate_study1_stat(trolley, vars = vars1b, 
+                                  label = "Speedboat", rscale = rscale)) %>% 
+  # RR was calculated by manual iteration
+  mutate(p = if_else(as.numeric(p) < .001, "<.001", p))
+
+studys1a_results<-studys1a_results[, -4]
+
+kbl(
+  studys1a_results,
+  col.names=c("Dilemma", "Cluster", "BF", "t", "df", "p", "Cohen's d"),
+  format = "latex",
+  booktabs = T,
+  escape=T,
+  caption = "The effect of personal force on moral dilemma judgements (no exclusion)",
+  centering=T,
+  position="H"
+  )%>%
+  kable_styling( full_width = F,  position="left")%>%
+  row_spec(row=0, bold=TRUE)%>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
+```
+
+```{r Study1a excl graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. Black full circles indicate group level means.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study1(trolley, "trolley")
+
+plot_data_summarised <- summarise_plot_data(plot_data)
+
+# Create plot
+create_plot_study1(plot_data, plot_data_summarised)
+```
+
+```{r Study1b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. Black full circles indicate group level means.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study1(trolley, "speedboat")
+
+plot_data_summarised <- summarise_plot_data(plot_data)
+
+# Create plot
+create_plot_study1(plot_data, plot_data_summarised)
+```
+
+
+## Study 2a and 2b
+
+```{r Study2a Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+rscaleFixed <- c("personal_force:intention" = 0.19)
+vars2a <- c("trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate")
+vars2b <- c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate")
+
+studys2a_results <- 
+  bind_rows(calculate_study2_stat(trolley, vars = vars2a, 
+                                  label = "Trolley", rscaleFixed = rscaleFixed), 
+            calculate_study2_stat(trolley, vars = vars2b, 
+                                  label = "Speedboat", rscaleFixed = rscaleFixed)) %>% 
+  # RR was calculated by manual iteration
+  mutate( p = if_else(as.numeric(p) < .001, "<.001", p))
+
+studys2a_results<-studys1a_results[, -4]
+
+kbl(
+  studys2a_results,
+    col.names=c("Dilemma", "Cluster", "BF", "t", "df", "p", "Partial $\eta^2$"),
+  format = "latex",
+  booktabs = T,
+  escape=T,
+  caption = "The interaction of personal force and intention on moral dilemma judgemnts (no exclusions)",
+  centering=T,
+  position="H"
+  )%>%
+  kable_styling( full_width = F,  position="left", latex_options = "scale_down")%>%
+  row_spec(row=0, bold=TRUE)%>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
+```
+
+```{r Study2a excl graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study2(study2a, "trolley")
+
+# Create plot
+create_plot_study2(plot_data)
+```
+
+
+```{r study2b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+# Prepare data for plotting
+plot_data <- prepare_plot_data_study2(trolley, "speedboat")
+
+# Create plot
+create_plot_study2(plot_data)
+```
+
+
+# 3. Individualism-collectivism analysis
+
+```{r analysis individual + country level study 2a, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+tabledata_s2a_ind <-  
+  trolley %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_interaction_stats(.)
+
+tabledata_s2a_ind_tidy <- tidy_interaction_stats(tabledata_s2a_ind)
+
+tabledata_s2b_ind <-  
+  trolley %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_interaction_stats(.)
+
+tabledata_s2b_ind_tidy <- tidy_interaction_stats(tabledata_s2b_ind)
+
+
+kbl(
+  tabledata_s2a_ind_tidy,
+  format = "latex",
+  booktabs = TRUE,
+  escape = TRUE,
+  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
+  centering = TRUE,
+  position = "H") %>%
+  kable_styling(full_width = FALSE,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE)
+```
+
+```{r study2a overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data_country <- prepare_plot_data_country(study2a, "study2a")
+
+# Create plot
+create_plot_country(plot_data_country)
+```
+
+```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+graphdata <- 
+  tabledata_s2a_ind_tidy %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
+
+create_plot_ind_col(graphdata)
+```
+
+```{r analysis individual + country level study 2b, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+tabledata_s2b_ind <-  
+  study2b %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_interaction_stats(.)
+
+tabledata_s2b_ind_tidy <- tidy_interaction_stats(tabledata_s2b_ind)
+
+kbl(
+  tabledata_s2b_ind_tidy,
+  format = "latex",
+  booktabs = TRUE,
+  escape = TRUE,
+  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
+  centering = TRUE,
+  position = "H") %>%
+  kable_styling(full_width = FALSE,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE)
+```
+
+```{r study2b overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Prepare data for plotting
+plot_data_country <- prepare_plot_data_country(study2b, "study2b")
+
+# Create plot
+create_plot_country(plot_data_country)
+```
+
+```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+graphdata <- 
+  tabledata_s2b_ind_tidy %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
+
+create_plot_ind_col(graphdata)
+```
+
+
+
 # Table 1
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
