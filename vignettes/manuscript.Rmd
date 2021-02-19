@@ -323,9 +323,9 @@ studys2a_results <-
 kbl(
   studys2a_results,
   format = "latex",
-  col.names=c("Exclusion", "Cluster", "BF", "RR", "t", "df", "p", "Partial $\eta^2$", "Raw effect"),
+  col.names=c("Exclusion", "Cluster", "BF", "RR", "F", "df", "p", 'Partial $\\eta^2$', "Raw effect"),
   booktabs = T,
-  escape=T,
+  escape=F,
   caption = "Do personal force interact with intention on Trolley dilemmas?",
   centering=T,
   position="H"
@@ -357,9 +357,9 @@ vars2b <- c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedbo
 
 studys2b_results <- 
   bind_rows(calculate_study2_stat(study2b, vars = vars2b, 
-                                  label = "Exlusion"), 
+                                  label = "Exlusion", rscaleFixed=rscaleFixed), 
             calculate_study2_stat(study2b_nf, vars = vars2b, 
-                                  label = "Include familiar")) %>% 
+                                  label = "Include familiar", rscaleFixed=rscaleFixed)) %>% 
   # RR was calculated by manual iteration
   mutate( RR = c("4.90e-02, 0.69", "5.10e-02, 0.63", "3.60e-02, 1.10", "2.60e-02, 0.72", "2.50e-02, 0.95", "1.40e-02, 1.30"),
           p = if_else(as.numeric(p) < .001, "<.001", p),
@@ -368,9 +368,9 @@ studys2b_results <-
 kbl(
   studys2b_results,
   format = "latex",
-  col.names=c("Exclusion", "Cluster", "BF", "RR", "t", "df", "p", "Partial $\eta^2$", "Raw effect"),
+  col.names=c("Exclusion", "Cluster", "BF", "RR", "F", "df", "p", 'Partial $\\eta^2$', "Raw effect"),
   booktabs = T,
-  escape=T,
+  escape=F,
   caption = "Do personal force interact with intention on Speedboat dilemmas?",
   centering=T,
   position="H"
@@ -418,9 +418,9 @@ full_table_trolley=merge(tabledata_s2a_ind_tidy, tabledata_s2a_ind_f_tidy, by="v
 full_table_trolley=full_table_trolley[, -c(4,5,9,10)]
 
 kbl(
-  full_table_ne,
+  full_table_trolley,
   format = "latex",
-  colnames=c("Variable", "BF", "b", "p", "BF", "b", "p"),
+  col.names=c("Variable", "BF", "b", "p", "BF", "b", "p"),
   booktabs = TRUE,
   escape = TRUE,
   caption = "Is the interaction of personal force and intention affected by individualism/collectivism (Trolley)?",
@@ -470,7 +470,7 @@ full_table_speedboat=full_table_speedboat[, -c(4,5,9,10)]
 kbl(
   full_table_speedboat,
   format = "latex",
-  colnames=c("Variable", "BF", "b", "p", "BF", "b", "p"),
+  col.names=c("Variable", "BF", "b", "p", "BF", "b", "p"),
   booktabs = TRUE,
   escape = TRUE,
   caption = "Is the interaction of personal force and intention affected by individualism/collectivism (Speedboat)?",
@@ -511,7 +511,7 @@ create_plot_country(plot_data_country)
 
 ```{r study2a vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
-  tabledata_s2a_f_ind %>% 
+  tabledata_s2a_ind_f_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
   select(variable, b, lower, higher)
 
@@ -529,7 +529,7 @@ create_plot_country(plot_data_country)
 
 ```{r study2b vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
-  tabledata_s2b_f_ind %>% 
+  tabledata_s2b_ind_nf_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
   select(variable, b, lower, higher)
 
@@ -601,14 +601,14 @@ studys2a_results <-
   # RR was calculated by manual iteration
   mutate( p = if_else(as.numeric(p) < .001, "<.001", p))
 
-studys2a_results<-studys1a_results[, -4]
+studys2a_results<-studys2a_results[, -(4)]
 
 kbl(
   studys2a_results,
-    col.names=c("Dilemma", "Cluster", "BF", "t", "df", "p", "Partial $\eta^2$"),
+  col.names=c("Dilemma", "Cluster", "BF", "F", "df", "p", 'Partial $\\eta^2$', "Raw effect"),
   format = "latex",
   booktabs = T,
-  escape=T,
+  escape=F,
   caption = "The interaction of personal force and intention on moral dilemma judgemnts (no exclusions)",
   centering=T,
   position="H"
@@ -620,7 +620,7 @@ kbl(
 
 ```{r Study2a ne graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study2(study2a, "trolley")
+plot_data <- prepare_plot_data_study2(trolley, "trolley")
 
 # Create plot
 create_plot_study2(plot_data)
@@ -659,7 +659,7 @@ full_table_ne=full_table_ne[, -c(4,5,9,10)]
 kbl(
   full_table_ne,
   format = "latex",
-  colnames=c("Variable", "BF", "b", "p", "BF", "b", "p"),
+  col.names=c("Variable", "BF", "b", "p", "BF", "b", "p"),
   booktabs = TRUE,
   escape = TRUE,
   caption = "Is the interaction of personal force and intention affected by individualism/collectivism?",

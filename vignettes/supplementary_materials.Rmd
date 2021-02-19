@@ -410,7 +410,7 @@ plot_data %>%
 
 #Exploratory analysis on overall utilitarianism and collectivism
 
-ALthough not part of the planned analysis, we hypothesized that country-level collectivism would be associated with utilitarian responding (i.e., higher morall acceptibility ratings). We found no evidence for this hypothesis, regardless of familiarity exclusion or dilemma context. Interestingly, however, we found strong evidence for the association between vertical individualism and average moral acceptibility ratings on moral dilemmas, regardless of dilemma context or exclusion criteria. The positive association means that higher levels of vertical individualism is associated with higher acceptance of the utilitarian response option. 
+ALthough not part of the planned analysis, we hypothesized that country-level collectivism would be negatively associated with utilitarian responding (i.e., higher morall acceptibility ratings). We found no evidence for this hypothesis, regardless of familiarity exclusion or dilemma context. Interestingly, however, we found strong evidence for the association between vertical individualism and average moral acceptibility ratings on moral dilemmas, regardless of dilemma context or exclusion criteria. The positive association means that higher levels of vertical individualism is associated with higher acceptance of the utilitarian response option. 
 
 In all of the regression models below, we added the random intercept of countries.
 
