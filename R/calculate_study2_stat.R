@@ -65,8 +65,7 @@ calculate_study2_stat <- function(data = NULL,
                      paste0("1, ", .)),
       p = purrr::map_chr(fmod,
                   ~dplyr::filter(.x, term == "personal_force:intention") %>%
-                    dplyr::pull(p.value) %>%
-                    scales::scientific()),
+                    dplyr::pull(p.value)),
       `Eta squared` = purrr::map_dbl(data_long,
                               ~aov(rate ~ personal_force*intention,
                                    data=.x) %>%

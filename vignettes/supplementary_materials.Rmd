@@ -336,16 +336,15 @@ studys1a_results<-studys1a_results[, -4]
 
 kbl(
   studys1a_results,
-  col.names=c("Dilemma", "Cluster", "BF", "t", "df", "p", "Cohen's d"),
+  col.names = c("Dilemma", "Cluster", "BF", "t", "df", "p", "Cohen's d"),
   format = "latex",
   booktabs = T,
-  escape=T,
+  escape = T,
   caption = "The effect of personal force on moral dilemma judgements (familiar particiapnts)",
-  centering=T,
-  position="H"
-  )%>%
-  kable_styling( full_width = F,  position="left")%>%
-  row_spec(row=0, bold=TRUE)%>%
+  centering = T,
+  position = "H") %>%
+  kable_styling(full_width = F,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE) %>%
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
@@ -366,16 +365,15 @@ studys2a_results<-studys2a_results[, -(4)]
 
 kbl(
   studys2a_results,
-  col.names=c("Dilemma", "Cluster", "BF", "F", "df", "p", 'Partial $\\eta^2$', "Raw effect"),
+  col.names = c("Dilemma", "Cluster", "BF", "F", "df", "p", 'Partial $\\eta^2$', "Raw effect"),
   format = "latex",
   booktabs = T,
-  escape=F,
+  escape = F,
   caption = "The interaction of personal force and intention on moral dilemma judgemnts (familiar participants)",
-  centering=T,
-  position="H"
-  )%>%
-  kable_styling( full_width = F,  position="left", latex_options = "scale_down")%>%
-  row_spec(row=0, bold=TRUE) %>%
+  centering = T,
+  position = "H") %>%
+  kable_styling(full_width = F,  position = "left", latex_options = "scale_down") %>%
+  row_spec(row = 0, bold = TRUE) %>%
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
