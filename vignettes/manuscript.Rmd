@@ -1,6 +1,7 @@
 ---
 title: "manuscript"
-output: rmarkdown::html_vignette
+output:
+  pdf_document: default
 vignette: >
   %\VignetteIndexEntry{manuscript}
   %\VignetteEngine{knitr::rmarkdown}
