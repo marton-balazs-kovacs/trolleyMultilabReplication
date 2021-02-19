@@ -25,3 +25,8 @@ This function samples n integer values between a floor and a ceiling.
 The probability of the values are calculated based on a
 truncated normal distribution of a known mean and standard deviation.
 }
+\examples{
+\dontrun{
+draw_values(n = 10000, mean = 5, sd = 2, floor = 1, ceiling = 9)
+}
+}

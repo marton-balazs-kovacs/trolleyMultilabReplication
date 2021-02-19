@@ -12,7 +12,7 @@
 #'
 #' @return A tibble in long format.
 #' @export
-#' @example
+#' @examples
 #' \dontrun{
 #' generate_dataset(n = 1000, mean = 5, sd = 2, tasks = 4, groups = c("a", "b"))
 #' }

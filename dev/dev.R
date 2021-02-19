@@ -74,3 +74,7 @@ usethis::use_r("calculate_additional_table")
 # Add vignettes
 usethis::use_vignette("supplementary_materials")
 usethis::use_vignette("manuscript")
+devtools::build_vignettes()
+
+# Check the package
+devtools::check()

@@ -30,3 +30,8 @@ and the inference.
 \description{
 Run a Bayesian t-test.
 }
+\examples{
+\dontrun{
+get_ttestbf_inference(full_data2, groups = c("study", "class"), formula = choice ~ condition, prior = "medium")
+}
+}

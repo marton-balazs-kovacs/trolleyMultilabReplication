@@ -12,7 +12,7 @@
 #'
 #' @return A vector of n random values.
 #' @export
-#' @example
+#' @examples
 #' \dontrun{
 #' draw_values(n = 10000, mean = 5, sd = 2, floor = 1, ceiling = 9)
 #' }

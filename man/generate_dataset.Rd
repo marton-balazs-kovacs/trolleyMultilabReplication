@@ -35,3 +35,8 @@ A tibble in long format.
 \description{
 Please add a description Tamas.
 }
+\examples{
+\dontrun{
+generate_dataset(n = 1000, mean = 5, sd = 2, tasks = 4, groups = c("a", "b"))
+}
+}
