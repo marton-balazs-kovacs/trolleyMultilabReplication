@@ -349,6 +349,36 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
+```{r Study2ab Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+rscaleFixed <- c("personal_force:intention" = 0.19)
+vars2a <- c("trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate")
+vars2b <- c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate")
+
+studys2a_results <- 
+  bind_rows(calculate_study2_stat(study1a_f, vars = vars2a, 
+                                  label = "Trolley", rscaleFixed = rscaleFixed), 
+            calculate_study2_stat(study1b_f, vars = vars2b, 
+                                  label = "Speedboat", rscaleFixed = rscaleFixed)) %>% 
+  # RR was calculated by manual iteration
+  mutate( p = if_else(as.numeric(p) < .001, "<.001", p))
+
+studys2a_results<-studys2a_results[, -(4)]
+
+kbl(
+  studys2a_results,
+  col.names=c("Dilemma", "Cluster", "BF", "F", "df", "p", 'Partial $\\eta^2$', "Raw effect"),
+  format = "latex",
+  booktabs = T,
+  escape=F,
+  caption = "The interaction of personal force and intention on moral dilemma judgemnts (familiar participants)",
+  centering=T,
+  position="H"
+  )%>%
+  kable_styling( full_width = F,  position="left", latex_options = "scale_down")%>%
+  row_spec(row=0, bold=TRUE) %>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
+```
+
 
 ## Oxford utilitarianism Scale
 
@@ -410,7 +440,7 @@ plot_data %>%
 
 #Exploratory analysis on overall utilitarianism and collectivism
 
-ALthough not part of the planned analysis, we hypothesized that country-level collectivism would be negatively associated with utilitarian responding (i.e., higher morall acceptibility ratings). We found no evidence for this hypothesis, regardless of familiarity exclusion or dilemma context. Interestingly, however, we found strong evidence for the association between vertical individualism and average moral acceptibility ratings on moral dilemmas, regardless of dilemma context or exclusion criteria. The positive association means that higher levels of vertical individualism is associated with higher acceptance of the utilitarian response option. 
+Although not part of the planned analysis, we hypothesized that country-level collectivism would be negatively associated with utilitarian responding (i.e., higher morall acceptibility ratings). We found no evidence for this hypothesis, regardless of familiarity exclusion or dilemma context. Interestingly, however, we found strong evidence for the association between vertical individualism and average moral acceptibility ratings on moral dilemmas, regardless of dilemma context or exclusion criteria. The positive association means that higher levels of vertical individualism is associated with higher acceptance of the utilitarian response option. 
 
 In all of the regression models below, we added the random intercept of countries.
 
