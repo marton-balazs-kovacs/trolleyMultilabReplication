@@ -27,6 +27,6 @@ create_plot_country <- function(data) {
       se = F) +
     ggplot2::xlab("Effect size") +
     ggplot2::scale_y_continuous(breaks = c(0, 0.05, 0.1, 0.15), limits = c(0, 0.15)) +
-    ggplot2::scale_x_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8))+
+    ggplot2::scale_x_continuous(breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8) )+
     theme_trolley()
 }

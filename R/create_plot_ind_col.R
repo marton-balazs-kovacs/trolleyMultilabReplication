@@ -27,6 +27,6 @@ create_plot_ind_col <- function(data) {
       width = 0.2) +
     ggplot2::labs(y = "Beta effect size") +
     ggplot2::geom_hline(yintercept = 0) +
-    ggplot2::scale_y_continuous(breaks = c(-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4), expand=c(-0.4,0.4)) +
+    ggplot2::scale_y_continuous(breaks = c(-0.4, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.4), limits=c(-0.4,0.4)) +
     theme_trolley()
 }
