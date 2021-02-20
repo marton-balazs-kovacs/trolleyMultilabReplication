@@ -32,6 +32,16 @@ create_plot_study1 <- function(data) {
     ggplot2::labs(y = "To what extent is this action morally acceptable?") +
     ggplot2::coord_cartesian(ylim = c(1, 9)) +
     ggplot2::scale_y_continuous(breaks = 1:9, expand = c(0, 0)) +
-    theme_trolley() +
-    ggplot2::theme(legend.position = "none")
+    ggplot2::theme_bw() +
+    ggplot2::theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      plot.title = element_text(hjust = 0.5, vjust = 0.5, face = "bold", size = 17),
+      axis.title.x = element_blank(),
+      axis.title.y = element_text(face = "bold", size = 10),
+      axis.text.x = element_text(face = "bold", size = 7, colour = "Black"),
+      axis.text.y = element_text(face = "bold", size = 12, colour = "Black"),
+      legend.title = element_blank(),
+      legend.text = element_text(size = 9),
+      legend.position = "none")
 }
