@@ -57,6 +57,13 @@ all_responses <-
   trolley %>% 
   count(Region, name = "all", .drop = TRUE)
 
+overall <- 
+  trolley %>% 
+  group_by(Region) %>% 
+  summarise(Reason = "N without exclusion", 
+            n = n(), 
+            .groups = "drop")
+
 exclude_careless <- 
   trolley %>% 
   filter(!include_nocareless) %>% 
@@ -157,7 +164,8 @@ all_wide_wofamiliarity <-
   select(-study)
 
 exclude_all <-
-  bind_rows(exclude_careless,
+  bind_rows(overall,
+            exclude_careless,
             exclude_confusion,
             exclude_familiar,
             exclude_techproblem,
