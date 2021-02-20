@@ -51,8 +51,7 @@ calculate_study1_stat <- function(data = NULL,
                    ~dplyr::pull(.x, parameter) %>%
                      round(2)),
       p = purrr::map_chr(fttest,
-                  ~dplyr::pull(.x, p.value) %>%
-                    scales::scientific()),
+                  ~dplyr::pull(.x, p.value)),
       `Cohen's d` = purrr::map_dbl(data_long,
                             ~effsize::cohen.d(rate ~ condition,
                                               data = .x)$estimate %>%
