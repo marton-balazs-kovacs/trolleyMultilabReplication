@@ -34,6 +34,7 @@ usethis::use_data_raw("trolley_raw")
 usethis::use_data_raw("trolley_preprocessed")
 usethis::use_data_raw("trolley")
 usethis::use_data_raw("cultural_distance")
+usethis::use_data_raw("trolley_infosheet")
 
 # Add data files
 usethis::use_data(correct_answers, qualtrics_surveys, internal = TRUE, overwrite = TRUE)
