@@ -181,10 +181,10 @@ exclude_all <-
               values_from = c(n, perc)) %>% 
   mutate(n_All = n_Eastern + n_Southern + n_Western,
          perc_All = n_All/nrow(trolley),
-         info = "Reason to exclude")
-  # mutate_at(vars(perc_All, perc_Eastern, perc_Southern, perc_Western),
-  #           list(~ case_when(Reason == "N without exclusion" ~ NA_real_,
-  #                            TRUE ~ .)))
+         info = "Reason to exclude") %>% 
+  mutate_at(vars(perc_All, perc_Eastern, perc_Southern, perc_Western),
+            list(~ case_when(Reason == "N without exclusion" ~ NA_real_,
+                             TRUE ~ .)))
   
 # Exclusion reason by region (excluded participants can overlap!)
 exclude_table <-
