@@ -4,11 +4,13 @@ output:
   rmarkdown::pdf_document:
     extra_dependencies: ["float"]
     fig_caption: yes 
+
 header-includes: 
   \usepackage{float} \floatplacement{figure}{H} 
   \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
 editor_options: 
   chunk_output_type: console
+
 vignette: >
   %\VignetteIndexEntry{supplementary_materials}
   %\VignetteEncoding{UTF-8}
