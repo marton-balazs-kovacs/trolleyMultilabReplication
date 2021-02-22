@@ -34,7 +34,7 @@ library(gt)
 library(countrycode)
 
 # Read raw data
-trolley_raw <- read_csv(system.file("extdata/trolley_raw.csv", package = "trolleyMultilabReplication"))
+#trolley_raw <- read_csv(system.file("extdata/trolley_raw.csv", package = "trolleyMultilabReplication"))
 
 # Prepare datafiles for the analysis
 # Save data for each study separately
@@ -470,17 +470,20 @@ vars=c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col")
 tabledata_s2a_ind = data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("BF", "b",  "p"))))
 
 dat=subset(utilitarian_trolley,  select=c("trolley_1_rate", "trolley_2_rate", "trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate", "country3", vars))
-dat_long=na.omit(melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3")))
+dat_long=melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3"))
 dat_long$country3=as.character(dat_long$country3)
 dat_long$country3=factor(paste0("0", dat_long$country3))
+dat_long=dat_long[!is.na(dat_long$rate),]
+
 
 graphdata=data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("b",  "lower", "higher"))))
 
 for (i in vars){
   if(i=="Collectivism"){
-  datt=lmBF(rate ~   Collectivism + country3, data=dat_long, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_long)
+  dat_c=dat_long[!is.na(dat_long$Collectivism),]
+  datt=lmBF(rate ~   Collectivism + country3, data=dat_c, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
+  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_c)  
+  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_c)
   frequentist=broom.mixed::tidy(frequentist_m)
   } else if(i=="ver_ind"){
   datt=lmBF(rate ~   ver_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_ind" = 0.19))
@@ -590,17 +593,19 @@ vars=c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col")
 tabledata_s2b_ind = data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("BF", "b",  "p"))))
 
 dat=subset(utilitarian_speedboat,  select=c("speedboat_1_rate", "speedboat_2_rate", "speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate", "country3", vars))
-dat_long=na.omit(melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3")))
+dat_long=melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3"))
 dat_long$country3=as.character(dat_long$country3)
 dat_long$country3=factor(paste0("0", dat_long$country3))
+dat_long=dat_long[!is.na(dat_long$rate),]
 
 graphdata=data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("b",  "lower", "higher"))))
 
 for (i in vars){
   if(i=="Collectivism"){
-  datt=lmBF(rate ~   Collectivism + country3, data=dat_long, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_long)
+    dat_c=dat_long[!is.na(dat_long$Collectivism),]
+  datt=lmBF(rate ~   Collectivism + country3, data=dat_c, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
+  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_c)  
+  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_c)
   frequentist=broom.mixed::tidy(frequentist_m)
   } else if(i=="ver_ind"){
   datt=lmBF(rate ~   ver_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_ind" = 0.19))
@@ -718,17 +723,19 @@ vars=c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col")
 tabledata_s2a_ind = data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("BF", "b",  "p"))))
 
 dat=subset(utilitarian_trolley,  select=c("trolley_1_rate", "trolley_2_rate", "trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate", "country3", vars))
-dat_long=na.omit(melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3")))
+dat_long=melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3"))
 dat_long$country3=as.character(dat_long$country3)
 dat_long$country3=factor(paste0("0", dat_long$country3))
+dat_long=dat_long[!is.na(dat_long$rate),]
 
 graphdata=data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("b",  "lower", "higher"))))
 
 for (i in vars){
   if(i=="Collectivism"){
-  datt=lmBF(rate ~   Collectivism + country3, data=dat_long, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_long)
+   dat_c=dat_long[!is.na(dat_long$Collectivism),]
+  datt=lmBF(rate ~   Collectivism + country3, data=dat_c, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
+  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_c)  
+  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_c)
   frequentist=broom.mixed::tidy(frequentist_m)
   } else if(i=="ver_ind"){
   datt=lmBF(rate ~   ver_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_ind" = 0.19))
@@ -838,17 +845,19 @@ vars=c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col")
 tabledata_s2b_ind = data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("BF", "b",  "p"))))
 
 dat=subset(utilitarian_speedboat,  select=c("speedboat_1_rate", "speedboat_2_rate", "speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate", "country3", vars))
-dat_long=na.omit(melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3")))
+dat_long=melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3"))
 dat_long$country3=as.character(dat_long$country3)
 dat_long$country3=factor(paste0("0", dat_long$country3))
+dat_long=dat_long[!is.na(dat_long$rate),]
 
 graphdata=data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("b",  "lower", "higher"))))
 
 for (i in vars){
   if(i=="Collectivism"){
-  datt=lmBF(rate ~   Collectivism + country3, data=dat_long, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_long)
+  dat_c=dat_long[!is.na(dat_long$Collectivism),]
+  datt=lmBF(rate ~   Collectivism + country3, data=dat_c, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
+  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_c)  
+  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_c)
   frequentist=broom.mixed::tidy(frequentist_m)
   } else if(i=="ver_ind"){
   datt=lmBF(rate ~   ver_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_ind" = 0.19))
