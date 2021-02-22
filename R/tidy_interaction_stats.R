@@ -11,11 +11,11 @@ tidy_interaction_stats <- function(data) {
   dplyr::transmute(variable,
                    BF = purrr::map_dbl(datt3, ~dplyr::slice(.x) %>%
                                          dplyr::pull(bf) %>%
-                                         round(4)),
+                                         round(2)),
                    b = purrr::map_dbl(frequentist,
                                       ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
                                         dplyr::pull(estimate) %>%
-                                        round(4)),
+                                        round(2)),
                    lower = purrr::map_dbl(frequentist,
                                           ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
                                             dplyr::pull(conf.low) %>%
@@ -27,6 +27,6 @@ tidy_interaction_stats <- function(data) {
                    p = purrr::map_dbl(frequentist,
                                       ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
                                         dplyr::pull(p.value) %>%
-                                        round(4))
+                                        round(3))
   )
 }
