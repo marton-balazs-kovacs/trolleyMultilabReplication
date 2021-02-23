@@ -34,7 +34,7 @@ library(gt)
 library(countrycode)
 
 # Read raw data
-trolley_raw <- read_csv(system.file("extdata/trolley_raw.csv", package = "trolleyMultilabReplication"))
+trolley_raw <- read_csv(system.file("extdata/trolley_raw.csv", package = "trolleyMultilabReplication"), guess_max=10000)
 
 # Prepare datafiles for the analysis
 # Save data for each study separately
@@ -159,7 +159,7 @@ demo_table <-
   fmt_missing(vars(Country, Collectivism, 
                    Region, grouping, `Higher education %`, 
                    `Male %`, `Age SD`)) %>% 
-  gt::tab_header(title = "Table S1. Demographic description of the sample by country.")%>%
+  gt::tab_header(title = " ", subtitle = "Table S1. Demographic description of the sample by country.")%>%
   gt::cols_label(`Age Mean` = "Age (SD)") %>% 
   gt::tab_footnote(footnote = "Distance from the US in collectivism. Some countries do not have a collectivism score.",
                locations = cells_column_labels(columns = vars(Collectivism))) %>% 
