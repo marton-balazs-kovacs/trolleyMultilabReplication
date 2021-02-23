@@ -159,10 +159,10 @@ demo_table <-
   fmt_missing(vars(Country, Collectivism, 
                    Region, grouping, `Higher education %`, 
                    `Male %`, `Age SD`)) %>% 
+  gt::tab_header(title = "Table S1. Demographic description of the sample by country.")%>%
   gt::cols_label(`Age Mean` = "Age (SD)") %>% 
   gt::tab_footnote(footnote = "Distance from the US in collectivism. Some countries do not have a collectivism score.",
                locations = cells_column_labels(columns = vars(Collectivism))) %>% 
-  gt::tab_header(title = "Table S1. Demographic description of the sample by country.")%>%
   gt::tab_options(row.striping.include_table_body = TRUE,
               row.striping.background_color = "#EEEEEE", 
               row.striping.include_stub = TRUE,
