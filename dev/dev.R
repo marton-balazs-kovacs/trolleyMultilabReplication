@@ -25,6 +25,7 @@ usethis::use_package("tidyr")
 usethis::use_package("broomExtra")
 usethis::use_package("lmerTest")
 usethis::use_package("stringr")
+usethis::use_package("tidyselect")
 
 # Add pipe
 usethis::use_pipe(export = TRUE)

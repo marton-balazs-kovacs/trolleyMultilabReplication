@@ -1,4 +1,5 @@
-
+#' Effect of cultural variables on overall utilitarian responding
+#'
 #' @param df a dataframe, either "study2a" or "study2b"
 #' @param study_type the type of the study either "trolley" or "speedboat"
 #'
