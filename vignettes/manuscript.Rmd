@@ -84,7 +84,7 @@ exclude_familiar <-
   trolley %>% 
   filter(!include_nofamiliarity) %>% 
   group_by(Region) %>% 
-  summarise(Reason = "Familiarity of the research question",
+  summarise(Reason = "Familiarity with moral dilemmas",
             n = n(), 
             .groups = "drop")
 
@@ -240,7 +240,7 @@ studys1a_results <-
                                   label = "Including familiar", rscale = rscale)) %>% 
   # RR was calculated by manual iteration
   mutate( RR = c("7.00e-03, 14.00", "1.00e-05, 2.80e+06", "1.20e-02, 4.30", "<1.00e-05, 1.10e+04", "<1.00e-05, 6.30e+14", "<1.00e-05, 9.80e+07"),
-          p = if_else(as.numeric(p) < .001, "<.001", p))
+          p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 kbl(
   studys1a_results,
@@ -255,7 +255,7 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
-```{r Study1a excl graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. Black full circles indicate group level means.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r Study1a excl graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. ", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(study1a, "trolley")
 
@@ -263,7 +263,7 @@ plot_data <- prepare_plot_data_study1(study1a, "trolley")
 create_plot_study1(plot_data)
 ```
 
-```{r Study1a w/o excl graph, fig.pos = "H",out.width = "80%",fig.cap = "Results on Trolley dilemmas in Study 1 with no exclusion criteria applied. Black full circles indicate group level means.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r Study1a w/o excl graph, fig.pos = "H",out.width = "80%",fig.cap = "Results on Trolley dilemmas in Study 1 with including familiar participants" , echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(study1a_nf, "trolley")
 
@@ -283,7 +283,7 @@ studys1b_results <-
                                   label = "Including familiar", rscale = rscale)) %>% 
   # RR was calculated by manual iteration
   mutate(RR = c("1.50e-0.3, 1.70e+04", "1.30e-03, 74.00", "3.30e-02, 1.2", "<1.00e-05, 9.50e+03", "<1.00e-05, 2.10e+08", "<1.00e-05, 1.0e+08"),
-          p = if_else(as.numeric(p) < .001, "<.001", p))
+          p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 kbl(
   studys1b_results,
@@ -299,7 +299,7 @@ kbl(
                 row_group_label_position = "identity")
 ```
 
-```{r Study1b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. Black full circles indicate group level means.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r Study1b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. ", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(study1b, "speedboat")
 
@@ -307,7 +307,7 @@ plot_data <- prepare_plot_data_study1(study1b, "speedboat")
 create_plot_study1(plot_data)
 ```
 
-```{r Study1b w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with no exclusion criteria applied. Black full circles indicate group level means.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r Study1b w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with including familiar participants. ", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(study1b_nf, "speedboat")
 
@@ -328,7 +328,7 @@ studys2a_results <-
                                   label = "Include familiar", rscaleFixed = rscaleFixed)) %>% 
   # RR was calculated by manual iteration
   mutate( RR = c(c("0.03, 0.64", "0.03, 0.2", "6.00e-05, 1.80e+03", "2.50e-02, 0.91", "8.00e-05, 1.70e+03", "<1.00e-05, 2.30e+14")),
-          p = if_else(as.numeric(p) < .001, "<.001", p))
+          p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 kbl(
   studys2a_results,
@@ -352,7 +352,7 @@ plot_data <- prepare_plot_data_study2(study2a, "trolley")
 create_plot_study2(plot_data)
 ```
 
-```{r Study2a w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean. ",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r Study2a w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 while not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(study2a_nf, "trolley")
 
@@ -371,7 +371,7 @@ studys2b_results <-
                                   label = "Include familiar", rscaleFixed=rscaleFixed)) %>% 
   # RR was calculated by manual iteration
   mutate(RR = c("4.90e-02, 0.69", "5.10e-02, 0.63", "3.60e-02, 1.10", "2.60e-02, 0.72", "2.50e-02, 0.95", "1.40e-02, 1.30"),
-          p = if_else(as.numeric(p) < .001, "<.001", p),
+          p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)),
           BF = round(as.numeric(BF), 2))
 
 kbl(
@@ -396,7 +396,7 @@ plot_data <- prepare_plot_data_study2(study2b, "speedboat")
 create_plot_study2(plot_data)
 ```
 
-```{r study2b w/o excl graph,fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when no exclusion criteria is applied. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r study2b w/o excl graph,fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2, not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(study2b_nf, "speedboat")
 
@@ -439,7 +439,7 @@ kbl(
   add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
 ```
 
-```{r study2a overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2a overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (all exclusions applied)", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2a, "study2a")
 
@@ -447,7 +447,7 @@ plot_data_country <- prepare_plot_data_country(study2a, "study2a")
 create_plot_country(plot_data_country)
 ```
 
-```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
   tabledata_s2a_ind_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
@@ -489,7 +489,7 @@ kbl(
   add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
 ```
 
-```{r study2b overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2b overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2b, "study2b")
 
@@ -497,7 +497,7 @@ plot_data_country <- prepare_plot_data_country(study2b, "study2b")
 create_plot_country(plot_data_country)
 ```
 
-```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
   tabledata_s2b_ind_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
@@ -509,7 +509,7 @@ create_plot_ind_col(graphdata)
 ## Including familiar participants
 
 
-```{r study2a overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2a overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2a_nf, "study2a")
 
@@ -517,7 +517,7 @@ plot_data_country <- prepare_plot_data_country(study2a_nf, "study2a")
 create_plot_country(plot_data_country)
 ```
 
-```{r study2a vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2a vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
   tabledata_s2a_ind_f_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
@@ -527,7 +527,7 @@ create_plot_ind_col(graphdata)
 ```
 
 
-```{r study2b overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2b overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2b_nf, "study2b")
 
@@ -535,7 +535,7 @@ plot_data_country <- prepare_plot_data_country(study2b_nf, "study2b")
 create_plot_country(plot_data_country)
 ```
 
-```{r study2b vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2b vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas, familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
   tabledata_s2b_ind_nf_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
@@ -558,7 +558,7 @@ studys1a_results <-
             calculate_study1_stat(trolley, vars = vars1b, 
                                   label = "Speedboat", rscale = rscale)) %>% 
   # RR was calculated by manual iteration
-  mutate(p = if_else(as.numeric(p) < .001, "<.001", p))
+  mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 studys1a_results<-studys1a_results[, -4]
 
@@ -576,7 +576,7 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
-```{r Study1a ne graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. Black full circles indicate group level means.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r Study1a ne graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with no exclusion criteria applied", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(trolley, "trolley")
 
@@ -584,7 +584,7 @@ plot_data <- prepare_plot_data_study1(trolley, "trolley")
 create_plot_study1(plot_data)
 ```
 
-```{r Study1b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. Black full circles indicate group level means.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r Study1b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with no exclusion criteria applied.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(trolley, "speedboat")
 
@@ -606,7 +606,7 @@ studys2a_results <-
             calculate_study2_stat(trolley, vars = vars2b, 
                                   label = "Speedboat", rscaleFixed = rscaleFixed)) %>% 
   # RR was calculated by manual iteration
-  mutate(p = if_else(as.numeric(p) < .001, "<.001", p))
+mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 studys2a_results<-studys2a_results[, -(4)]
 
@@ -624,7 +624,7 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
-```{r Study2a ne graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r Study2a ne graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(trolley, "trolley")
 
@@ -633,7 +633,8 @@ create_plot_study2(plot_data)
 ```
 
 
-```{r study2b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+
+```{r study2b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(trolley, "speedboat")
 
@@ -676,7 +677,7 @@ kbl(
   add_header_above(c(" " = 1, "Trolley" = 3, "Speedboat" = 3))
 ```
 
-```{r study2a overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2a overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (no exclusion)", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(trolley, "study2a")
 
@@ -684,7 +685,7 @@ plot_data_country <- prepare_plot_data_country(trolley, "study2a")
 create_plot_country(plot_data_country)
 ```
 
-```{r study2a vertical horizontal individualism ne, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2a vertical horizontal individualism ne, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemma, no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
   tabledata_s2a_ind_ne_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
@@ -694,7 +695,7 @@ create_plot_ind_col(graphdata)
 ```
 
 
-```{r study2b overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2b overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(trolley, "study2b")
 
@@ -702,7 +703,7 @@ plot_data_country <- prepare_plot_data_country(trolley, "study2b")
 create_plot_country(plot_data_country)
 ```
 
-```{r study2b vertical horizontal individualism ne,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2b vertical horizontal individualism ne,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemma, no exclusion)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <- 
   tabledata_s2b_ind_ne_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
