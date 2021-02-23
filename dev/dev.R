@@ -75,6 +75,7 @@ usethis::use_r("calculate_additional_table")
 usethis::use_r("calculate_culture_utilitarianism")
 usethis::use_r("tidy_culture_utilitarianism")
 usethis::use_r("prepare_plot_data_country_means")
+usethis::use_r("create_plot_country_utilitarianism")
 
 
 # Add vignettes
