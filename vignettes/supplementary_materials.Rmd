@@ -65,10 +65,10 @@ study2b_nf <- add_ind_col_scale(study2b_nf)
 trolley <- add_ind_col_scale(trolley)
 ```
 
-```{r background information, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+```{r background information, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE, eval = FALSE}
 # Calculate background information
 # Check if GBR001 is in the processed data
-trolley %>% 
+trolley %>%
   distinct(survey_name, lab)
 
 # Show the labs who are in the raw dataset but not in the processed
@@ -95,12 +95,12 @@ trolley_raw %>%
  count()
 
 # Show the number of labs
-trolley %>% 
-  distinct(lab) %>% 
+trolley %>%
+  distinct(lab) %>%
   count()
 
-trolley_raw %>% 
-  distinct(lab) %>% 
+trolley_raw %>%
+  distinct(lab) %>%
   count()
 
 # Number of responses
@@ -108,9 +108,9 @@ nrow(trolley)
 nrow(trolley_raw)
 
 # Number of languages
-trolley_raw %>% 
-  distinct(Q_Lang) %>% 
-  drop_na(Q_Lang) %>% 
+trolley_raw %>%
+  distinct(Q_Lang) %>%
+  drop_na(Q_Lang) %>%
   count()
 ```
 
@@ -466,7 +466,7 @@ tabledata_sa_ind <-
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_culture_utilitarianism(study_type = "trolley")
 
-tabledata_sa_ind_tidy <-tidy_culture_utilitarianism(tabledata_s2a_ind)
+tabledata_sa_ind_tidy <-tidy_culture_utilitarianism(tabledata_sa_ind)
 
 tabledata_sa_ind_f <-  
   utilitarian_trolley_nf %>% 
@@ -532,6 +532,8 @@ kbl(
 
 ```{r study2a overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice).", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley, "trolley")
+
+create_plot_country_utilitarianism(plot_data_country)
 ```
 
 ```{r study2a vertical horizontal individualism, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -544,35 +546,9 @@ create_plot_ind_col(graphdata)
 ```
 
 ```{r study2b overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-##cohen d calculation for every country
-#scatterplot: x effect size, y individualism
-#size of dots: cohen d
-countrydata=data.frame(country=levels(factor(utilitarian_speedboat$country3)), matrix(nrow=length(levels(factor(utilitarian_speedboat$country3))),ncol=3, dimnames=list(levels(factor(utilitarian_speedboat$country3)), c("cohend","Collectivism","N") )))
+plot_data_country <- prepare_plot_data_country_means(utilitarian_speedboat, "speedboat")
 
-for (i in levels(factor(utilitarian_speedboat$country3))){
-  d=subset(utilitarian_speedboat, country3==i, select=c("speedboat_1_rate", "speedboat_2_rate", "speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate"))
-  dat_long=na.omit(melt(data=d, variable.name = "condition", value.name="rate"))
-  if (length(dat_long$rate)<10){
-    countrydata[i,"cohend"]=NA
-  }else{
-    countrydata[i,"cohend"]=mean(dat_long$rate)
-  }
-  countrydata[i,"Collectivism"]=mean(utilitarian_speedboat[utilitarian_speedboat$country3==i,]$Collectivism, na.rm=T)
-  countrydata[i,"N"]=length(dat_long$rate)
-}
-
-countrydata=na.omit(countrydata)
-ggplot(countrydata, aes(x=cohend, y=Collectivism, label=country)) +
-  geom_point(aes(size=N))+
-  geom_text(hjust=-0.2,size=3)+
-geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legend = FALSE, se=F)+xlab("Average moral acceptibility rating")+
-  theme_bw()+
-  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
-        axis.title.x=element_text(face="bold", size=12, colour="Black"), axis.title.y=element_text(face="bold", size=12, colour="Black"), axis.text.x = element_text(face="bold", size=10, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
-        legend.title=element_text(face="bold", size=10, colour="Black"),legend.text=element_text(size=9))
-  
-  
-
+create_plot_country_utilitarianism(plot_data_country)
 ```
 
 ```{r study2b vertical horizontal individualism,  out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -588,35 +564,9 @@ create_plot_ind_col(graphdata)
 ##Without familiarity exclusion
 
 ```{r study2a overall individualism plot w/o exc, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-##cohen d calculation for every country
-#scatterplot: x effect size, y individualism
-#size of dots: cohen d
-countrydata=data.frame(country=levels(factor(utilitarian_trolley$country3)), matrix(nrow=length(levels(factor(utilitarian_trolley$country3))),ncol=3, dimnames=list(levels(factor(utilitarian_trolley$country3)), c("cohend","Collectivism","N") )))
+plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley_nf, "trolley")
 
-for (i in levels(factor(utilitarian_trolley$country3))){
-  d=subset(utilitarian_trolley, country3==i, select=c("trolley_1_rate", "trolley_2_rate", "trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate"))
-  dat_long=na.omit(melt(data=d, variable.name = "condition", value.name="rate"))
-  if (length(dat_long$rate)<10){
-    countrydata[i,"cohend"]=NA
-  }else{
-    countrydata[i,"cohend"]=mean(dat_long$rate)
-  }
-  countrydata[i,"Collectivism"]=mean(utilitarian_trolley[utilitarian_trolley$country3==i,]$Collectivism, na.rm=T)
-  countrydata[i,"N"]=length(dat_long$rate)
-}
-
-countrydata=na.omit(countrydata)
-ggplot(countrydata, aes(x=cohend, y=Collectivism, label=country)) +
-  geom_point(aes(size=N))+
-  geom_text(hjust=-0.2,size=3)+
-geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legend = FALSE, se=F)+xlab("Average moral acceptibility rating")+
-  theme_bw()+
-  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
-        axis.title.x=element_text(face="bold", size=12, colour="Black"), axis.title.y=element_text(face="bold", size=12, colour="Black"), axis.text.x = element_text(face="bold", size=10, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
-        legend.title=element_text(face="bold", size=10, colour="Black"),legend.text=element_text(size=9))
-  
-  
-
+create_plot_country_utilitarianism(plot_data_country)
 ```
 
 
@@ -631,32 +581,9 @@ create_plot_ind_col(graphdata)
 
 
 ```{r study2b overall individualism plot w/o excl, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-##cohen d calculation for every country
-#scatterplot: x effect size, y individualism
-#size of dots: cohen d
-countrydata=data.frame(country=levels(factor(utilitarian_speedboat$country3)), matrix(nrow=length(levels(factor(utilitarian_speedboat$country3))),ncol=3, dimnames=list(levels(factor(utilitarian_speedboat$country3)), c("cohend","Collectivism","N") )))
+plot_data_country <- prepare_plot_data_country_means(utilitarian_speedboat_nf, "speedboat")
 
-for (i in levels(factor(utilitarian_speedboat$country3))){
-  d=subset(utilitarian_speedboat, country3==i, select=c("speedboat_1_rate", "speedboat_2_rate", "speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate"))
-  dat_long=na.omit(melt(data=d, variable.name = "condition", value.name="rate"))
-  if (length(dat_long$rate)<10){
-    countrydata[i,"cohend"]=NA
-  }else{
-    countrydata[i,"cohend"]=mean(dat_long$rate)
-  }
-  countrydata[i,"Collectivism"]=mean(utilitarian_speedboat[utilitarian_speedboat$country3==i,]$Collectivism, na.rm=T)
-  countrydata[i,"N"]=length(dat_long$rate)
-}
-
-countrydata=na.omit(countrydata)
-ggplot(countrydata, aes(x=cohend, y=Collectivism, label=country)) +
-  geom_point(aes(size=N))+
-  geom_text(hjust=-0.2,size=3)+
-geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legend = FALSE, se=F)+xlab("Average moral acceptibility rating")+
-  theme_bw()+
-  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
-        axis.title.x=element_text(face="bold", size=12, colour="Black"), axis.title.y=element_text(face="bold", size=12, colour="Black"), axis.text.x = element_text(face="bold", size=10, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
-        legend.title=element_text(face="bold", size=10, colour="Black"),legend.text=element_text(size=9))
+create_plot_country_utilitarianism(plot_data_country)
 ```
 
 

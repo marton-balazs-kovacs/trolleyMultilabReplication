@@ -1,4 +1,4 @@
-#' Create country and effect size scatter plot
+#' Create country and average moral acceptability rating scatter plot
 #'
 #' This function creates a ....
 #'
@@ -6,11 +6,11 @@
 #'
 #' @return The function returns a ggplot2 list object.
 #' @export
-create_plot_country <- function(data) {
+create_plot_country_utilitarianism <- function(data) {
   data %>%
     ggplot2::ggplot() +
     ggplot2::aes(
-      x = cohend,
+      x = mean,
       y = Collectivism,
       label = country) +
     ggplot2::geom_point(
@@ -25,9 +25,9 @@ create_plot_country <- function(data) {
       color = "blue",
       show.legend = FALSE,
       se = F) +
-    ggplot2::xlab("Effect size") +
+    ggplot2::xlab("Average moral acceptibility ratings") +
     ggplot2::scale_y_continuous(breaks = c(0, 0.05, 0.1, 0.15), limits = c(0, 0.15)) +
-    ggplot2::scale_x_continuous(breaks = c(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8) )+
+    ggplot2::scale_x_continuous(breaks = c(1, 2, 3, 4, 5, 6) )+
     ggplot2::theme_bw() +
     ggplot2::theme(
       panel.grid.major = element_blank(),

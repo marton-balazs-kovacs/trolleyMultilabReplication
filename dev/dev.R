@@ -75,12 +75,18 @@ usethis::use_r("calculate_additional_table")
 usethis::use_r("calculate_culture_utilitarianism")
 usethis::use_r("tidy_culture_utilitarianism")
 usethis::use_r("prepare_plot_data_country_means")
+usethis::use_r("create_plot_country_utilitarianism")
 
 
 # Add vignettes
 usethis::use_vignette("supplementary_materials")
+rmarkdown::render()
 usethis::use_vignette("manuscript")
 devtools::build_vignettes()
-
+build_rmd()
+devtools::build_rmd("vignettes/supplementary_materials.Rmd")
 # Check the package
 devtools::check()
+
+# Build the package
+# devtools::build(vignettes = FALSE)
