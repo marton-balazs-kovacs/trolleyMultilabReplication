@@ -3,7 +3,7 @@ title: "Supplementary Analaysis"
 output: 
   rmarkdown::pdf_document:
     extra_dependencies: ["float"]
-    fig_caption: yes 
+    fig_caption: yes
 
 header-includes: 
   \usepackage{float} \floatplacement{figure}{H} 
@@ -162,6 +162,7 @@ demo_table <-
   gt::cols_label(`Age Mean` = "Age (SD)") %>% 
   gt::tab_footnote(footnote = "Distance from the US in collectivism. Some countries do not have a collectivism score.",
                locations = cells_column_labels(columns = vars(Collectivism))) %>% 
+  gt::tab_header(title = "Table S1. Demographic description of the sample by country.")%>%
   gt::tab_options(row.striping.include_table_body = TRUE,
               row.striping.background_color = "#EEEEEE", 
               row.striping.include_stub = TRUE,
@@ -198,21 +199,31 @@ additional_speedboat <-
                                 TRUE ~ NA_character_)) %>% 
   calculate_additional_table(.)
 
-bind_rows(additional_trolley, additional_speedboat) %>% 
+table<-bind_rows(additional_trolley, additional_speedboat) %>% 
   filter(str_detect(comparison, "intention|physical")) %>% 
   separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
-  transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
-            Dilemma = str_to_title(Dilemma),
+  transmute(Dilemma = str_to_title(Dilemma),
+            Cluster = str_remove(survey_name, "^[^_]*_"),
             Comparison = case_when(Comparison == "physical" ~ "Physical Contact",
                                    Comparison == "intention" ~ "Intention"),
             t,
             `Bf` = scales::scientific(bf),
             df,
             p = as.character(p),
-            p = if_else(as.numeric(p) < .001, "< .001", p)) %>% 
-  papaja::apa_table(
-    caption = "Effect of Physical Contact and Intention",
-    escape = TRUE)
+            p = if_else(as.numeric(p) < .001, "< .001", p)) %>%
+
+  kbl(
+    caption = "Table S2. Effect of Physical Contact and Intention (all exclusion applied)",
+    escape = TRUE,
+    format = "latex",
+    booktabs = T,
+    position= "H") %>%
+  row_spec(row = 0, bold = TRUE) %>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")%>%
+  collapse_rows(columns = 2, valign = "top", latex_hline="none" )
+
+
+
 ```
 
 ```{r no familiarity, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -241,8 +252,8 @@ additional_speedboat <-
 bind_rows(additional_trolley, additional_speedboat) %>% 
   filter(str_detect(comparison, "intention|physical")) %>% 
   separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
-  transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
-            Dilemma = str_to_title(Dilemma),
+  transmute(Dilemma = str_to_title(Dilemma),
+            Cluster = str_remove(survey_name, "^[^_]*_"),
             Comparison = case_when(Comparison == "physical" ~ "Physical Contact",
                                    Comparison == "intention" ~ "Intention"),
             t,
@@ -250,10 +261,16 @@ bind_rows(additional_trolley, additional_speedboat) %>%
             df,
             p = as.character(p),
             p = if_else(as.numeric(p) < .001, "< .001", p)) %>% 
-  papaja::apa_table(
-    caption = "Effect of Physical Contact and Intention",
+ kbl(
+    caption = "Table S3. Effect of Physical Contact and Intention on moral dilemma judgements (familiarity exclusion not applied).",
     escape = TRUE,
-    position= "h")
+    format = "latex",
+    booktabs = T,
+    position= "H") %>%
+  kable_styling(full_width = F,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE) %>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major")%>%
+  collapse_rows(columns = 2, valign = "top", latex_hline="none")
 ```
 
 ## Comparing the standard switch and standard footbridge dilemmas
@@ -282,17 +299,22 @@ additional_speedboat <-
 bind_rows(additional_trolley, additional_speedboat) %>% 
   filter(str_detect(comparison, "standard")) %>% 
   separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
-  transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
-            Dilemma = str_to_title(Dilemma),
+  transmute(Dilemma = str_to_title(Dilemma),
+            Cluster = str_remove(survey_name, "^[^_]*_"),
             t,
             `Bf` = scales::scientific(bf),
             df,
             p = as.character(p),
             p = if_else(as.numeric(p) < .001, "< .001", p)) %>% 
-  papaja::apa_table(
-    caption = "Comparing the Standard Switch and Standard Footbridge Dilemmas",
+  kbl(
+    caption = "Table S4. Comparing the Standard Switch and Standard Footbridge Dilemmas (all exclusion applied).",
     escape = TRUE,
-    position="h")
+    format = "latex",
+    booktabs = T,
+    position= "H") %>%
+  kable_styling(full_width = F,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE) %>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
 ```{r switch vs footbridge no familiarity, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -318,17 +340,22 @@ additional_speedboat <-
 bind_rows(additional_trolley, additional_speedboat) %>% 
   filter(str_detect(comparison, "standard")) %>% 
   separate(comparison, into = c("Dilemma", "Comparison"), sep = "_") %>% 
-  transmute(Cluster = str_remove(survey_name, "^[^_]*_"),
-            Dilemma = str_to_title(Dilemma),
+  transmute(Dilemma = str_to_title(Dilemma),
+            Cluster = str_remove(survey_name, "^[^_]*_"),
             t,
             `Bf` = scales::scientific(bf),
             df,
             p = as.character(p),
             p = if_else(as.numeric(p) < .001, "< .001", p)) %>% 
-  papaja::apa_table(
-    caption = "Comparing the Standard Switch and Standard Footbridge Dilemmas",
+  kbl(
+    caption = "Table S5. Comparing the Standard Switch and Standard Footbridge Dilemmas (familiarity exclusion not applied)",
     escape = TRUE,
-    position="h")
+    format = "latex",
+    booktabs = T,
+    position= "H") %>%
+  kable_styling(full_width = F,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE) %>%
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
 ##Analysing familiar participants
@@ -344,7 +371,7 @@ studys1a_results <-
             calculate_study1_stat(study1b_f, vars = vars1b, 
                                   label = "Speedboat", rscale = rscale)) %>% 
   # RR was calculated by manual iteration
-  mutate(p = if_else(as.numeric(p) < .001, "<.001", p))
+  mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 studys1a_results <- studys1a_results[, -4]
 
@@ -354,7 +381,7 @@ kbl(
   format = "latex",
   booktabs = T,
   escape = T,
-  caption = "The effect of personal force on moral dilemma judgements (familiar particiapnts)",
+  caption = "Table S6. The effect of personal force on moral dilemma judgements (familiar participants).",
   centering = T,
   position = "H") %>%
   kable_styling(full_width = F,  position = "left") %>%
@@ -373,7 +400,7 @@ studys2a_results <-
             calculate_study2_stat(study2b_f, vars = vars2b, 
                                   label = "Speedboat", rscaleFixed = rscaleFixed)) %>% 
   # RR was calculated by manual iteration
-  mutate(p = if_else(as.numeric(p) < .001, "<.001", p))
+  mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 studys2a_results <- studys2a_results[, -(4)]
 
@@ -383,10 +410,10 @@ kbl(
   format = "latex",
   booktabs = T,
   escape = F,
-  caption = "The interaction of personal force and intention on moral dilemma judgemnts (familiar participants)",
+  caption = "Table S7. The interaction of personal force and intention on moral dilemma judgemnts (familiar participants).",
   centering = T,
   position = "H") %>%
-  kable_styling(full_width = F,  position = "left", latex_options = "scale_down") %>%
+  kable_styling(full_width = F,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
@@ -466,17 +493,22 @@ tabledata_sa_ind <-
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_culture_utilitarianism(study_type = "trolley")
 
-tabledata_sa_ind_tidy <-tidy_culture_utilitarianism(tabledata_sa_ind)
+tabledata_sa_ind_tidy <-tidy_culture_utilitarianism(tabledata_sa_ind) %>%
+  mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))%>%
+     mutate(BF=signif(BF,2))
 
 tabledata_sa_ind_f <-  
   utilitarian_trolley_nf %>% 
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_culture_utilitarianism(study_type="trolley")
 
-tabledata_sa_ind_f_tidy <- tidy_culture_utilitarianism(tabledata_sa_ind_f)
+tabledata_sa_ind_f_tidy <- tidy_culture_utilitarianism(tabledata_sa_ind_f) %>%
+  mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))%>%
+     mutate(BF=signif(BF,2))
 
 full_table_trolley=merge(tabledata_sa_ind_tidy, tabledata_sa_ind_f_tidy, by="variable")
 full_table_trolley=full_table_trolley[, -c(4,5,9,10)]
+
 
 kbl(
   full_table_trolley,
@@ -484,7 +516,7 @@ kbl(
   col.names = c("Variable", "BF", "b", "p", "BF", "b", "p"),
   booktabs = TRUE,
   escape = TRUE,
-  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
+  caption = "Table S8. Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
   centering = TRUE,
   position = "H") %>%
   kable_styling(full_width = FALSE,  position = "left") %>%
@@ -502,14 +534,18 @@ tabledata_sb_ind <-
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_culture_utilitarianism(study_type = "speedboat")
 
-tabledata_sb_ind_tidy <- tidy_culture_utilitarianism(tabledata_sb_ind)
+tabledata_sb_ind_tidy <- tidy_culture_utilitarianism(tabledata_sb_ind) %>%
+  mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))%>%
+     mutate(BF=signif(BF,2))
 
 tabledata_sb_ind_f <-  
   utilitarian_speedboat_nf %>% 
   left_join(., cultural_distance, by = "country3") %>% 
   calculate_culture_utilitarianism(study_type = "speedboat")
 
-tabledata_sb_ind_f_tidy <- tidy_culture_utilitarianism(tabledata_sb_ind_f)
+tabledata_sb_ind_f_tidy <- tidy_culture_utilitarianism(tabledata_sb_ind_f) %>%
+  mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))%>%
+     mutate(BF=signif(BF,2))
 
 full_table_trolley <- merge(tabledata_sb_ind_tidy, tabledata_sb_ind_f_tidy, by = "variable")
 full_table_trolley <- full_table_trolley[, -c(4,5,9,10)]
@@ -520,7 +556,7 @@ kbl(
   col.names = c("Variable", "BF", "b", "p", "BF", "b", "p"),
   booktabs = TRUE,
   escape = TRUE,
-  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Speedboat dilemmas?",
+  caption = "Table S9. Is the interaction of personal force and intention affected by individualism/collectivism on Speedboat dilemmas?",
   centering = TRUE,
   position = "H") %>%
   kable_styling(full_width = FALSE,  position = "left") %>%
@@ -528,7 +564,7 @@ kbl(
   add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
 ```
 
-##With all exclusions
+##With exclusions
 
 ```{r study2a overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice).", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley, "trolley")
