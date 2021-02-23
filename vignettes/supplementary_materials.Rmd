@@ -34,7 +34,7 @@ library(gt)
 library(countrycode)
 
 # Read raw data
-#trolley_raw <- read_csv(system.file("extdata/trolley_raw.csv", package = "trolleyMultilabReplication"))
+trolley_raw <- read_csv(system.file("extdata/trolley_raw.csv", package = "trolleyMultilabReplication"))
 
 # Prepare datafiles for the analysis
 # Save data for each study separately
@@ -215,12 +215,12 @@ bind_rows(additional_trolley, additional_speedboat) %>%
     escape = TRUE)
 ```
 
-```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r no familiarity, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 # Additional analysis after all exclusions
 # Comparing standard footbridge with footbridge pole in every cluster
 additional_trolley <- 
   trolley %>% 
-  filter(include_study1a_nf | include_study2a_nf) %>% 
+  filter(include_study1a_withoutfamiliarity | include_study2a_withoutfamiliarity) %>% 
   select(survey_name, survey_id, matches("trolley_[0-9]_rate")) %>% 
   pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
   mutate(comparison = case_when(task %in% c("trolley_1", "trolley_4") ~ "trolley_physical",
@@ -230,7 +230,7 @@ additional_trolley <-
 
 additional_speedboat <- 
   trolley %>% 
-  filter(include_study1b_nf | include_study2b_nf) %>% 
+  filter(include_study1b_withoutfamiliarity | include_study2b_withoutfamiliarity) %>% 
   select(survey_name, survey_id, matches("speedboat_[0-9]_rate")) %>% 
   pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
   mutate(comparison = case_when(task %in% c("speedboat_1", "speedboat_4") ~ "speedboat_physical",
@@ -295,11 +295,11 @@ bind_rows(additional_trolley, additional_speedboat) %>%
     position="h")
 ```
 
-```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r switch vs footbridge no familiarity, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 #Additional analysis after all exclusions
 additional_trolley <- 
   trolley %>% 
-  filter(include_study1a_nf | include_study2a_nf) %>% 
+  filter(include_study1a_withoutfamiliarity | include_study2a_withoutfamiliarity) %>% 
   select(survey_name, survey_id, matches("trolley_[0-9]_rate")) %>% 
   pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
   mutate(comparison = case_when(task %in% c("trolley_3", "trolley_4") ~ "trolley_standard",
@@ -308,7 +308,7 @@ additional_trolley <-
 
 additional_speedboat <- 
   trolley %>% 
-  filter(include_study1b_nf | include_study2b_nf) %>% 
+  filter(include_study1b_withoutfamiliarity | include_study2b_withoutfamiliarity) %>% 
   select(survey_name, survey_id, matches("speedboat_[0-9]_rate")) %>% 
   pivot_longer(matches("_rate"), names_to = "task", names_pattern = "(.*)_rate", values_to = "rate") %>% 
   mutate(comparison = case_when(task %in% c("speedboat_3", "speedboat_4") ~ "speedboat_standard",
@@ -368,9 +368,9 @@ vars2a <- c("trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rat
 vars2b <- c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate")
 
 studys2a_results <- 
-  bind_rows(calculate_study2_stat(study1a_f, vars = vars2a, 
+  bind_rows(calculate_study2_stat(study2a_f, vars = vars2a, 
                                   label = "Trolley", rscaleFixed = rscaleFixed), 
-            calculate_study2_stat(study1b_f, vars = vars2b, 
+            calculate_study2_stat(study2b_f, vars = vars2b, 
                                   label = "Speedboat", rscaleFixed = rscaleFixed)) %>% 
   # RR was calculated by manual iteration
   mutate( p = if_else(as.numeric(p) < .001, "<.001", p))
@@ -456,207 +456,99 @@ Although not part of the planned analysis, we hypothesized that country-level co
 
 In all of the regression models below, we added the random intercept of countries.
 
-##With all exclusions
 
-<!-- Bayesian country level individualism w/o exclusion -->
 ```{r analysis individual + country level study 2a, echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 
 utilitarian_trolley <- filter(trolley, include_study1a|include_study2a)
-utilitarian_speedboat <- filter(trolley, include_study1b|include_study2b)
+utilitarian_trolley_nf <- filter(trolley, include_study1a_withoutfamiliarity|include_study2a_withoutfamiliarity)
 
+tabledata_sa_ind <-  
+  utilitarian_trolley %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_culture_utilitarianism(study_type="trolley")
 
+tabledata_sa_ind_tidy <-tidy_culture_utilitarianism(tabledata_s2a_ind)
 
-vars=c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col")
-tabledata_s2a_ind = data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("BF", "b",  "p"))))
+tabledata_sa_ind_f <-  
+  utilitarian_trolley_nf %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_culture_utilitarianism(study_type="trolley")
 
-dat=subset(utilitarian_trolley,  select=c("trolley_1_rate", "trolley_2_rate", "trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate", "country3", vars))
-dat_long=melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3"))
-dat_long$country3=as.character(dat_long$country3)
-dat_long$country3=factor(paste0("0", dat_long$country3))
-dat_long=dat_long[!is.na(dat_long$rate),]
+tabledata_sa_ind_f_tidy <- tidy_culture_utilitarianism(tabledata_sa_ind_f)
 
-
-graphdata=data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("b",  "lower", "higher"))))
-
-for (i in vars){
-  if(i=="Collectivism"){
-  dat_c=dat_long[!is.na(dat_long$Collectivism),]
-  datt=lmBF(rate ~   Collectivism + country3, data=dat_c, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_c)  
-  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_c)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  } else if(i=="ver_ind"){
-  datt=lmBF(rate ~   ver_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_ind" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ ver_ind +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="hor_ind"){
-  datt=lmBF(rate ~   hor_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("hor_ind" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ hor_ind +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="ver_col"){
-  datt=lmBF(rate ~   ver_col + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_col" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ ver_col +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="hor_col"){
-  datt=lmBF(rate ~   hor_col + country3, data=dat_long, whichRandom="country3",rscaleCont = c("hor_col" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ hor_col +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }
-datt3=datt/datt2
-datt3=as_tibble(recompute(datt3, iterations = 50000))
-tabledata_s2a_ind[i, "BF"]=signif(datt3[1,1],4)
-tabledata_s2a_ind[i, "b"]=round(frequentist[2, "estimate"],3)
-tabledata_s2a_ind[i, "p"]=round(frequentist[2, "p.value"],3)
-graphdata[i, "b"]=round(frequentist[2, "estimate"],3)
-graphdata[i, "lower"]=round(confint(frequentist_m),2)[4,1]
-graphdata[i, "higher"]=round(confint(frequentist_m),2)[4,2]
-
-}
-
-graphdata=graphdata[-1,]
-rownames(tabledata_s2a_ind) <- NULL
-
+full_table_trolley=merge(tabledata_sa_ind_tidy, tabledata_sa_ind_f_tidy, by="variable")
+full_table_trolley=full_table_trolley[, -c(4,5,9,10)]
 
 kbl(
-  tabledata_s2a_ind,
+  full_table_trolley,
   format = "latex",
-  booktabs = T,
-  escape=T,
+  col.names = c("Variable", "BF", "b", "p", "BF", "b", "p"),
+  booktabs = TRUE,
+  escape = TRUE,
   caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
-  centering=T,
-  position="H"
-  )%>%
-  kable_styling( full_width = F,  position="left")%>%
-  row_spec(row=0, bold=TRUE)
+  centering = TRUE,
+  position = "H") %>%
+  kable_styling(full_width = FALSE,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE) %>%
+  add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
 
 ```
 
-
-```{r study2a overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice).", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-##cohen d calculation for every country
-#scatterplot: x effect size, y individualism
-#size of dots: cohen d
-countrydata=data.frame(country=levels(factor(utilitarian_trolley$country3)), matrix(nrow=length(levels(factor(utilitarian_trolley$country3))),ncol=3, dimnames=list(levels(factor(utilitarian_trolley$country3)), c("cohend","Collectivism","N") )))
-
-for (i in levels(factor(utilitarian_trolley$country3))){
-  d=subset(utilitarian_trolley, country3==i, select=c("trolley_1_rate", "trolley_2_rate", "trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate"))
-  dat_long=na.omit(melt(data=d, variable.name = "condition", value.name="rate"))
-  if (length(dat_long$rate)<10){
-    countrydata[i,"cohend"]=NA
-  }else{
-    countrydata[i,"cohend"]=mean(dat_long$rate)
-  }
-  countrydata[i,"Collectivism"]=mean(utilitarian_trolley[utilitarian_trolley$country3==i,]$Collectivism, na.rm=T)
-  countrydata[i,"N"]=length(dat_long$rate)
-}
-
-countrydata=na.omit(countrydata)
-ggplot(countrydata, aes(x=cohend, y=Collectivism, label=country)) +
-  geom_point(aes(size=N))+
-  geom_text(hjust=-0.2,size=3)+
-geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legend = FALSE, se=F)+xlab("Average moral acceptibility rating")+
-  theme_bw()+
-  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
-        axis.title.x=element_text(face="bold", size=12, colour="Black"), axis.title.y=element_text(face="bold", size=12, colour="Black"), axis.text.x = element_text(face="bold", size=10, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
-        legend.title=element_text(face="bold", size=10, colour="Black"),legend.text=element_text(size=9))
-  
-  
-
-```
-
-
-<!-- Bayesian personal level individualism  w/o exclusion-->
-```{r study2a vertical horizontal individualism, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
-
-ggplot(graphdata, aes(x=variable, y=b, width=0.7)) +
- geom_bar(stat="identity", position="dodge", colour="Black",  width=1.2)+
-  geom_errorbar(aes(ymin=lower, ymax=higher), position=position_dodge(width=0.7), colour="Black", width=0.2) +
-  labs( y="Beta effect size")+ theme_bw()+
-  geom_hline(yintercept=0)+
-  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
-        axis.title.x=element_blank(), axis.title.y=element_text(face="bold", size=10), axis.text.x = element_text(face="bold", size=7, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
-        legend.title=element_blank(),legend.text=element_text(size=9))
-
-
-```
-
-
-<!-- Bayesian country level individualism w/o exclusion -->
 ```{r analysis individual + country level study 2b, echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 
-vars=c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col")
-tabledata_s2b_ind = data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("BF", "b",  "p"))))
+utilitarian_speedboat <- filter(trolley, include_study1b|include_study2b)
+utilitarian_speedboat_nf <- filter(trolley, include_study1b_withoutfamiliarity|include_study2b_withoutfamiliarity)
 
-dat=subset(utilitarian_speedboat,  select=c("speedboat_1_rate", "speedboat_2_rate", "speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate", "country3", vars))
-dat_long=melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3"))
-dat_long$country3=as.character(dat_long$country3)
-dat_long$country3=factor(paste0("0", dat_long$country3))
-dat_long=dat_long[!is.na(dat_long$rate),]
+tabledata_sb_ind <-  
+  utilitarian_speedboat %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_culture_utilitarianism(study_type="speedboat")
 
-graphdata=data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("b",  "lower", "higher"))))
+tabledata_sb_ind_tidy <-tidy_culture_utilitarianism(tabledata_sb_ind)
 
-for (i in vars){
-  if(i=="Collectivism"){
-    dat_c=dat_long[!is.na(dat_long$Collectivism),]
-  datt=lmBF(rate ~   Collectivism + country3, data=dat_c, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_c)  
-  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_c)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  } else if(i=="ver_ind"){
-  datt=lmBF(rate ~   ver_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_ind" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ ver_ind +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="hor_ind"){
-  datt=lmBF(rate ~   hor_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("hor_ind" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ hor_ind +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="ver_col"){
-  datt=lmBF(rate ~   ver_col + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_col" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ ver_col +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="hor_col"){
-  datt=lmBF(rate ~   hor_col + country3, data=dat_long, whichRandom="country3",rscaleCont = c("hor_col" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ hor_col +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }
-datt3=datt/datt2
-datt3=as_tibble(recompute(datt3, iterations = 50000))
-tabledata_s2b_ind[i, "BF"]=signif(datt3[1,1],4)
-tabledata_s2b_ind[i, "b"]=round(frequentist[2, "estimate"],3)
-tabledata_s2b_ind[i, "p"]=round(frequentist[2, "p.value"],3)
-graphdata[i, "b"]=round(frequentist[2, "estimate"],3)
-graphdata[i, "lower"]=round(confint(frequentist_m),2)[4,1]
-graphdata[i, "higher"]=round(confint(frequentist_m),2)[4,2]
+tabledata_sb_ind_f <-  
+  utilitarian_speedboat_nf %>% 
+  left_join(., cultural_distance, by = "country3") %>% 
+  calculate_culture_utilitarianism(study_type="speedboat")
 
-}
+tabledata_sb_ind_f_tidy <- tidy_culture_utilitarianism(tabledata_sb_ind_f)
 
-graphdata=graphdata[-1,]
-rownames(tabledata_s2b_ind) <- NULL
-
+full_table_trolley=merge(tabledata_sb_ind_tidy, tabledata_sb_ind_f_tidy, by="variable")
+full_table_trolley=full_table_trolley[, -c(4,5,9,10)]
 
 kbl(
-  tabledata_s2b_ind,
+  full_table_trolley,
   format = "latex",
-  booktabs = T,
-  escape=T,
-  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
-  centering=T,
-  position="H"
-  )%>%
-  kable_styling( full_width = F,  position="left")%>%
-  row_spec(row=0, bold=TRUE)
+  col.names = c("Variable", "BF", "b", "p", "BF", "b", "p"),
+  booktabs = TRUE,
+  escape = TRUE,
+  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Speedboat dilemmas?",
+  centering = TRUE,
+  position = "H") %>%
+  kable_styling(full_width = FALSE,  position = "left") %>%
+  row_spec(row = 0, bold = TRUE) %>%
+  add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
 
 ```
 
+##With all exclusions
+
+```{r study2a overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice).", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley, "trolley")
+
+```
+
+```{r study2a vertical horizontal individualism, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+
+graphdata <- 
+  tabledata_sa_ind_tidy %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
+
+create_plot_ind_col(graphdata)
+
+
+```
 
 ```{r study2b overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 ##cohen d calculation for every country
@@ -690,19 +582,15 @@ geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legen
 
 ```
 
-
-<!-- Bayesian personal level individualism  w/o exclusion-->
 ```{r study2b vertical horizontal individualism,  out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 
 
-ggplot(graphdata, aes(x=variable, y=b, width=0.7)) +
- geom_bar(stat="identity", position="dodge", colour="Black",  width=1.2)+
-  geom_errorbar(aes(ymin=lower, ymax=higher), position=position_dodge(width=0.7), colour="Black", width=0.2) +
-  labs( y="Beta effect size")+ theme_bw()+
-  geom_hline(yintercept=0)+
-  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
-        axis.title.x=element_blank(), axis.title.y=element_text(face="bold", size=10), axis.text.x = element_text(face="bold", size=7, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
-        legend.title=element_blank(),legend.text=element_text(size=9))
+graphdata <- 
+  tabledata_sb_ind_tidy %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
+
+create_plot_ind_col(graphdata)
 
 
 
@@ -710,83 +598,6 @@ ggplot(graphdata, aes(x=variable, y=b, width=0.7)) +
 
 
 ##Without familiarity exclusion
-
-<!-- Bayesian country level individualism w/o exclusion -->
-```{r analysis individual + country level study 2a w/o excl, echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
-utilitarian_trolley <- filter(trolley, include_study1a_withoutfamiliarity|include_study2a_withoutfamiliarity)
-utilitarian_speedboat <- filter(trolley, include_study1b_withoutfamiliarity|include_study2b_withoutfamiliarity)
-
-
-
-vars=c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col")
-tabledata_s2a_ind = data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("BF", "b",  "p"))))
-
-dat=subset(utilitarian_trolley,  select=c("trolley_1_rate", "trolley_2_rate", "trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate", "country3", vars))
-dat_long=melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3"))
-dat_long$country3=as.character(dat_long$country3)
-dat_long$country3=factor(paste0("0", dat_long$country3))
-dat_long=dat_long[!is.na(dat_long$rate),]
-
-graphdata=data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("b",  "lower", "higher"))))
-
-for (i in vars){
-  if(i=="Collectivism"){
-   dat_c=dat_long[!is.na(dat_long$Collectivism),]
-  datt=lmBF(rate ~   Collectivism + country3, data=dat_c, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_c)  
-  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_c)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  } else if(i=="ver_ind"){
-  datt=lmBF(rate ~   ver_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_ind" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ ver_ind +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="hor_ind"){
-  datt=lmBF(rate ~   hor_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("hor_ind" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ hor_ind +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="ver_col"){
-  datt=lmBF(rate ~   ver_col + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_col" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ ver_col +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="hor_col"){
-  datt=lmBF(rate ~   hor_col + country3, data=dat_long, whichRandom="country3",rscaleCont = c("hor_col" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ hor_col +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }
-datt3=datt/datt2
-datt3=as_tibble(recompute(datt3, iterations = 50000))
-tabledata_s2a_ind[i, "BF"]=signif(datt3[1,1],4)
-tabledata_s2a_ind[i, "b"]=round(frequentist[2, "estimate"],3)
-tabledata_s2a_ind[i, "p"]=round(frequentist[2, "p.value"],3)
-graphdata[i, "b"]=round(frequentist[2, "estimate"],3)
-graphdata[i, "lower"]=round(confint(frequentist_m),2)[4,1]
-graphdata[i, "higher"]=round(confint(frequentist_m),2)[4,2]
-
-}
-
-graphdata=graphdata[-1,]
-rownames(tabledata_s2a_ind) <- NULL
-
-
-kbl(
-  tabledata_s2a_ind,
-  format = "latex",
-  booktabs = T,
-  escape=T,
-  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
-  centering=T,
-  position="H"
-  )%>%
-  kable_styling( full_width = F,  position="left")%>%
-  row_spec(row=0, bold=TRUE)
-
-```
-
 
 ```{r study2a overall individualism plot w/o exc, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 ##cohen d calculation for every country
@@ -821,91 +632,16 @@ geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legen
 ```
 
 
-<!-- Bayesian personal level individualism  w/o exclusion-->
 ```{r study2a vertical horizontal individualism w/o excl, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 
 
-ggplot(graphdata, aes(x=variable, y=b, width=0.7)) +
- geom_bar(stat="identity", position="dodge", colour="Black",  width=1.2)+
-  geom_errorbar(aes(ymin=lower, ymax=higher), position=position_dodge(width=0.7), colour="Black", width=0.2) +
-  labs( y="Beta effect size")+ theme_bw()+
-  geom_hline(yintercept=0)+
-  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
-        axis.title.x=element_blank(), axis.title.y=element_text(face="bold", size=10), axis.text.x = element_text(face="bold", size=7, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
-        legend.title=element_blank(),legend.text=element_text(size=9))
+graphdata <- 
+  tabledata_sa_ind_f_tidy %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
 
+create_plot_ind_col(graphdata)
 
-```
-
-
-<!-- Bayesian country level individualism w/o exclusion -->
-```{r analysis individual + country level study 2b wo/excl, echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
-vars=c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col")
-tabledata_s2b_ind = data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("BF", "b",  "p"))))
-
-dat=subset(utilitarian_speedboat,  select=c("speedboat_1_rate", "speedboat_2_rate", "speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate", "country3", vars))
-dat_long=melt(data=dat, variable.name = "condition", value.name="rate", id.vars=c(vars, "country3"))
-dat_long$country3=as.character(dat_long$country3)
-dat_long$country3=factor(paste0("0", dat_long$country3))
-dat_long=dat_long[!is.na(dat_long$rate),]
-
-graphdata=data.frame(variable=c("Country-level collectivism", "Vertical Individualism", "Horizontal Individualism", "Vertical Collectivism", "Horizontal Collectivism"), matrix(nrow=5, ncol=3, dimnames=list(vars,c("b",  "lower", "higher"))))
-
-for (i in vars){
-  if(i=="Collectivism"){
-  dat_c=dat_long[!is.na(dat_long$Collectivism),]
-  datt=lmBF(rate ~   Collectivism + country3, data=dat_c, whichRandom="country3",rscaleCont = c("Collectivism" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_c)  
-  frequentist_m=lmer(rate ~ Collectivism +(1|country3), data=dat_c)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  } else if(i=="ver_ind"){
-  datt=lmBF(rate ~   ver_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_ind" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ ver_ind +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="hor_ind"){
-  datt=lmBF(rate ~   hor_ind + country3, data=dat_long, whichRandom="country3",rscaleCont = c("hor_ind" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ hor_ind +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="ver_col"){
-  datt=lmBF(rate ~   ver_col + country3, data=dat_long, whichRandom="country3",rscaleCont = c("ver_col" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ ver_col +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }else if(i=="hor_col"){
-  datt=lmBF(rate ~   hor_col + country3, data=dat_long, whichRandom="country3",rscaleCont = c("hor_col" = 0.19))
-  datt2=lmBF(rate ~  country3, whichRandom="country3",data=dat_long)  
-  frequentist_m=lmer(rate ~ hor_col +(1|country3), data=dat_long)
-  frequentist=broom.mixed::tidy(frequentist_m)
-  }
-datt3=datt/datt2
-datt3=as_tibble(recompute(datt3, iterations = 50000))
-tabledata_s2b_ind[i, "BF"]=signif(datt3[1,1],4)
-tabledata_s2b_ind[i, "b"]=round(frequentist[2, "estimate"],3)
-tabledata_s2b_ind[i, "p"]=round(frequentist[2, "p.value"],3)
-graphdata[i, "b"]=round(frequentist[2, "estimate"],3)
-graphdata[i, "lower"]=round(confint(frequentist_m),2)[4,1]
-graphdata[i, "higher"]=round(confint(frequentist_m),2)[4,2]
-
-}
-
-graphdata=graphdata[-1,]
-rownames(tabledata_s2b_ind) <- NULL
-
-
-kbl(
-  tabledata_s2b_ind,
-  format = "latex",
-  booktabs = T,
-  escape=T,
-  caption = "Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?",
-  centering=T,
-  position="H"
-  )%>%
-  kable_styling( full_width = F,  position="left")%>%
-  row_spec(row=0, bold=TRUE)
 
 ```
 
@@ -943,18 +679,15 @@ geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legen
 ```
 
 
-<!-- Bayesian personal level individualism  w/o exclusion-->
 ```{r study2b vertical horizontal individualism w/o excl,  out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 
 
-ggplot(graphdata, aes(x=variable, y=b, width=0.7)) +
- geom_bar(stat="identity", position="dodge", colour="Black",  width=1.2)+
-  geom_errorbar(aes(ymin=lower, ymax=higher), position=position_dodge(width=0.7), colour="Black", width=0.2) +
-  labs( y="Beta effect size")+ theme_bw()+
-  geom_hline(yintercept=0)+
-  theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
-        axis.title.x=element_blank(), axis.title.y=element_text(face="bold", size=10), axis.text.x = element_text(face="bold", size=7, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
-        legend.title=element_blank(),legend.text=element_text(size=9))
+graphdata <- 
+  tabledata_sb_ind_f_tidy %>% 
+  filter(variable != "Country-level collectivism") %>% 
+  select(variable, b, lower, higher)
+
+create_plot_ind_col(graphdata)
 
 
 

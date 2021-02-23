@@ -71,6 +71,10 @@ usethis::use_r("my_bf_extractor")
 usethis::use_r("calculate_interaction_stats")
 usethis::use_r("tidy_interaction_stats")
 usethis::use_r("calculate_additional_table")
+usethis::use_r("calculate_culture_utilitarianism")
+usethis::use_r("tidy_culture_utilitarianism")
+usethis::use_r("prepare_plot_data_country_means")
+
 
 # Add vignettes
 usethis::use_vignette("supplementary_materials")
