@@ -346,7 +346,7 @@ studys1a_results <-
   # RR was calculated by manual iteration
   mutate(p = if_else(as.numeric(p) < .001, "<.001", p))
 
-studys1a_results<-studys1a_results[, -4]
+studys1a_results <- studys1a_results[, -4]
 
 kbl(
   studys1a_results,
@@ -373,9 +373,9 @@ studys2a_results <-
             calculate_study2_stat(study2b_f, vars = vars2b, 
                                   label = "Speedboat", rscaleFixed = rscaleFixed)) %>% 
   # RR was calculated by manual iteration
-  mutate( p = if_else(as.numeric(p) < .001, "<.001", p))
+  mutate(p = if_else(as.numeric(p) < .001, "<.001", p))
 
-studys2a_results<-studys2a_results[, -(4)]
+studys2a_results <- studys2a_results[, -(4)]
 
 kbl(
   studys2a_results,
@@ -458,14 +458,13 @@ In all of the regression models below, we added the random intercept of countrie
 
 
 ```{r analysis individual + country level study 2a, echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
-utilitarian_trolley <- filter(trolley, include_study1a|include_study2a)
-utilitarian_trolley_nf <- filter(trolley, include_study1a_withoutfamiliarity|include_study2a_withoutfamiliarity)
+utilitarian_trolley <- filter(trolley, include_study1a | include_study2a)
+utilitarian_trolley_nf <- filter(trolley, include_study1a_withoutfamiliarity | include_study2a_withoutfamiliarity)
 
 tabledata_sa_ind <-  
   utilitarian_trolley %>% 
   left_join(., cultural_distance, by = "country3") %>% 
-  calculate_culture_utilitarianism(study_type="trolley")
+  calculate_culture_utilitarianism(study_type = "trolley")
 
 tabledata_sa_ind_tidy <-tidy_culture_utilitarianism(tabledata_s2a_ind)
 
@@ -495,26 +494,25 @@ kbl(
 ```
 
 ```{r analysis individual + country level study 2b, echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
-utilitarian_speedboat <- filter(trolley, include_study1b|include_study2b)
-utilitarian_speedboat_nf <- filter(trolley, include_study1b_withoutfamiliarity|include_study2b_withoutfamiliarity)
+utilitarian_speedboat <- filter(trolley, include_study1b | include_study2b)
+utilitarian_speedboat_nf <- filter(trolley, include_study1b_withoutfamiliarity | include_study2b_withoutfamiliarity)
 
 tabledata_sb_ind <-  
   utilitarian_speedboat %>% 
   left_join(., cultural_distance, by = "country3") %>% 
-  calculate_culture_utilitarianism(study_type="speedboat")
+  calculate_culture_utilitarianism(study_type = "speedboat")
 
-tabledata_sb_ind_tidy <-tidy_culture_utilitarianism(tabledata_sb_ind)
+tabledata_sb_ind_tidy <- tidy_culture_utilitarianism(tabledata_sb_ind)
 
 tabledata_sb_ind_f <-  
   utilitarian_speedboat_nf %>% 
   left_join(., cultural_distance, by = "country3") %>% 
-  calculate_culture_utilitarianism(study_type="speedboat")
+  calculate_culture_utilitarianism(study_type = "speedboat")
 
 tabledata_sb_ind_f_tidy <- tidy_culture_utilitarianism(tabledata_sb_ind_f)
 
-full_table_trolley=merge(tabledata_sb_ind_tidy, tabledata_sb_ind_f_tidy, by="variable")
-full_table_trolley=full_table_trolley[, -c(4,5,9,10)]
+full_table_trolley <- merge(tabledata_sb_ind_tidy, tabledata_sb_ind_f_tidy, by = "variable")
+full_table_trolley <- full_table_trolley[, -c(4,5,9,10)]
 
 kbl(
   full_table_trolley,
@@ -528,26 +526,21 @@ kbl(
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
   add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
-
 ```
 
 ##With all exclusions
 
 ```{r study2a overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice).", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley, "trolley")
-
 ```
 
 ```{r study2a vertical horizontal individualism, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
 graphdata <- 
   tabledata_sa_ind_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
-
-
 ```
 
 ```{r study2b overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -583,17 +576,12 @@ geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legen
 ```
 
 ```{r study2b vertical horizontal individualism,  out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
-
 graphdata <- 
   tabledata_sb_ind_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
-
-
-
 ```
 
 
@@ -633,16 +621,12 @@ geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legen
 
 
 ```{r study2a vertical horizontal individualism w/o excl, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
-
 graphdata <- 
   tabledata_sa_ind_f_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
-
-
 ```
 
 
@@ -673,22 +657,14 @@ geom_smooth(method = "lm", mapping = aes(weight = N), color = "blue", show.legen
   theme(panel.grid.major=element_blank(),panel.grid.minor=element_blank(),plot.title=element_text( hjust=0.5, vjust=0.5, face="bold", size=17),
         axis.title.x=element_text(face="bold", size=12, colour="Black"), axis.title.y=element_text(face="bold", size=12, colour="Black"), axis.text.x = element_text(face="bold", size=10, colour="Black"), axis.text.y = element_text(face="bold", size=12, colour="Black"),
         legend.title=element_text(face="bold", size=10, colour="Black"),legend.text=element_text(size=9))
-  
-
-
 ```
 
 
 ```{r study2b vertical horizontal individualism w/o excl,  out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-
-
 graphdata <- 
   tabledata_sb_ind_f_tidy %>% 
   filter(variable != "Country-level collectivism") %>% 
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
-
-
-
 ```

@@ -2,12 +2,12 @@
 % Please edit documentation in R/tidy_culture_utilitarianism.R
 \name{tidy_culture_utilitarianism}
 \alias{tidy_culture_utilitarianism}
-\title{Tidy the results of the interaction analysis}
+\title{Tidy the results of the utilitarianism analysis}
 \usage{
 tidy_culture_utilitarianism(data)
 }
 \arguments{
-\item{data}{the result of the calculate_interaction_stats function}
+\item{data}{the result of the calculate_culture_utilitarianism function}
 }
 \value{
 tidy table

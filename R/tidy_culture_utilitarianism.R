@@ -1,8 +1,8 @@
-#' Tidy the results of the interaction analysis
+#' Tidy the results of the utilitarianism analysis
 #'
 #' Lorem ipsum
 #'
-#' @param data the result of the calculate_interaction_stats function
+#' @param data the result of the calculate_culture_utilitarianism function
 #'
 #' @return tidy table
 #' @export
