@@ -26,6 +26,7 @@ usethis::use_package("broomExtra")
 usethis::use_package("lmerTest")
 usethis::use_package("stringr")
 usethis::use_package("tidyselect")
+usethis::use_package("ggnewscale")
 
 # Add pipe
 usethis::use_pipe(export = TRUE)
