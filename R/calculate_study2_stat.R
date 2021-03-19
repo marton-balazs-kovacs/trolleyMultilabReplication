@@ -43,6 +43,10 @@ calculate_study2_stat <- function(data = NULL,
            bmod = purrr::map2(bmod_1, bmod_2,
                        ~BayesFactor::recompute(.x / .y, iterations = 50000) %>%
                          tibble::as_tibble()),
+           hdi = purrr::map(data_long,
+                            ~ bayestestR::hdi(
+                              BayesFactor::lmBF(rate ~ personal_force * intention, data = .x, rscaleFixed = rscaleFixed),
+                              c = 0.89)),
            fmod = purrr::map(data_long,
                       ~aov(rate ~ personal_force * intention, data=.x) %>%
                         broom::tidy())) %>%
@@ -68,8 +72,7 @@ calculate_study2_stat <- function(data = NULL,
                     dplyr::pull(p.value) %>%
                        round(3)),
       `Eta squared` = purrr::map_dbl(data_long,
-                              ~aov(rate ~ personal_force*intention,
-                                   data=.x) %>%
+                              ~aov(rate ~ personal_force*intention, data = .x) %>%
                                 effectsize::eta_squared() %>%
                                 tibble::as_tibble() %>%
                                 dplyr::filter(Parameter == "personal_force:intention") %>%
@@ -83,7 +86,13 @@ calculate_study2_stat <- function(data = NULL,
                                            values_from = avg_rate) %>%
                                dplyr::mutate(raw_diff = (`0_0`-`1_0`) - (`0_1` - `1_1`)) %>%
                                dplyr::pull(raw_diff) %>%
-                               round(2))
+                               round(2)),
+      CI = purrr::map_chr(hdi,
+                         . %>%
+                           tibble::as_tibble() %>%
+                           dplyr::filter(Parameter == "personal_force:intention-1.&.1") %>%
+                           dplyr::mutate(CI = glue::glue("[{round(CI_low, 2)}, {round(CI_high, 2)}]")) %>%
+                           dplyr::pull(CI))
     )
 }
 

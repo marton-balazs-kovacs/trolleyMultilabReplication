@@ -30,8 +30,11 @@ calculate_study1_stat <- function(data = NULL,
                              as.data.frame()),
            bttest = purrr::map(data_long,
                         ~BayesFactor::ttestBF(formula = rate ~ condition, data = .x,
-                                 rscale = rscale, nullInterval = c(0, Inf)) %>%
-                          tibble::as_tibble()),
+                                 rscale = rscale, nullInterval = c(0, Inf))),
+           hdi = purrr::map(data_long,
+                            ~ bayestestR::hdi(
+                              BayesFactor::ttestBF(formula = rate ~ condition, data = .x, rscale = rscale),
+                              c = 0.89)),
            fttest = purrr::map(data_long,
                         ~t.test(rate ~ condition, data = .x) %>%
                           broom::tidy())) %>%
@@ -40,9 +43,11 @@ calculate_study1_stat <- function(data = NULL,
       Exclusion = label,
       Cluster = Region,
       BF = purrr::map_chr(bttest,
-                   ~dplyr::slice(.x, 2) %>%
-                     dplyr::pull(bf) %>%
-                     scales::scientific()),
+                          . %>%
+                            tibble::as_tibble() %>%
+                            slice(2) %>%
+                            dplyr::pull(bf) %>%
+                            scales::scientific()),
       RR = NA_character_,
       t = purrr::map_dbl(fttest,
                   ~dplyr::pull(.x, statistic) %>%
@@ -54,9 +59,13 @@ calculate_study1_stat <- function(data = NULL,
                   ~dplyr::pull(.x, p.value) %>%
                     round(3)),
       `Cohen's d` = purrr::map_dbl(data_long,
-                            ~effsize::cohen.d(rate ~ condition,
-                                              data = .x)$estimate %>%
-                              round(2)))
-
-
+                            ~abs(
+                              effsize::cohen.d(rate ~ condition, data = .x)$estimate %>%
+                              round(2))),
+      CI = purrr::map_chr(hdi,
+                          . %>%
+                            as_tibble() %>%
+                            mutate(CI = glue::glue("[{round(CI_low, 2)}, {round(CI_high, 2)}]")) %>%
+                            pull(CI))
+      )
 }

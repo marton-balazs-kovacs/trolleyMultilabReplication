@@ -50,26 +50,31 @@ calculate_interaction_stats <- function(df = NULL, study_type) {
     dplyr::mutate(
       data = dplyr::if_else(var == "Collectivism", purrr::map(data, drop_na), data),
       datt = purrr::map2(data, var,
-                       ~BayesFactor::lmBF(rate ~ personal_force*intention*value + country0,
-                             whichRandom = "country0",
-                             data = as.data.frame(.x),
-                             # Set prior dynamically, based on the interaction with a specific variable
-                             rscaleCont = purrr::set_names(0.19, stringr::str_glue("personal_force:intention:{.y}")))),
-           datt2 = purrr::map(data,
-                       ~BayesFactor::lmBF(rate ~ personal_force + intention + value +
-                               personal_force:value +
-                               personal_force:intention + intention:value +
-                               country0,
-                             whichRandom = "country0",
-                             data = as.data.frame(.x))),
-           datt3 = purrr::map2(datt, datt2, ~BayesFactor::recompute((.x/.y), iterations = 50000) %>%
-                          as_tibble()),
-           frequentist = purrr::map(data,
-                             ~lmerTest::lmer(rate ~ personal_force*intention*value + (1|country3),
-                                   data = .x) %>%
-                               broom.mixed::tidy(conf.int = TRUE)),
-      n = map_dbl(data, nrow)) %>%
-    #
+                         ~BayesFactor::lmBF(rate ~ personal_force*intention*value + country0,
+                                            whichRandom = "country0",
+                                            data = as.data.frame(.x),
+                                            # Set prior dynamically, based on the interaction with a specific variable
+                                            rscaleCont = purrr::set_names(0.19, stringr::str_glue("personal_force:intention:{.y}")))),
+      datt2 = purrr::map(data,
+                         ~BayesFactor::lmBF(rate ~ personal_force + intention + value + personal_force:value + personal_force:intention + intention:value + country0,
+                                            whichRandom = "country0",
+                                            data = as.data.frame(.x))),
+      datt3 = purrr::map2(datt, datt2,
+                          ~BayesFactor::recompute((.x/.y), iterations = 50000) %>%
+                            as_tibble()),
+      frequentist = purrr::map(data,
+                               ~lmerTest::lmer(scale(rate) ~ personal_force*intention*scale(value) + (1|country3),
+                                               data = .x) %>%
+                                 broom.mixed::tidy(conf.int = TRUE)),
+      n = map_dbl(data, nrow),
+      hdi = purrr::map2(data, var,
+                        ~ bayestestR::hdi(
+                          BayesFactor::lmBF(rate ~ personal_force*intention*value + country0,
+                                            whichRandom = "country0",
+                                            data = as.data.frame(.x),
+                                            # Set prior dynamically, based on the interaction with a specific variable
+                                            rscaleCont = purrr::set_names(0.19, stringr::str_glue("personal_force:intention:{.y}"))),
+                          c = 0.89))) %>%
     dplyr::left_join(cultural_vars, by = "var")
 
 }

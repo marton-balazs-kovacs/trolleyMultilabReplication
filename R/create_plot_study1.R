@@ -8,10 +8,6 @@
 #'
 #' @return The function returns a ggplot2 list object.
 #' @export
-#'
-
-source("https://gist.githubusercontent.com/benmarwick/2a1bb0133ff568cbe28d/raw/fb53bd97121f7f9ce947837ef1a4c65a73bffb3f/geom_flat_violin.R")
-
 create_plot_study1 <- function(data) {
   data %>%
     ggplot2::ggplot() +
