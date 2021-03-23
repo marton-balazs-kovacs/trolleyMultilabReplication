@@ -245,13 +245,13 @@ studys1a_results <-
 kbl(
   studys1a_results,
   format = "latex",
-  col.names = c("Exclusion", "Cluster", "BF", "RR", "t", "df", "p", "Cohen's d", "$89\\%$ CI"),
+  col.names = c("Exclusion", "Cluster", "BF", "RR", "t", "df", "p", "Cohen's d","Raw effect","$89\\%$ CI"),
   booktabs = T,
   escape = F,
   caption = "The effect of personal force on moral dilemma judgements on Trolley dilemmas",
   centering = T,
   position = "H") %>%
-  kable_styling( full_width = F,  position = "left") %>%
+  kable_styling( full_width = F,  position = "left", latex_options = "scale_down") %>%
   row_spec(row = 0, bold = TRUE) %>%
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
@@ -289,13 +289,13 @@ studys1b_results <-
 kbl(
   studys1b_results,
   format = "latex",
-  col.names = c("Exclusion", "Cluster", "BF", "RR", "t", "df", "p", "Cohen's d", "Raw effect", "$89\\%$ CI"),
+  col.names = c("Exclusion", "Cluster", "BF", "RR", "t", "df", "p", "Cohen's d","Raw effect","$89\\%$ CI"),
   booktabs = TRUE,
   escape = F,
   caption = " The effect of personal force on moral dilemma judgements on Speedboat dilemmas",
   centering = TRUE,
   position = "H")%>%
-  kable_styling(full_width = FALSE, position = "left")%>%
+  kable_styling(full_width = FALSE, position = "left", latex_options = "scale_down")%>%
   row_spec(row = 0, bold = TRUE) %>%
   collapse_rows(columns = 1, valign = "top", latex_hline = "major",  
                 row_group_label_position = "identity")
@@ -425,12 +425,12 @@ tabledata_s2a_ind_f <-
 tabledata_s2a_ind_f_tidy <- tidy_interaction_stats(tabledata_s2a_ind_f)
 
 full_table_trolley=merge(tabledata_s2a_ind_tidy, tabledata_s2a_ind_f_tidy, by="variable")
-full_table_trolley=full_table_trolley[, -c(4,5,9,10)]
+full_table_trolley=full_table_trolley[, -c(5,6,11,12)]
 
 kbl(
   full_table_trolley,
   format = "latex",
-  col.names = c("Variable", "BF", "b", "p", "$89\\%$ CI", "BF", "b", "p", "$89\\%$ CI"),
+  col.names = c("Variable", "BF", "b", "$89\\%$ CI", "p", "BF", "b","$89\\%$ CI", "p"),
   booktabs = TRUE,
   escape = F,
   caption = "Is the interaction of personal force and intention affected by individualism/collectivism (Trolley)?",
@@ -438,7 +438,7 @@ kbl(
   position = "H") %>%
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
-  add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
+  add_header_above(c(" " = 1, "With familiarity exclusion" = 4, "No familiarity exclusion" = 4))
 ```
 
 ```{r study2a overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (all exclusions applied)", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
@@ -475,12 +475,12 @@ tabledata_s2b_ind_nf_tidy <- tidy_interaction_stats(tabledata_s2b_ind_nf)
 
 
 full_table_speedboat=merge(tabledata_s2b_ind_tidy, tabledata_s2b_ind_nf_tidy, by="variable")
-full_table_speedboat=full_table_speedboat[, -c(4,5,9,10)]
+full_table_speedboat=full_table_speedboat[, -c(5,6,11,12)]
 
 kbl(
   full_table_speedboat,
   format = "latex",
-  col.names = c("Variable", "BF", "b", "p", "$89\\%$ CI", "BF", "b", "p", "$89\\%$ CI"),
+  col.names = c("Variable", "BF", "b", "$89\\%$ CI", "p", "BF", "b","$89\\%$ CI", "p"),
   booktabs = TRUE,
   escape = TRUE,
   caption = "Is the interaction of personal force and intention affected by individualism/collectivism (Speedboat)?",
@@ -488,7 +488,7 @@ kbl(
   position = "H") %>%
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
-  add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
+  add_header_above(c(" " = 1, "With familiarity exclusion" = 4, "No familiarity exclusion" = 4))
 ```
 
 ```{r study2b overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -566,10 +566,10 @@ studys1a_results<-studys1a_results[, -4]
 
 kbl(
   studys1a_results,
-  col.names = c("Dilemma", "Cluster", "BF", "t", "df", "p", "Cohen's d", "$89\\%$ CI"),
+  col.names = c("Dilemma", "Cluster", "BF", "t", "df", "p", "Cohen's d", "Raw effect", "$89\\%$ CI"),
   format = "latex",
   booktabs = T,
-  escape = T,
+  escape = F,
   caption = "The effect of personal force on moral dilemma judgements (no exclusion)",
   centering = T,
   position = "H") %>%
@@ -663,20 +663,20 @@ tabledata_s2b_ne_ind <-
 tabledata_s2b_ind_ne_tidy <- tidy_interaction_stats(tabledata_s2b_ne_ind)
 
 full_table_ne=merge(tabledata_s2a_ind_ne_tidy, tabledata_s2b_ind_ne_tidy, by="variable")
-full_table_ne=full_table_ne[, -c(4,5,9,10)]
+full_table_ne=full_table_ne[, -c(5,6,10,11)]
 
 kbl(
   full_table_ne,
   format = "latex",
-  col.names = c("Variable", "BF", "b", "p", "$89\\%$ CI", "BF", "b", "p", "$89\\%$ CI"),
+  col.names = c("Variable", "BF", "b", "$89\\%$ CI", "p", "BF", "b","$89\\%$ CI", "p"),
   booktabs = TRUE,
-  escape = TRUE,
+  escape = F,
   caption = "Is the interaction of personal force and intention affected by individualism/collectivism?",
   centering = TRUE,
   position = "H") %>%
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
-  add_header_above(c(" " = 1, "Trolley" = 3, "Speedboat" = 3))
+  add_header_above(c(" " = 1, "Trolley" = 4, "Speedboat" = 4))
 ```
 
 ```{r study2a overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (no exclusion)", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}

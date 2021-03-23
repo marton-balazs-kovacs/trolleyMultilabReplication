@@ -84,7 +84,7 @@ rmarkdown::render()
 usethis::use_vignette("manuscript")
 devtools::build_vignettes()
 build_rmd()
-devtools::build_rmd("vignettes/supplementary_materials.Rmd")
+devtools::build_rmd("vignettes/manuscript.Rmd")
 # Check the package
 devtools::check()
 
