@@ -658,7 +658,7 @@ tabledata_s2a_ind_ne_tidy <- tidy_interaction_stats(tabledata_s2a_ne_ind)
 tabledata_s2b_ne_ind <-  
   trolley %>% 
   left_join(., cultural_distance, by = "country3") %>% 
-  calculate_interaction_stats(study_type = "speedboat")
+  calculate_interaction_stats(., study_type = "speedboat")
 
 tabledata_s2b_ind_ne_tidy <- tidy_interaction_stats(tabledata_s2b_ne_ind)
 
