@@ -62,6 +62,11 @@ calculate_study1_stat <- function(data = NULL,
                             ~abs(
                               effsize::cohen.d(rate ~ condition, data = .x)$estimate %>%
                               round(2))),
+      `Raw effect` = purrr::map_dbl(data_long,
+                                    ~dplyr::group_by(.x, condition) %>%
+                                      dplyr::summarise(avg_rate = mean(rate, na.rm = TRUE),
+                                                       .groups = "drop") %>%
+                                      round(2)),
       CI = purrr::map_chr(hdi,
                           . %>%
                             as_tibble() %>%

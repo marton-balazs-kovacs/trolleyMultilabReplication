@@ -30,8 +30,10 @@ calculate_study2_stat <- function(data = NULL,
                              dplyr::mutate(
                                personal_force = dplyr::if_else(stringr::str_detect(condition, "3|5"), 0, 1),
                                intention = dplyr::if_else(stringr::str_detect(condition, "4|5"), 1, 0),
+                               personal_force2 = dplyr::if_else(stringr::str_detect(condition, "3|5"), -1, 1),
+                               intention2 = dplyr::if_else(stringr::str_detect(condition, "4|5"), 1, -1),
                                personal_force = factor(personal_force),
-                               intention = factor(intention)) %>%
+                               intention = factor(intention))%>%
                              as.data.frame()),
            bmod_1 = purrr::map(data_long,
                         ~BayesFactor::lmBF(rate ~ personal_force * intention,
@@ -48,7 +50,7 @@ calculate_study2_stat <- function(data = NULL,
                               BayesFactor::lmBF(rate ~ personal_force * intention, data = .x, rscaleFixed = rscaleFixed),
                               c = 0.89)),
            fmod = purrr::map(data_long,
-                      ~aov(rate ~ personal_force * intention, data=.x) %>%
+                      ~lm(rate ~ personal_force2 * intention2, data=.x) %>%
                         broom::tidy())) %>%
     dplyr::ungroup() %>%
     dplyr::transmute(
@@ -59,16 +61,22 @@ calculate_study2_stat <- function(data = NULL,
                      dplyr::pull(bf) %>%
                      scales::scientific()),
       RR = NA_character_,
-      `F` = purrr::map_dbl(fmod,
-                    ~dplyr::filter(.x, term == "personal_force:intention") %>%
-                      dplyr::pull(statistic) %>%
+      `b` = purrr::map_dbl(fmod,
+                  ~dplyr::filter(.x, term == "personal_force2:intention2") %>%
+                      dplyr::pull(estimate) %>%
                       round(3)),
-      df = purrr::map_chr(fmod,
-                   ~dplyr::filter(.x, term == "Residuals") %>%
-                     dplyr::pull(df) %>%
-                     paste0("1, ", .)),
+#      df = purrr::map_chr(fmod,
+#                   ~dplyr::filter(.x, term == "Residuals") %>%
+#                     dplyr::pull(df) %>%
+#                     paste0("1, ", .)),
+      CI = purrr::map_chr(hdi,
+                         . %>%
+                           tibble::as_tibble() %>%
+                           dplyr::filter(Parameter == "personal_force:intention-1.&.1") %>%
+                           dplyr::mutate(CI = glue::glue("[{round(CI_low, 2)}, {round(CI_high, 2)}]")) %>%
+                           dplyr::pull(CI)),
       p = purrr::map_chr(fmod,
-                  ~dplyr::filter(.x, term == "personal_force:intention") %>%
+                  ~dplyr::filter(.x, term == "personal_force2:intention2") %>%
                     dplyr::pull(p.value) %>%
                        round(3)),
       `Eta squared` = purrr::map_dbl(data_long,
@@ -86,13 +94,8 @@ calculate_study2_stat <- function(data = NULL,
                                            values_from = avg_rate) %>%
                                dplyr::mutate(raw_diff = (`0_0`-`1_0`) - (`0_1` - `1_1`)) %>%
                                dplyr::pull(raw_diff) %>%
-                               round(2)),
-      CI = purrr::map_chr(hdi,
-                         . %>%
-                           tibble::as_tibble() %>%
-                           dplyr::filter(Parameter == "personal_force:intention-1.&.1") %>%
-                           dplyr::mutate(CI = glue::glue("[{round(CI_low, 2)}, {round(CI_high, 2)}]")) %>%
-                           dplyr::pull(CI))
+                               round(2))
+
     )
 }
 

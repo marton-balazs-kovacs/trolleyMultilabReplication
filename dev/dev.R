@@ -26,9 +26,6 @@ usethis::use_package("broomExtra")
 usethis::use_package("lmerTest")
 usethis::use_package("stringr")
 usethis::use_package("tidyselect")
-usethis::use_package("ggnewscale")
-usethis::use_package("bayestestR")
-usethis::use_package("sjstats")
 
 # Add pipe
 usethis::use_pipe(export = TRUE)
