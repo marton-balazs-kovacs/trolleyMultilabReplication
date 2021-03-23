@@ -13,19 +13,19 @@ tidy_interaction_stats <- function(data) {
                                          dplyr::pull(bf) %>%
                                          round(2)),
                    `std. b` = purrr::map_dbl(frequentist,
-                                      ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
+                                      ~dplyr::filter(.x, term == "personal_force2:intention2:value") %>%
                                         dplyr::pull(estimate) %>%
                                         round(2)),
                    lower = purrr::map_dbl(frequentist,
-                                          ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
+                                          ~dplyr::filter(.x, term == "personal_force2:intention2:value") %>%
                                             dplyr::pull(conf.low) %>%
                                             round(4)),
                    higher = purrr::map_dbl(frequentist,
-                                           ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
+                                           ~dplyr::filter(.x, term == "personal_force2:intention2:value") %>%
                                              dplyr::pull(conf.high) %>%
                                              round(4)),
                    p = purrr::map_dbl(frequentist,
-                                      ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
+                                      ~dplyr::filter(.x, term == "personal_force2:intention2:value") %>%
                                         dplyr::pull(p.value) %>%
                                         round(3)),
                    CI = purrr::map_chr(hdi,
