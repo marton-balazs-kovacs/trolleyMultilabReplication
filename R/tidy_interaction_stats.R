@@ -12,10 +12,16 @@ tidy_interaction_stats <- function(data) {
                    BF = purrr::map_dbl(datt3, ~dplyr::slice(.x) %>%
                                          dplyr::pull(bf) %>%
                                          round(2)),
-                   `std. b` = purrr::map_dbl(frequentist,
+                   b = purrr::map_dbl(frequentist,
                                       ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
                                         dplyr::pull(estimate) %>%
                                         round(2)),
+                   CI = purrr::map_chr(hdi,
+                                       . %>%
+                                         tibble::as_tibble() %>%
+                                         dplyr::filter(Parameter == "personal_force:intention:value-1.&.1.&.value") %>%
+                                         dplyr::mutate(CI = glue::glue("[{round(CI_low, 2)}, {round(CI_high, 2)}]")) %>%
+                                         dplyr::pull(CI)),
                    lower = purrr::map_dbl(frequentist,
                                           ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
                                             dplyr::pull(conf.low) %>%
@@ -27,12 +33,6 @@ tidy_interaction_stats <- function(data) {
                    p = purrr::map_dbl(frequentist,
                                       ~dplyr::filter(.x, term == "personal_force1:intention1:value") %>%
                                         dplyr::pull(p.value) %>%
-                                        round(3)),
-                   CI = purrr::map_chr(hdi,
-                                       . %>%
-                                         tibble::as_tibble() %>%
-                                         dplyr::filter(Parameter == "personal_force:intention:value-1.&.1.&.value") %>%
-                                         dplyr::mutate(CI = glue::glue("[{round(CI_low, 2)}, {round(CI_high, 2)}]")) %>%
-                                         dplyr::pull(CI))
+                                        round(3))
   )
 }
