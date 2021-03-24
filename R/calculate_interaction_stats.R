@@ -62,7 +62,7 @@ calculate_interaction_stats <- function(df = NULL, study_type) {
                                             whichRandom = "country0",
                                             data = as.data.frame(.x))),
       datt3 = purrr::map2(datt, datt2,
-                          ~BayesFactor::recompute((.x/.y), iterations = 50000) %>%
+                          ~BayesFactor::recompute((.x/.y), iterations = 100000) %>%
                             as_tibble()),
       frequentist = purrr::map(data,
                                ~lmerTest::lmer(rate ~ personal_force2 * intention2 * value + (1|country3),

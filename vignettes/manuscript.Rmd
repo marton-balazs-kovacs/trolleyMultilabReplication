@@ -482,7 +482,7 @@ kbl(
   format = "latex",
   col.names = c("Variable", "BF", "b", "$89\\%$ CI", "p", "BF", "b","$89\\%$ CI", "p"),
   booktabs = TRUE,
-  escape = TRUE,
+  escape = FALSE,
   caption = "Is the interaction of personal force and intention affected by individualism/collectivism (Speedboat)?",
   centering = TRUE,
   position = "H") %>%
@@ -663,7 +663,7 @@ tabledata_s2b_ne_ind <-
 tabledata_s2b_ind_ne_tidy <- tidy_interaction_stats(tabledata_s2b_ne_ind)
 
 full_table_ne=merge(tabledata_s2a_ind_ne_tidy, tabledata_s2b_ind_ne_tidy, by="variable")
-full_table_ne=full_table_ne[, -c(5,6,10,11)]
+full_table_ne=full_table_ne[, -c(5,6,11,12)]
 
 kbl(
   full_table_ne,
@@ -679,7 +679,7 @@ kbl(
   add_header_above(c(" " = 1, "Trolley" = 4, "Speedboat" = 4))
 ```
 
-```{r study2a overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (no exclusion)", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
+```{r study2a overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interaction effect of personal force and intention in Eta sqaured on the Trolley dilemmas (no exclusion)", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(trolley, "study2a")
 
