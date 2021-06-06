@@ -346,6 +346,7 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
+
 ```{r Study2a excl graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(study2a, "trolley")
@@ -508,8 +509,8 @@ graphdata <-
 create_plot_ind_col(graphdata)
 ```
 
-## Including familiar participants
 
+## Including familiar participants
 
 ```{r study2a overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
@@ -633,8 +634,6 @@ plot_data <- prepare_plot_data_study2(trolley, "trolley")
 # Create plot
 create_plot_study2(plot_data)
 ```
-
-
 
 ```{r study2b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 # Prepare data for plotting

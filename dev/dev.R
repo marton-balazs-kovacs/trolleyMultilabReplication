@@ -26,6 +26,8 @@ usethis::use_package("broomExtra")
 usethis::use_package("lmerTest")
 usethis::use_package("stringr")
 usethis::use_package("tidyselect")
+usethis::use_package("Rmisc")
+
 
 # Add pipe
 usethis::use_pipe(export = TRUE)
@@ -67,6 +69,8 @@ usethis::use_r("create_ind_col_plot")
 usethis::use_r("prepare_plot_data_country")
 usethis::use_r("calculate_study1_stat")
 usethis::use_r("calculate_study2_stat")
+usethis::use_r("calculate_intention_stat")
+usethis::use_r("calculate_contact_stat")
 usethis::use_r("create_plot_country")
 usethis::use_r("my_bf_extractor")
 usethis::use_r("calculate_interaction_stats")
@@ -84,7 +88,7 @@ rmarkdown::render()
 usethis::use_vignette("manuscript")
 devtools::build_vignettes()
 build_rmd()
-devtools::build_rmd("vignettes/manuscript.Rmd")
+devtools::build_rmd("vignettes/supplementary_materials.Rmd")
 # Check the package
 devtools::check()
 
