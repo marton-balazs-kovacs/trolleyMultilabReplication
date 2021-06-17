@@ -57,9 +57,7 @@ trolley <- add_ind_col_scale(trolley)
 
 
 # 2. Main replication analysis
-
 ## Study 2a and 2b
-
 
 ```{r Study2a intention, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 rscale <-  0.26

@@ -225,6 +225,28 @@ exclude_table <-
 exclude_table
 ```
 
+Estimating the percentage of respondents who pass all the exclusion criteria when familiarity does not matter in contrast to all the respondents.
+
+```{r}
+percentage_per_study_withoutfamiliarity <-
+  trolley %>% 
+  select(
+    include_study1a_withoutfamiliarity,
+    include_study1b_withoutfamiliarity,
+    include_study2a_withoutfamiliarity,
+    include_study2b_withoutfamiliarity) %>% 
+  pivot_longer(cols = everything(), names_to = "study", values_to = "value") %>% 
+  count(study, value) %>% 
+  drop_na(value) %>% 
+  group_by(study) %>% 
+  mutate(sum_n = sum(n)) %>% 
+  ungroup() %>% 
+  filter(value == TRUE) %>% 
+  mutate(percentage = n / sum_n * 100)
+
+mean(percentage_per_study_withoutfamiliarity$percentage)
+```
+
 # 2. Main replication analysis
 ## Study 1a and 1b
 ### Bayesian analysis
@@ -262,26 +284,31 @@ plot_data <- prepare_plot_data_study1(study1a, "trolley")
 
 # Create plot
 create_plot_study1(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig1.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r Study1a w/o excl graph, fig.pos = "H",out.width = "80%",fig.cap = "Results on Trolley dilemmas in Study 1 with including familiar participants" , echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(study1a_nf, "trolley")
 
-
 # Create plot
 create_plot_study1(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig2.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r Study1b Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 rscale <- .26
 vars1b <- c("speedboat_1_rate", "speedboat_2_rate")
 
-studys1b_results <- 
-  bind_rows(calculate_study1_stat(study1b, vars = vars1b, 
-                                  label = "Exclude", rscale = rscale), 
-            calculate_study1_stat(study1b_nf, vars = vars1b, 
-                                  label = "Including familiar", rscale = rscale)) %>% 
+studys1b_results <-
+  bind_rows(calculate_study1_stat(study1b, vars = vars1b,
+                                  label = "Exclude", rscale = rscale),
+            calculate_study1_stat(study1b_nf, vars = vars1b,
+                                  label = "Including familiar", rscale = rscale)) %>%
   # RR was calculated by manual iteration
   mutate(RR = c("1.50e-0.3, 1.70e+04", "1.30e-03, 74.00", "3.30e-02, 1.2", "<1.00e-05, 9.50e+03", "<1.00e-05, 2.10e+08", "<1.00e-05, 1.0e+08"),
           p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
@@ -297,7 +324,7 @@ kbl(
   position = "H")%>%
   kable_styling(full_width = FALSE, position = "left", latex_options = "scale_down")%>%
   row_spec(row = 0, bold = TRUE) %>%
-  collapse_rows(columns = 1, valign = "top", latex_hline = "major",  
+  collapse_rows(columns = 1, valign = "top", latex_hline = "major",
                 row_group_label_position = "identity")
 ```
 
@@ -307,6 +334,9 @@ plot_data <- prepare_plot_data_study1(study1b, "speedboat")
 
 # Create plot
 create_plot_study1(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig3.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r Study1b w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with including familiar participants. ", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -315,6 +345,9 @@ plot_data <- prepare_plot_data_study1(study1b_nf, "speedboat")
 
 # Create plot
 create_plot_study1(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig4.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ## Study 2a and 2b
@@ -323,11 +356,11 @@ create_plot_study1(plot_data)
 rscaleFixed <- c("personal_force:intention" = 0.19)
 vars2a <- c("trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate")
 
-studys2a_results <- 
-  bind_rows(calculate_study2_stat(study2a, vars = vars2a, 
-                                  label = "Exlusion", rscaleFixed = rscaleFixed), 
-            calculate_study2_stat(study2a_nf, vars = vars2a, 
-                                  label = "Include familiar", rscaleFixed = rscaleFixed)) %>% 
+studys2a_results <-
+  bind_rows(calculate_study2_stat(study2a, vars = vars2a,
+                                  label = "Exlusion", rscaleFixed = rscaleFixed),
+            calculate_study2_stat(study2a_nf, vars = vars2a,
+                                  label = "Include familiar", rscaleFixed = rscaleFixed)) %>%
   # RR was calculated by manual iteration
   mutate( RR = c(c("0.03, 0.64", "0.03, 0.2", "6.00e-05, 1.80e+03", "2.50e-02, 0.91", "8.00e-05, 1.70e+03", "<1.00e-05, 2.30e+14")),
           p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
@@ -353,6 +386,9 @@ plot_data <- prepare_plot_data_study2(study2a, "trolley")
 
 # Create plot
 create_plot_study2(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig5.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r Study2a w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 while not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -361,17 +397,20 @@ plot_data <- prepare_plot_data_study2(study2a_nf, "trolley")
 
 # Create plot
 create_plot_study2(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig6.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 rscaleFixed <- c("personal_force:intention" = 0.19)
 vars2b <- c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate")
 
-studys2b_results <- 
-  bind_rows(calculate_study2_stat(study2b, vars = vars2b, 
-                                  label = "Exlusion", rscaleFixed=rscaleFixed), 
-            calculate_study2_stat(study2b_nf, vars = vars2b, 
-                                  label = "Include familiar", rscaleFixed=rscaleFixed)) %>% 
+studys2b_results <-
+  bind_rows(calculate_study2_stat(study2b, vars = vars2b,
+                                  label = "Exlusion", rscaleFixed=rscaleFixed),
+            calculate_study2_stat(study2b_nf, vars = vars2b,
+                                  label = "Include familiar", rscaleFixed=rscaleFixed)) %>%
   # RR was calculated by manual iteration
   mutate(RR = c("4.90e-02, 0.69", "5.10e-02, 0.63", "3.60e-02, 1.10", "2.60e-02, 0.72", "2.50e-02, 0.95", "1.40e-02, 1.30"),
           p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)),
@@ -397,6 +436,9 @@ plot_data <- prepare_plot_data_study2(study2b, "speedboat")
 
 # Create plot
 create_plot_study2(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig7.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b w/o excl graph,fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2, not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -405,22 +447,25 @@ plot_data <- prepare_plot_data_study2(study2b_nf, "speedboat")
 
 # Create plot
 create_plot_study2(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig8.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 # 3. Individualism-collectivism analysis
 ## With all exclusions
 
 ```{r analysis individual + country level study 2a, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-tabledata_s2a_ind <-  
-  study2a %>% 
-  left_join(., cultural_distance, by = "country3") %>% 
+tabledata_s2a_ind <-
+  study2a %>%
+  left_join(., cultural_distance, by = "country3") %>%
   calculate_interaction_stats(study_type="trolley")
 
 tabledata_s2a_ind_tidy <- tidy_interaction_stats(tabledata_s2a_ind)
 
-tabledata_s2a_ind_f <-  
-  study2a_nf %>% 
-  left_join(., cultural_distance, by = "country3") %>% 
+tabledata_s2a_ind_f <-
+  study2a_nf %>%
+  left_join(., cultural_distance, by = "country3") %>%
   calculate_interaction_stats(study_type="trolley")
 
 tabledata_s2a_ind_f_tidy <- tidy_interaction_stats(tabledata_s2a_ind_f)
@@ -448,28 +493,34 @@ plot_data_country <- prepare_plot_data_country(study2a, "study2a")
 
 # Create plot
 create_plot_country(plot_data_country)
+
+# Save plot
+ggplot2::ggsave("figures/fig9.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-graphdata <- 
-  tabledata_s2a_ind_tidy %>% 
-  filter(variable != "Country-level collectivism") %>% 
+graphdata <-
+  tabledata_s2a_ind_tidy %>%
+  filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
+
+# Save plot
+ggplot2::ggsave("figures/fig10.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r analysis individual + country level study 2b, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-tabledata_s2b_ind <-  
-  study2b %>% 
-  left_join(., cultural_distance, by = "country3") %>% 
+tabledata_s2b_ind <-
+  study2b %>%
+  left_join(., cultural_distance, by = "country3") %>%
   calculate_interaction_stats(study_type = "speedboat")
 
 tabledata_s2b_ind_tidy <- tidy_interaction_stats(tabledata_s2b_ind)
 
-tabledata_s2b_ind_nf <-  
-  study2b_nf %>% 
-  left_join(., cultural_distance, by = "country3") %>% 
+tabledata_s2b_ind_nf <-
+  study2b_nf %>%
+  left_join(., cultural_distance, by = "country3") %>%
   calculate_interaction_stats(study_type = "speedboat")
 
 tabledata_s2b_ind_nf_tidy <- tidy_interaction_stats(tabledata_s2b_ind_nf)
@@ -498,15 +549,21 @@ plot_data_country <- prepare_plot_data_country(study2b, "study2b")
 
 # Create plot
 create_plot_country(plot_data_country)
+
+# Save plot
+ggplot2::ggsave("figures/fig11.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-graphdata <- 
-  tabledata_s2b_ind_tidy %>% 
-  filter(variable != "Country-level collectivism") %>% 
+graphdata <-
+  tabledata_s2b_ind_tidy %>%
+  filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
+
+# Save plot
+ggplot2::ggsave("figures/fig12.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 
@@ -518,17 +575,22 @@ plot_data_country <- prepare_plot_data_country(study2a_nf, "study2a")
 
 # Create plot
 create_plot_country(plot_data_country)
+
+# Save plot
+ggplot2::ggsave("figures/fig13.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2a vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-graphdata <- 
-  tabledata_s2a_ind_f_tidy %>% 
-  filter(variable != "Country-level collectivism") %>% 
+graphdata <-
+  tabledata_s2a_ind_f_tidy %>%
+  filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
-```
 
+# Save plot
+ggplot2::ggsave("figures/fig14.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+```
 
 ```{r study2b overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
@@ -536,16 +598,23 @@ plot_data_country <- prepare_plot_data_country(study2b_nf, "study2b")
 
 # Create plot
 create_plot_country(plot_data_country)
+
+# Save plot
+ggplot2::ggsave("figures/fig15.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas, familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-graphdata <- 
-  tabledata_s2b_ind_nf_tidy %>% 
-  filter(variable != "Country-level collectivism") %>% 
+graphdata <-
+  tabledata_s2b_ind_nf_tidy %>%
+  filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
+
+# Save plot
+ggplot2::ggsave("figures/fig16.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
+
 
 # 3. No exclusion analysis
 ## Study 1a and 1b
@@ -555,11 +624,11 @@ rscale <- .26
 vars1a <- c("trolley_1_rate", "trolley_2_rate")
 vars1b <- c("speedboat_1_rate", "speedboat_2_rate")
 
-studys1a_results <- 
-  bind_rows(calculate_study1_stat(trolley, vars = vars1a, 
+studys1a_results <-
+  bind_rows(calculate_study1_stat(trolley, vars = vars1a,
                                   label = "Trolley", rscale = rscale),
-            calculate_study1_stat(trolley, vars = vars1b, 
-                                  label = "Speedboat", rscale = rscale)) %>% 
+            calculate_study1_stat(trolley, vars = vars1b,
+                                  label = "Speedboat", rscale = rscale)) %>%
   # RR was calculated by manual iteration
   mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
@@ -585,6 +654,9 @@ plot_data <- prepare_plot_data_study1(trolley, "trolley")
 
 # Create plot
 create_plot_study1(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig17.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r Study1b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with no exclusion criteria applied.", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -593,6 +665,9 @@ plot_data <- prepare_plot_data_study1(trolley, "speedboat")
 
 # Create plot
 create_plot_study1(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig18.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 
@@ -603,11 +678,11 @@ rscaleFixed <- c("personal_force:intention" = 0.19)
 vars2a <- c("trolley_3_rate", "trolley_4_rate", "trolley_5_rate", "trolley_6_rate")
 vars2b <- c("speedboat_3_rate", "speedboat_4_rate", "speedboat_5_rate", "speedboat_6_rate")
 
-studys2a_results <- 
-  bind_rows(calculate_study2_stat(trolley, vars = vars2a, 
-                                  label = "Trolley", rscaleFixed = rscaleFixed), 
-            calculate_study2_stat(trolley, vars = vars2b, 
-                                  label = "Speedboat", rscaleFixed = rscaleFixed)) %>% 
+studys2a_results <-
+  bind_rows(calculate_study2_stat(trolley, vars = vars2a,
+                                  label = "Trolley", rscaleFixed = rscaleFixed),
+            calculate_study2_stat(trolley, vars = vars2b,
+                                  label = "Speedboat", rscaleFixed = rscaleFixed)) %>%
   # RR was calculated by manual iteration
 mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
@@ -633,6 +708,9 @@ plot_data <- prepare_plot_data_study2(trolley, "trolley")
 
 # Create plot
 create_plot_study2(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig19.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -641,22 +719,25 @@ plot_data <- prepare_plot_data_study2(trolley, "speedboat")
 
 # Create plot
 create_plot_study2(plot_data)
+
+# Save plot
+ggplot2::ggsave("figures/fig20.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 
 ## Individualism-collectivism analysis
 
 ```{r analysis individual + country level study 2ab, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-tabledata_s2a_ne_ind <-  
-  trolley %>% 
-  left_join(., cultural_distance, by = "country3") %>% 
+tabledata_s2a_ne_ind <-
+  trolley %>%
+  left_join(., cultural_distance, by = "country3") %>%
   calculate_interaction_stats(., study_type = "trolley")
 
 tabledata_s2a_ind_ne_tidy <- tidy_interaction_stats(tabledata_s2a_ne_ind)
 
-tabledata_s2b_ne_ind <-  
-  trolley %>% 
-  left_join(., cultural_distance, by = "country3") %>% 
+tabledata_s2b_ne_ind <-
+  trolley %>%
+  left_join(., cultural_distance, by = "country3") %>%
   calculate_interaction_stats(., study_type = "speedboat")
 
 tabledata_s2b_ind_ne_tidy <- tidy_interaction_stats(tabledata_s2b_ne_ind)
@@ -684,17 +765,22 @@ plot_data_country <- prepare_plot_data_country(trolley, "study2a")
 
 # Create plot
 create_plot_country(plot_data_country)
+
+# Save plot
+ggplot2::ggsave("figures/fig21.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2a vertical horizontal individualism ne, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemma, no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-graphdata <- 
-  tabledata_s2a_ind_ne_tidy %>% 
-  filter(variable != "Country-level collectivism") %>% 
+graphdata <-
+  tabledata_s2a_ind_ne_tidy %>%
+  filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
-```
 
+# Save plot
+ggplot2::ggsave("figures/fig22.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+```
 
 ```{r study2b overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
@@ -702,52 +788,54 @@ plot_data_country <- prepare_plot_data_country(trolley, "study2b")
 
 # Create plot
 create_plot_country(plot_data_country)
+
+# Save plot
+ggplot2::ggsave("figures/fig23.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b vertical horizontal individualism ne,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemma, no exclusion)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-graphdata <- 
-  tabledata_s2b_ind_ne_tidy %>% 
-  filter(variable != "Country-level collectivism") %>% 
+graphdata <-
+  tabledata_s2b_ind_ne_tidy %>%
+  filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
 ```
 
 
-
 # Table 1
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE}
 ### Some country codes are not standard iso codes; replace
-custom_countries <- 
-  c("LEB" = "LBN", 
-    "BUL" = "BGR", 
-    "SPA" = "ESP", 
+custom_countries <-
+  c("LEB" = "LBN",
+    "BUL" = "BGR",
+    "SPA" = "ESP",
     "SWT" = "CHE",
     "PSA" = "USA")
 
 # Transform data for the table
 ## Table 1 represents the countries who collected data for the study
 ## in the three investigated clusters
-table_data <- 
-  trolley %>% 
+table_data <-
+  trolley %>%
   select(survey_name, lab) %>%
-  drop_na(lab) %>% 
-  mutate(country3 = str_extract(lab, "[A-Z]+") %>% 
+  drop_na(lab) %>%
+  mutate(country3 = str_extract(lab, "[A-Z]+") %>%
               recode(., !!!custom_countries),
          region = str_remove(survey_name, "PSA006_"),
-         Country = countrycode(sourcevar = country3, 
+         Country = countrycode(sourcevar = country3,
                                       origin = "iso3c",
                                       destination = "country.name"))
 # GBR_001!
 # Check the number of countries per region
-table_data %>% 
-  distinct(region, Country) %>% 
+table_data %>%
+  distinct(region, Country) %>%
   count(region)
 
 # Check the number of countries
-table_data %>% 
-  distinct(Country) %>% 
+table_data %>%
+  distinct(Country) %>%
   count()
 
 # Missing countries since the Stage 1 manuscript:
@@ -755,13 +843,13 @@ table_data %>%
 # Southern: El Salvador
 # Eastern: Indonesia
 
-table_data <- 
-  table_data %>% 
-  distinct(region, Country) %>% 
-  group_by(region) %>% 
-  arrange(Country) %>% 
-  filter(!(region == "Eastern" & Country == "United Kingdom")) %>% 
-  summarise(countries = str_c(Country, collapse = ", ")) %>% 
+table_data <-
+  table_data %>%
+  distinct(region, Country) %>%
+  group_by(region) %>%
+  arrange(Country) %>%
+  filter(!(region == "Eastern" & Country == "United Kingdom")) %>%
+  summarise(countries = str_c(Country, collapse = ", ")) %>%
   pivot_wider(names_from = region, values_from = countries)
 
 table_data$Eastern

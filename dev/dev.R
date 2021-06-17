@@ -27,6 +27,8 @@ usethis::use_package("lmerTest")
 usethis::use_package("stringr")
 usethis::use_package("tidyselect")
 usethis::use_package("Rmisc")
+usethis::use_package("effsize")
+usethis::use_dev_package("papaja", remote = "crsh/papaja")
 
 
 # Add pipe

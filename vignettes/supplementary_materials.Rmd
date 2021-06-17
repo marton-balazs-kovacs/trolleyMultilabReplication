@@ -122,6 +122,7 @@ trolley_raw %>%
   count()
 ```
 
+
 # 1. Demographics  
 
 ```{r dem2,echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -179,6 +180,7 @@ demo_table <-
 
 demo_table
 ```
+
 
 # 2. Additional analysis
 ## Effect of physical contact 
@@ -299,8 +301,11 @@ bind_rows(additional_trolley, additional_speedboat) %>%
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
+
 ##Analysing familiar participants
+
 As we registered, we conducted the analysis on familiar participants, the results can be found below.
+
 ```{r Study1ab Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 rscale <- .26
 vars1a <- c("trolley_1_rate", "trolley_2_rate")
@@ -415,9 +420,13 @@ plot_data %>%
     axis.text.y = element_text(face = "bold", size = 12, colour = "Black"),
     legend.title = element_blank(),
     legend.text = element_text(size = 9))
+
+# Save plot
+ggplot2::ggsave("figures/figs1.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 As registered, we also report means and confidence intervals for each cultural cluster and each subscale of the Oxford Utilitarianism Scale.
+
 ```{r OUS means + CI, echo = FALSE, message=FALSE, warning=FALSE, paged.print=FALSE }
 # Prepare data for plotting
 oxford_data <-
@@ -463,10 +472,7 @@ for (i in levels(factor(oxford_data$Region))) {
   kable_styling(full_width = F,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
   add_header_above(c(" " = 1, "Instrumental Harm" = 2, "Impartial Beneficence" = 2))
-
-
 ```
-
 
 We also reported correlations between each Oxford Utilitarianism Scale subscales and moral acceptability ratings on each moral dilemma. Results suggests a higher correlation between acceptability ratings and the Instrumental Harm scale, anda somewhat lower correlation between Impartial Beneficence and acceptability ratings.
 
@@ -552,10 +558,7 @@ final<-bind_rows(
   row_spec(row = 0, bold = TRUE) %>%
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")%>%
   add_header_above(c(" " = 1, "Impartial Beneficence" = 2, "Instrumental Harm" = 2, " " = 1))
-
-
 ```
-
 
 
 #Exploratory analysis on overall utilitarianism and collectivism
@@ -563,7 +566,6 @@ final<-bind_rows(
 Although not part of the planned analysis, we hypothesized that country-level collectivism would be negatively associated with utilitarian responding (i.e., higher morall acceptibility ratings). We found no evidence for this hypothesis, regardless of familiarity exclusion or dilemma context. Interestingly, however, we found strong evidence for the association between vertical individualism and average moral acceptibility ratings on moral dilemmas, regardless of dilemma context or exclusion criteria. The positive association means that higher levels of vertical individualism is associated with higher acceptance of the utilitarian response option. Although we hypothesized that it would be collectivism that makes people *more* emotional and therefore, less utilitarian, we speculate that individualism made people *less* emotional and therefore, more utilitarian.
 
 In all of the regression models below, we added the random intercept of countries.
-
 
 ```{r analysis individual + country level study 2a, echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 utilitarian_trolley <- filter(trolley, include_study1a | include_study2a)
@@ -603,7 +605,6 @@ kbl(
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
   add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
-
 ```
 
 ```{r analysis individual + country level study 2b, echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -645,12 +646,16 @@ kbl(
   add_header_above(c(" " = 1, "With familiarity exclusion" = 3, "No familiarity exclusion" = 3))
 ```
 
+
 ##With exclusions
 
 ```{r study2a overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice).", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley, "trolley")
 
 create_plot_country_utilitarianism(plot_data_country)
+
+# Save plot
+ggplot2::ggsave("figures/figs2.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2a vertical horizontal individualism, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -660,12 +665,18 @@ graphdata <-
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
+
+# Save plot
+ggplot2::ggsave("figures/figs3.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_speedboat, "speedboat")
 
 create_plot_country_utilitarianism(plot_data_country)
+
+# Save plot
+ggplot2::ggsave("figures/figs4.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b vertical horizontal individualism,  out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
@@ -675,6 +686,9 @@ graphdata <-
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
+
+# Save plot
+ggplot2::ggsave("figures/figs5.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 
@@ -684,8 +698,10 @@ create_plot_ind_col(graphdata)
 plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley_nf, "trolley")
 
 create_plot_country_utilitarianism(plot_data_country)
-```
 
+# Save plot
+ggplot2::ggsave("figures/figs6.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+```
 
 ```{r study2a vertical horizontal individualism w/o excl, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 graphdata <- 
@@ -694,15 +710,19 @@ graphdata <-
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
-```
 
+# Save plot
+ggplot2::ggsave("figures/figs7.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+```
 
 ```{r study2b overall individualism plot w/o excl, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_speedboat_nf, "speedboat")
 
 create_plot_country_utilitarianism(plot_data_country)
-```
 
+# Save plot
+ggplot2::ggsave("figures/figs8.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+```
 
 ```{r study2b vertical horizontal individualism w/o excl,  out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
 graphdata <- 
@@ -711,4 +731,7 @@ graphdata <-
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
+
+# Save plot
+ggplot2::ggsave("figures/figs9.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```

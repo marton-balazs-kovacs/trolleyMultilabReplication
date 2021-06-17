@@ -29,7 +29,7 @@ trolley <-
                                FL_22_DO_Loop == 1 ~ "Loop",
                                FL_22_DO_Obstaclecollide == 1 ~ "Obstaclecollide",
                                TRUE ~ NA_character_),
-         # Flag careless responders
+         # Flag careless respondents
          include_nocareless = careless_1 != 1 & careless_2 != 1 & careless_3 != 2,
          # Flag confused participants
          include_noconfusion = confusion != 3,
@@ -39,21 +39,21 @@ trolley <-
          include_notechproblem = technical_problems != 2,
          # Flag those who did not fill the questionnaire on their native language
          include_nonativelang = native_language != 2,
-         # Flag those without any exclusion criterion
-         include_noproblem =  include_nocareless &
+         # Flag those who pass all exclusion criterion
+         include_noproblem =  include_nofamiliarity &
+           include_nocareless &
            include_noconfusion &
-           include_nofamiliarity &
            include_notechproblem &
            include_nonativelang,
-         # Flag those who pass all exclusion criterion expect but familiarity does not matter
+         # Flag those who pass all exclusion criterion but familiarity does not matter
          include_withoutfamiliarity = include_nocareless &
            include_noconfusion &
            include_notechproblem &
            include_nonativelang,
          # Flag those who pass all exclusion criterion but they are familiar with the tasks
-         include_familiar = include_nocareless &
+         include_familiar = !include_nofamiliarity &
+           include_nocareless &
            include_noconfusion &
-           !include_nofamiliarity &
            include_notechproblem &
            include_nonativelang) %>%
   # Flag those that are eligible to analysis in each study
@@ -66,6 +66,7 @@ trolley <-
          include_study1a = include_study1a_attention & include_noproblem,
          include_study1b = include_study1b_attention & include_noproblem,
          # Flag responses where participants pass all the checks but both familiar and not familiar respondents are included
+         # (i.e., familiarity does not matter)
          include_study1a_withoutfamiliarity = include_study1a_attention & include_withoutfamiliarity,
          include_study1b_withoutfamiliarity = include_study1b_attention & include_withoutfamiliarity,
          # Flag responses where participants pass all the checks but only familiar respondents are included
@@ -81,6 +82,7 @@ trolley <-
          include_study2a = include_study2a_attention & include_noproblem,
          include_study2b = include_study2b_attention & include_noproblem,
          # Flag responses where participants pass all the checks but both familiar and not familiar respondents are included
+         # (i.e., familiarity does not matter)
          include_study2a_withoutfamiliarity = include_study2a_attention & include_withoutfamiliarity,
          include_study2b_withoutfamiliarity = include_study2b_attention & include_withoutfamiliarity,
          # Flag responses where participants pass all the checks but only familiar respondents are included
