@@ -1,13 +1,13 @@
 #' Add individualism and collectivism aggregated scores
 #'
 #' The function takes a dataframe with the raw individual and
-#' collectivism scales and calculates the aggreageted scores rowwise.
+#' collectivism scales and calculates the aggregated scores row wise.
 #'
 #' @param df a dataframe that contains the raw scales
 #'
 #' @return The function returns the dataframe with the
 #' additional aggregated scores added in four new
-#' variables rowwise: `hor_ind`, `ver_ind`, `hor_col`,
+#' variables row wise: `hor_ind`, `ver_ind`, `hor_col`,
 #' `ver_col`.
 #' @export
 add_ind_col_scale <- function(df) {

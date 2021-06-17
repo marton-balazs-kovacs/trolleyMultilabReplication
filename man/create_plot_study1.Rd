@@ -13,7 +13,6 @@ create_plot_study1(data)
 The function returns a ggplot2 list object.
 }
 \description{
-The function creates a plot for the
-trolley problem paper specifically from already prepared
-data.
+The function creates a plot for study1 based on
+prepared dataset created by \code{\link{prepare_plot_data_study1}}.
 }

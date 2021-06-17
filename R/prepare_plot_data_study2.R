@@ -1,6 +1,7 @@
 #' Prepare datatable for plotting for study2
 #'
-#' Prepares datatable for plotting.
+#' Prepares datatable for creating a plot for study1. The plot
+#' can be created with the \code{\link{create_plot_study2}} function.
 #'
 #' @param data the datatable to be plotted
 #' @param study_type the type of the study either "trolley" or "speedboat"

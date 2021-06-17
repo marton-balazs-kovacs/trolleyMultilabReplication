@@ -1,6 +1,7 @@
-#' Calculates the statistics for study 2
+#' Runs the statistical analysis for study2
 #'
-#' description...
+#' The function runs the statistical analysis for study2 a and b as
+#' described in the manuscript.
 #'
 #' @param data data frame or tibble that contains Region and specified variables
 #' @param vars the variables to be collapsed

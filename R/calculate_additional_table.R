@@ -2,7 +2,7 @@
 #'
 #' This is a super lazy function that needs to be generalized.
 #'
-#' @param data the piped reformatted data for the additional anaylsis
+#' @param data the piped reformatted data for the additional analysis
 #' @export
 calculate_additional_table <- function(data) {
   data %>%

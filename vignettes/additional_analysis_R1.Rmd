@@ -15,7 +15,8 @@ knitr::opts_chunk$set(
 ) 
 ```
 
-```{r setup, ,echo=FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
+```{r setup, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+# Load packages
 library(trolleyMultilabReplication)
 library(tidyverse)
 library(kableExtra)
@@ -64,18 +65,19 @@ rscale <-  0.26
 vars1a <- c("trolley_3_rate", "trolley_2_rate")
 
 studys1a_results <- 
-  bind_rows(calculate_intention_stat(intention_a, vars = vars1a, 
-                                  label = "Exclusion", rscale = rscale),
-            calculate_intention_stat(intention_a_nf, vars = vars1a, 
-                                  label = "Include familiar", rscale = rscale),
-            calculate_intention_stat(trolley, vars = vars1a, 
-                                  label = "No exclusion", rscale = rscale)) %>% 
+  bind_rows(
+    calculate_intention_stat(intention_a, vars = vars1a, 
+                             label = "Exclusion", rscale = rscale),
+    calculate_intention_stat(intention_a_nf, vars = vars1a, 
+                             label = "Include familiar", rscale = rscale),
+    calculate_intention_stat(trolley, vars = vars1a, 
+                             label = "No exclusion", rscale = rscale)) %>% 
   mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 kbl(
   studys1a_results,
   format = "latex",
-  col.names = c("Exclusion", "Cluster", "BF",  "t", "df", "p", "Cohen's d","Raw effect","$89\\%$ CI"),
+  col.names = c("Exclusion", "Cluster", "BF",  "t", "df", "p", "Cohen's d", "Raw effect", "$89\\%$ CI"),
   booktabs = T,
   escape = F,
   caption = "The effect of intention on moral dilemma judgements on Trolley dilemmas",
@@ -91,18 +93,19 @@ rscale <-  0.26
 vars1b <- c("speedboat_3_rate", "speedboat_2_rate")
 
 studys1b_results <- 
-  bind_rows(calculate_intention_stat(intention_b, vars = vars1b, 
-                                  label = "Exclusion", rscale = rscale),
-            calculate_intention_stat(intention_b_nf, vars = vars1b, 
-                                  label = "Include familiar", rscale = rscale),
-            calculate_intention_stat(trolley, vars = vars1b, 
-                                  label = "No exclusion", rscale = rscale)) %>% 
+  bind_rows(
+    calculate_intention_stat(intention_b, vars = vars1b, 
+                             label = "Exclusion", rscale = rscale),
+    calculate_intention_stat(intention_b_nf, vars = vars1b, 
+                             label = "Include familiar", rscale = rscale),
+    calculate_intention_stat(trolley, vars = vars1b, 
+                             label = "No exclusion", rscale = rscale)) %>% 
   mutate(p = ifelse(as.numeric(p) < .001, "<.001", round(as.numeric(p),3)))
 
 kbl(
   studys1b_results,
   format = "latex",
-  col.names = c("Exclusion", "Cluster", "BF",  "t", "df", "p", "Cohen's d","Raw effect","$89\\%$ CI"),
+  col.names = c("Exclusion", "Cluster", "BF",  "t", "df", "p", "Cohen's d", "Raw effect", "$89\\%$ CI"),
   booktabs = T,
   escape = F,
   caption = "The effect of intention on moral dilemma judgements on Speedboat dilemmas",

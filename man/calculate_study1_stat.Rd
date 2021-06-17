@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_study1_stat.R
 \name{calculate_study1_stat}
 \alias{calculate_study1_stat}
-\title{Calculates the statistics for study 1}
+\title{Runs the statistical analysis for study1}
 \usage{
 calculate_study1_stat(data = NULL, vars = NULL, label = NULL, rscale)
 }
@@ -20,5 +20,6 @@ a tibble that contains the selected statistics
   in a format that can be printed
 }
 \description{
-This is the description
+The function runs the statistical analysis for study1 a and b as
+described in the manuscript.
 }

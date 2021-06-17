@@ -16,5 +16,6 @@ the function returns a modified datatable
 ready to be passed to the plotting function.
 }
 \description{
-Prepares datatable for plotting.
+Prepares datatable for creating a plot for study1. The plot
+can be created with the \code{\link{create_plot_study2}} function.
 }

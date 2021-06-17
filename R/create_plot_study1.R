@@ -1,8 +1,7 @@
 #' Create a plot for study1
 #'
-#' The function creates a plot for the
-#' trolley problem paper specifically from already prepared
-#' data.
+#' The function creates a plot for study1 based on
+#' prepared dataset created by \code{\link{prepare_plot_data_study1}}.
 #'
 #' @param data the datatable to be plotted
 #'
@@ -16,20 +15,31 @@ create_plot_study1 <- function(data) {
       y = rate,
       fill = condition,
       colour=condition) +
-    geom_flat_violin(aes(y=rate, colour=condition),position = position_nudge(x = .2, y = 0), alpha = .8)+
-    geom_point(aes(y=rate, colour=condition), position = position_jitter(width = .15), size = .25, alpha= 0.8)+
+    geom_flat_violin(
+      ggplot2::aes(
+        y = rate,
+        colour = condition),
+      position = ggplot2::position_nudge(x = .2, y = 0),
+      alpha = .8) +
+    ggplot2::geom_point(
+      ggplot2::aes(
+        y = rate,
+        colour = condition),
+      position = ggplot2::position_jitter(width = .15),
+      size = .25,
+      alpha= 0.8) +
     ggplot2::stat_summary(
       fun = mean,
       geom = "point",
       position = position_nudge(x = .3, y = 0),
-      colour=c("White", "Black","White", "Black","White", "Black")) +
+      colour = c("White", "Black", "White", "Black", "White", "Black")) +
     ggplot2::stat_summary(
       fun.data = mean_cl_boot,
       geom = "errorbar",
       width = 0,
-      position = position_nudge(x = .3, y = 0),
-      colour=c("White", "Black","White", "Black","White", "Black"),
-      show.legend=F) +
+      position = ggplot2::position_nudge(x = .3, y = 0),
+      colour = c("White", "Black", "White", "Black", "White", "Black"),
+      show.legend = F) +
     scale_fill_viridis_d() +
     scale_colour_viridis_d() +
     ggplot2::facet_wrap(facets = vars(survey_name)) +

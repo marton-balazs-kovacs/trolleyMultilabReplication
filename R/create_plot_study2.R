@@ -1,8 +1,7 @@
 #' Create plot for study2
 #'
-#' The function creates plot for the
-#' trolley problem paper specifically from already prepared
-#' data.
+#' The function creates a plot for study1 based on
+#' prepared dataset created by \code{\link{prepare_plot_data_study2}}.
 #'
 #' @param data the datatable to be plotted
 #'

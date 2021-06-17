@@ -7,7 +7,7 @@
 calculate_additional_table(data)
 }
 \arguments{
-\item{data}{the piped reformatted data for the additional anaylsis}
+\item{data}{the piped reformatted data for the additional analysis}
 }
 \description{
 This is a super lazy function that needs to be generalized.
