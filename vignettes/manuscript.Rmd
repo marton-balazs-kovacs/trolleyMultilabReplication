@@ -813,6 +813,8 @@ graphdata <-
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
+ggplot2::ggsave("figures/fig24.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+
 ```
 
 
