@@ -23,7 +23,7 @@ not_core_team <-
   trolley_infosheet_raw  %>%
   filter(is.na(`Order in publication`)) %>%
   arrange(Surname) %>%
-  mutate(`Order in publication` = 7:259,
+  mutate(`Order in publication` = 7:269,
          `Core team` = 0L,
          `Writing - review & editing` = TRUE,
          Investigation = TRUE) %>%
