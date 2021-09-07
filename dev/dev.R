@@ -1,7 +1,6 @@
 # Add packages
 usethis::use_package("dplyr")
 usethis::use_package("kableExtra")
-usethis::use_package("papaja")
 usethis::use_package("lmerTest")
 usethis::use_package("jsonlite")
 usethis::use_package("vroom")

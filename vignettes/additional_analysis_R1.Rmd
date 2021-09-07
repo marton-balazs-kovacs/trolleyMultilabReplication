@@ -53,7 +53,6 @@ study2b_nf <- add_ind_col_scale(study2b_nf)
 
 # Add individualism and collectivism scales
 trolley <- add_ind_col_scale(trolley)
-
 ```
 
 
