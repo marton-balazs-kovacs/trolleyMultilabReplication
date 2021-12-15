@@ -17,7 +17,8 @@ knitr::opts_chunk$set(
 
 ```{r setup, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Load packages
-library(trolleyMultilabReplication)
+#library(trolleyMultilabReplication)
+devtools::load_all()
 library(tidyverse)
 library(kableExtra)
 library(gt)
@@ -250,7 +251,9 @@ mean(percentage_per_study_withoutfamiliarity$percentage)
 ```
 
 # 2. Main replication analysis
+
 ## Study 1a and 1b
+
 ### Bayesian analysis
 
 ```{r Study1a Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -288,25 +291,85 @@ kbl(
 
 ```{r Study1a excl graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. ", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study1(study1a, "trolley")
+plot_data <- 
+  prepare_plot_data_study1(study1a, "trolley") %>% 
+  add_count(survey_name, condition) %>% 
+  mutate(n_label = paste0("n = ", n))
+
+fig1_tags <-
+  tibble(x = rep(.55, 3),
+         y = rep(8.55, 3),
+         survey_name = unique(plot_data$survey_name),
+         label = LETTERS[1:3],
+         )
 
 # Create plot
-create_plot_study1(plot_data)
+fig1 <-
+  create_plot_study1(plot_data) +
+  geom_text(data = fig1_tags, 
+            aes(x = x, y = y, label = label), 
+            fontface = "bold",
+            inherit.aes = FALSE) +
+  geom_text(y = -.05, 
+            aes(label = n_label), 
+            size = 2.5,
+            color = "black") 
 
-# Save plot
-ggplot2::ggsave("figures/fig1.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+
+    # Save plot
+ggplot2::ggsave(plot = fig1, 
+                filename = "vignettes/figures/fig1.pdf", 
+                device = "pdf", 
+                dpi = 300)
 ```
 
 ```{r Study1a w/o excl graph, fig.pos = "H",out.width = "80%",fig.cap = "Results on Trolley dilemmas in Study 1 with including familiar participants" , echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study1(study1a_nf, "trolley")
+plot_data <- 
+  prepare_plot_data_study1(study1a_nf, "trolley") %>% 
+  add_count(survey_name, condition) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study1(plot_data)
+fig2_tags <-
+  tibble(x = rep(.55, 3),
+         y = rep(8.55, 3),
+         survey_name = unique(plot_data$survey_name),
+         label = LETTERS[4:6])
+
+# Create plot
+fig2 <-
+  create_plot_study1(plot_data) +
+  geom_text(data = fig2_tags, 
+            aes(x = x, y = y, label = label), 
+            fontface = "bold",
+            inherit.aes = FALSE) +
+  geom_text(y = -.05, 
+            aes(label = n_label), 
+            size = 2.5,
+            color = "black") 
 
 # Save plot
-ggplot2::ggsave("figures/fig2.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave(plot = fig2, filename = "vignettes/figures/fig2.pdf", device = "pdf", dpi = 300)
 ```
+
+## Merged Figure 1-2
+
+```{r}
+library(patchwork)
+
+fig1_2 <-
+  fig1 + 
+  fig2 + 
+  plot_layout(ncol = 1, tag_level = "new")
+
+ggsave(plot = fig1_2, 
+       filename = "vignettes/figures/fig1_2.pdf", 
+       device = "pdf", dpi = 300, scale = 2)
+
+```
+
+
 
 ```{r Study1b Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 rscale <- .26
@@ -340,26 +403,70 @@ kbl(
 
 ```{r Study1b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 1 with all exclusion criteria applied.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study1(study1b, "speedboat")
+plot_data <- 
+  prepare_plot_data_study1(study1b, "speedboat") %>% 
+  add_count(survey_name, condition) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study1(plot_data)
+fig3 <-
+  create_plot_study1(plot_data) +
+  geom_text(data = fig1_tags, 
+            aes(x = x, y = y, label = label), 
+            fontface = "bold",
+            inherit.aes = FALSE) +
+  geom_text(y = -.05, 
+            aes(label = n_label), 
+            size = 2.5,
+            color = "black") 
 
-# Save plot
-ggplot2::ggsave("figures/fig3.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+    # Save plot
+ggplot2::ggsave(plot = fig3, 
+                filename = "vignettes/figures/fig3.pdf", 
+                device = "pdf", 
+                dpi = 300)
+
 ```
 
 ```{r Study1b w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with including familiar participants.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study1(study1b_nf, "speedboat")
+plot_data <- 
+  prepare_plot_data_study1(study1b_nf, "speedboat") %>% 
+  add_count(survey_name, condition) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study1(plot_data)
+fig4 <-
+  create_plot_study1(plot_data) +
+  geom_text(data = fig2_tags, 
+            aes(x = x, y = y, label = label), 
+            fontface = "bold",
+            inherit.aes = FALSE) +
+  geom_text(y = -.05, 
+            aes(label = n_label), 
+            size = 2.5,
+            color = "black") 
 
-# Save plot
-ggplot2::ggsave("figures/fig4.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+    # Save plot
+ggplot2::ggsave(plot = fig4, 
+                filename = "vignettes/figures/fig4.pdf", 
+                device = "pdf", 
+                dpi = 300)
 ```
 
+## Merged Figure 3-4
+
+```{r}
+fig3_4 <-
+  fig3 + 
+  fig4 + 
+  plot_layout(ncol = 1, tag_level = "new")
+
+ggsave(plot = fig3_4, 
+       filename = "vignettes/figures/fig3_4.pdf", 
+       device = "pdf", dpi = 300, scale = 2)
+
+```
 
 ## Study 2a and 2b
 
@@ -400,7 +507,7 @@ plot_data <- prepare_plot_data_study2(study2a, "trolley")
 create_plot_study2(plot_data)
 
 # Save plot
-ggplot2::ggsave("figures/fig5.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig5.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r Study2a w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 while not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -411,7 +518,7 @@ plot_data <- prepare_plot_data_study2(study2a_nf, "trolley")
 create_plot_study2(plot_data)
 
 # Save plot
-ggplot2::ggsave("figures/fig6.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig6.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -452,7 +559,7 @@ plot_data <- prepare_plot_data_study2(study2b, "speedboat")
 create_plot_study2(plot_data)
 
 # Save plot
-ggplot2::ggsave("figures/fig7.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig7.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b w/o excl graph,fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2, not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -463,10 +570,11 @@ plot_data <- prepare_plot_data_study2(study2b_nf, "speedboat")
 create_plot_study2(plot_data)
 
 # Save plot
-ggplot2::ggsave("figures/fig8.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig8.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 # 3. Individualism-collectivism analysis
+
 ## With all exclusions
 
 ```{r analysis individual + country level study 2a, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -509,7 +617,7 @@ plot_data_country <- prepare_plot_data_country(study2a, "study2a")
 create_plot_country(plot_data_country)
 
 # Save plot
-ggplot2::ggsave("figures/fig9.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig9.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -521,7 +629,7 @@ graphdata <-
 create_plot_ind_col(graphdata)
 
 # Save plot
-ggplot2::ggsave("figures/fig10.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig10.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r analysis individual + country level study 2b, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -564,7 +672,7 @@ plot_data_country <- prepare_plot_data_country(study2b, "study2b")
 create_plot_country(plot_data_country)
 
 # Save plot
-ggplot2::ggsave("figures/fig11.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig11.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -576,9 +684,8 @@ graphdata <-
 create_plot_ind_col(graphdata)
 
 # Save plot
-ggplot2::ggsave("figures/fig12.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig12.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
-
 
 ## Including familiar participants
 
@@ -590,7 +697,7 @@ plot_data_country <- prepare_plot_data_country(study2a_nf, "study2a")
 create_plot_country(plot_data_country)
 
 # Save plot
-ggplot2::ggsave("figures/fig13.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig13.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2a vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -602,7 +709,7 @@ graphdata <-
 create_plot_ind_col(graphdata)
 
 # Save plot
-ggplot2::ggsave("figures/fig14.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig14.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -613,7 +720,7 @@ plot_data_country <- prepare_plot_data_country(study2b_nf, "study2b")
 create_plot_country(plot_data_country)
 
 # Save plot
-ggplot2::ggsave("figures/fig15.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig15.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas, familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -625,11 +732,11 @@ graphdata <-
 create_plot_ind_col(graphdata)
 
 # Save plot
-ggplot2::ggsave("figures/fig16.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig16.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
-
 # 3. No exclusion analysis
+
 ## Study 1a and 1b
 
 ```{r Study1ab Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -669,7 +776,7 @@ plot_data <- prepare_plot_data_study1(trolley, "trolley")
 create_plot_study1(plot_data)
 
 # Save plot
-ggplot2::ggsave("figures/fig17.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig17.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r Study1b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with no exclusion criteria applied.", echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -680,9 +787,8 @@ plot_data <- prepare_plot_data_study1(trolley, "speedboat")
 create_plot_study1(plot_data)
 
 # Save plot
-ggplot2::ggsave("figures/fig18.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig18.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
-
 
 ## Study 2a and 2b
 
@@ -723,7 +829,7 @@ plot_data <- prepare_plot_data_study2(trolley, "trolley")
 create_plot_study2(plot_data)
 
 # Save plot
-ggplot2::ggsave("figures/fig19.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig19.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -734,9 +840,8 @@ plot_data <- prepare_plot_data_study2(trolley, "speedboat")
 create_plot_study2(plot_data)
 
 # Save plot
-ggplot2::ggsave("figures/fig20.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig20.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
-
 
 ## Individualism-collectivism analysis
 
@@ -780,7 +885,7 @@ plot_data_country <- prepare_plot_data_country(trolley, "study2a")
 create_plot_country(plot_data_country)
 
 # Save plot
-ggplot2::ggsave("figures/fig21.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig21.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2a vertical horizontal individualism ne, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemma, no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -792,7 +897,7 @@ graphdata <-
 create_plot_ind_col(graphdata)
 
 # Save plot
-ggplot2::ggsave("figures/fig22.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig22.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -803,7 +908,7 @@ plot_data_country <- prepare_plot_data_country(trolley, "study2b")
 create_plot_country(plot_data_country)
 
 # Save plot
-ggplot2::ggsave("figures/fig23.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig23.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 ```{r study2b vertical horizontal individualism ne,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemma, no exclusion)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -813,10 +918,9 @@ graphdata <-
   select(variable, b, lower, higher)
 
 create_plot_ind_col(graphdata)
-ggplot2::ggsave("figures/fig24.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig24.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 
 ```
-
 
 # Table 1
 

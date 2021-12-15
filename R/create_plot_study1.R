@@ -14,7 +14,7 @@ create_plot_study1 <- function(data) {
       x = condition,
       y = rate,
       fill = condition,
-      colour=condition) +
+      colour = condition) +
     geom_flat_violin(
       ggplot2::aes(
         y = rate,
@@ -25,7 +25,7 @@ create_plot_study1 <- function(data) {
       ggplot2::aes(
         y = rate,
         colour = condition),
-      position = ggplot2::position_jitter(width = .15),
+      position = ggplot2::position_jitter(width = .15, height = .25),
       size = .25,
       alpha= 0.8) +
     ggplot2::stat_summary(
@@ -44,7 +44,7 @@ create_plot_study1 <- function(data) {
     scale_colour_viridis_d() +
     ggplot2::facet_wrap(facets = vars(survey_name)) +
     ggplot2::labs(y = "To what extent is this action morally acceptable?") +
-    ggplot2::coord_cartesian(ylim = c(1, 9)) +
+    ggplot2::coord_cartesian(ylim = c(.5, 9.5), clip = "off") +
     ggplot2::scale_y_continuous(breaks = 1:9, expand = c(0, 0)) +
     ggplot2::theme_bw() +
     ggplot2::theme(
@@ -55,6 +55,7 @@ create_plot_study1 <- function(data) {
       axis.title.y = element_text(face = "bold", size = 10),
       axis.text.x = element_text(face = "bold", size = 7, colour = "Black"),
       axis.text.y = element_text(face = "bold", size = 12, colour = "Black"),
+      plot.margin = unit(c(5.5, 5.5, 11, 5.5), "pt"),
       legend.title = element_blank(),
       legend.text = element_text(size = 9),
       legend.position = "none")
