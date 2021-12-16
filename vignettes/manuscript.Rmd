@@ -23,6 +23,7 @@ library(tidyverse)
 library(kableExtra)
 library(gt)
 library(countrycode)
+library(patchwork)
 
 # Save data for each study separately
 study1a <- dplyr::filter(trolley, include_study1a)
@@ -353,11 +354,9 @@ fig2 <-
 ggplot2::ggsave(plot = fig2, filename = "vignettes/figures/fig2.pdf", device = "pdf", dpi = 300)
 ```
 
-## Merged Figure 1-2
+### Merged Figure 1-2
 
 ```{r}
-library(patchwork)
-
 fig1_2 <-
   fig1 + 
   fig2 + 
@@ -454,7 +453,7 @@ ggplot2::ggsave(plot = fig4,
                 dpi = 300)
 ```
 
-## Merged Figure 3-4
+### Merged Figure 3-4
 
 ```{r}
 fig3_4 <-
@@ -614,10 +613,10 @@ kbl(
 plot_data_country <- prepare_plot_data_country(study2a, "study2a")
 
 # Create plot
-create_plot_country(plot_data_country)
+fig9 <- create_plot_country(plot_data_country)
 
 # Save plot
-ggplot2::ggsave("vignettes/figures/fig9.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig9.pdf", device = "pdf", plot = fig9, dpi = 300)
 ```
 
 ```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -626,11 +625,25 @@ graphdata <-
   filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
-create_plot_ind_col(graphdata)
+fig10 <- create_plot_ind_col(graphdata)
+        
 
 # Save plot
-ggplot2::ggsave("vignettes/figures/fig10.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+ggplot2::ggsave("vignettes/figures/fig10.pdf", device = "pdf", plot = fig10, dpi = 300)
 ```
+
+### Merge Figure 9-10
+```{r}
+fig9_10 <-
+  fig10 + 
+  fig9 +
+  plot_layout(ncol = 2, tag_level = "new") +
+  plot_annotation(tag_levels = c("A", "B"))
+  
+
+fig9_10
+```
+
 
 ```{r analysis individual + country level study 2b, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 tabledata_s2b_ind <-
