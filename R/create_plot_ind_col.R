@@ -10,8 +10,8 @@ create_plot_ind_col <- function(data) {
   data %>%
     ggplot2::ggplot() +
     ggplot2::aes(
-      x = variable,
-      y = b,
+      y = variable,
+      x = b,
       width = 0.7) +
     ggplot2::geom_bar(
       stat = "identity",
@@ -20,13 +20,15 @@ create_plot_ind_col <- function(data) {
       width = 1.2) +
     ggplot2::geom_errorbar(
       aes(
-        ymin = lower,
-        ymax = higher),
+        xmin = lower,
+        xmax = higher),
       position = position_dodge(width = 0.7),
       colour = "Black",
       width = 0.2) +
-    ggplot2::labs(y = "Beta effect size") +
-    ggplot2::geom_hline(yintercept = 0) +
-    ggplot2::scale_y_continuous(breaks = c(-0.15, -0.1, -0.05, 0, 0.05, 0.1, 0.15), limits=c(-0.15,0.15)) +
+    ggplot2::labs(x = "Std. Beta (SEM)",
+                  y = NULL) +
+    ggplot2::geom_vline(xintercept = 0) +
+    ggplot2::scale_x_continuous(breaks = seq(-.10, .10, .05),
+                                limits = c(-0.10,0.10)) +
     theme_trolley()
 }
