@@ -290,6 +290,7 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
+#Fig 1 left
 ```{r Study1a excl graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with all exclusion criteria applied. ", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- 
@@ -324,6 +325,7 @@ ggplot2::ggsave(plot = fig1,
                 dpi = 300)
 ```
 
+#Fig 1 right
 ```{r Study1a w/o excl graph, fig.pos = "H",out.width = "80%",fig.cap = "Results on Trolley dilemmas in Study 1 with including familiar participants" , echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- 
@@ -400,6 +402,7 @@ kbl(
                 row_group_label_position = "identity")
 ```
 
+#Fig 2 left
 ```{r Study1b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 1 with all exclusion criteria applied.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- 
@@ -427,6 +430,7 @@ ggplot2::ggsave(plot = fig3,
 
 ```
 
+#Fig 2 right
 ```{r Study1b w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with including familiar participants.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- 
@@ -498,6 +502,7 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
+#Fig 3 left
 ```{r Study2a excl graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(study2a, "trolley")
@@ -509,6 +514,7 @@ create_plot_study2(plot_data)
 ggplot2::ggsave("vignettes/figures/fig5.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
+#Fig 3 right
 ```{r Study2a w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 while not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(study2a_nf, "trolley")
@@ -550,6 +556,7 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
+#Fig 4 left
 ```{r study2b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(study2b, "speedboat")
@@ -560,7 +567,7 @@ create_plot_study2(plot_data)
 # Save plot
 ggplot2::ggsave("vignettes/figures/fig7.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
-
+#Fig 4 right
 ```{r study2b w/o excl graph,fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2, not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(study2b_nf, "speedboat")
@@ -608,6 +615,7 @@ kbl(
   add_header_above(c(" " = 1, "With familiarity exclusion" = 4, "No familiarity exclusion" = 4))
 ```
 
+#Fig 5 left
 ```{r study2a overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2a, "study2a")
@@ -619,6 +627,7 @@ fig9 <- create_plot_country(plot_data_country)
 ggplot2::ggsave("vignettes/figures/fig9.pdf", device = "pdf", plot = fig9, dpi = 300)
 ```
 
+#Figure 6 left
 ```{r study2a vertical horizontal individualism, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <-
   tabledata_s2a_ind_tidy %>%
@@ -677,6 +686,7 @@ kbl(
   add_header_above(c(" " = 1, "With familiarity exclusion" = 4, "No familiarity exclusion" = 4))
 ```
 
+#Figure 7 left
 ```{r study2b overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2b, "study2b")
@@ -688,6 +698,7 @@ create_plot_country(plot_data_country)
 ggplot2::ggsave("vignettes/figures/fig11.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
+#Figure 8 left
 ```{r study2b vertical horizontal individualism,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas, all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <-
   tabledata_s2b_ind_tidy %>%
@@ -702,6 +713,7 @@ ggplot2::ggsave("vignettes/figures/fig12.pdf", device = "pdf", plot = ggplot2::l
 
 ## Including familiar participants
 
+#Figure 5 right
 ```{r study2a overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2a_nf, "study2a")
@@ -713,6 +725,7 @@ create_plot_country(plot_data_country)
 ggplot2::ggsave("vignettes/figures/fig13.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
+#Figure 6 right
 ```{r study2a vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemmas, familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <-
   tabledata_s2a_ind_f_tidy %>%
@@ -725,6 +738,7 @@ create_plot_ind_col(graphdata)
 ggplot2::ggsave("vignettes/figures/fig14.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
+#Figure 7 right
 ```{r study2b overall individualism plot w familiar, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2b_nf, "study2b")
@@ -736,6 +750,7 @@ create_plot_country(plot_data_country)
 ggplot2::ggsave("vignettes/figures/fig15.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
+#Figure 8 right
 ```{r study2b vertical horizontal individualism w familiar, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemmas, familiarity exclusion not applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <-
   tabledata_s2b_ind_nf_tidy %>%
@@ -780,7 +795,7 @@ kbl(
   row_spec(row = 0, bold = TRUE) %>%
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
-
+#Figure 9 left
 ```{r Study1a ne graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with no exclusion criteria applied", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(trolley, "trolley")
@@ -791,7 +806,7 @@ create_plot_study1(plot_data)
 # Save plot
 ggplot2::ggsave("vignettes/figures/fig17.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
-
+#Figure 9 right
 ```{r Study1b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with no exclusion criteria applied.", echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study1(trolley, "speedboat")
@@ -834,6 +849,7 @@ kbl(
   collapse_rows(columns = 1, valign = "top", latex_hline = "major", row_group_label_position = "identity")
 ```
 
+#Figure 10 left
 ```{r Study2a ne graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(trolley, "trolley")
@@ -845,6 +861,7 @@ create_plot_study2(plot_data)
 ggplot2::ggsave("vignettes/figures/fig19.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
+#Figure 10 right
 ```{r study2b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- prepare_plot_data_study2(trolley, "speedboat")
@@ -890,6 +907,7 @@ kbl(
   add_header_above(c(" " = 1, "Trolley" = 4, "Speedboat" = 4))
 ```
 
+#Figure 11 left
 ```{r study2a overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interaction effect of personal force and intention in Eta sqaured on the Trolley dilemmas (no exclusion)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(trolley, "study2a")
@@ -900,7 +918,7 @@ create_plot_country(plot_data_country)
 # Save plot
 ggplot2::ggsave("vignettes/figures/fig21.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
-
+#Figure 12 left
 ```{r study2a vertical horizontal individualism ne, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemma, no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <-
   tabledata_s2a_ind_ne_tidy %>%
@@ -912,7 +930,7 @@ create_plot_ind_col(graphdata)
 # Save plot
 ggplot2::ggsave("vignettes/figures/fig22.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
-
+#Figure 11 right
 ```{r study2b overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interactional effect of personal force and intention in Eta squared on Speedboat dilemmas (no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(trolley, "study2b")
@@ -923,7 +941,7 @@ create_plot_country(plot_data_country)
 # Save plot
 ggplot2::ggsave("vignettes/figures/fig23.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
-
+#Figure 12 right
 ```{r study2b vertical horizontal individualism ne,  out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (speedboat dilemma, no exclusion)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 graphdata <-
   tabledata_s2b_ind_ne_tidy %>%
