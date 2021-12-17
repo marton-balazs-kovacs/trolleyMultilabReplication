@@ -24,9 +24,10 @@ create_plot_study2 <- function(data) {
                      alpha = .8) +
     ggplot2::geom_point(aes(y = rate,
                             color = personal_force),
-                        position = position_jitter(width = .15),
+                        position = ggplot2::position_jitter(width = .15, height = .25),
                         size = .25,
-                        alpha= 0.8) +
+                        alpha = 0.8,
+                        show.legend = FALSE) +
     ggplot2::scale_fill_viridis_d() +
     ggplot2::scale_color_viridis_d() +
     ggnewscale::new_scale_color() +
@@ -36,11 +37,13 @@ create_plot_study2 <- function(data) {
                              position = position_nudge(x = .3, y = 0)) +
     ggplot2::scale_color_manual(values = c("white", "black")) +
     ggplot2::facet_wrap(~survey_name) +
-    ggplot2::labs(y = "To what extent is this action morally acceptable?") +
-    ggplot2::coord_cartesian(ylim = c(1, 9)) +
-    ggplot2::scale_y_continuous(breaks = 1:9, expand = c(0,0)) +
+    ggplot2::labs(y = "To what extent is this action morally acceptable?",
+                  x = NULL) +
+    ggplot2::coord_cartesian(ylim = c(.5, 9.5), clip = "off") +
+    ggplot2::scale_y_continuous(breaks = 1:9, expand = c(0, 0)) +
     theme_trolley() +
-    ggplot2::theme(legend.position = "bottom")
+    ggplot2::theme(legend.position = "bottom",
+                   legend.title = element_blank()) # This is needed bc of complicated new scales
 
 }
 

@@ -26,7 +26,7 @@ create_plot_country <- function(data) {
       alpha = .5,
       show.legend = FALSE,
       se = F) +
-    ggplot2::labs(x = "Cohen's d", y = NULL, color = NULL) +
+    ggplot2::labs(x = "Eta squared", y = "Collectivism", color = NULL) +
     ggplot2::scale_y_continuous(breaks = c(0, 0.05, 0.1, 0.15),
                                 limits = c(0, 0.15)) +
     ggplot2::scale_x_continuous(breaks = seq(0, .9, .1),
