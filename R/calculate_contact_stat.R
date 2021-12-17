@@ -10,14 +10,7 @@
 #' @return a tibble that contains the selected statistics
 #'   in a format that can be printed
 #' @export
-
-
-
-calculate_contact_stat <- function(data = NULL,
-                                     vars = NULL,
-                                     label = NULL,
-                                     rscale){
-
+calculate_contact_stat <- function(data = NULL, vars = NULL, label = NULL, rscale) {
   data %>%
     tibble::as_tibble() %>%
     dplyr::select(Region, {{vars}}) %>%
@@ -25,11 +18,12 @@ calculate_contact_stat <- function(data = NULL,
     tidyr::nest() %>%
     dplyr::arrange(Region) %>%
     dplyr::mutate(data_long = purrr::map(data,
-                                         ~tidyr::pivot_longer(.x,
-                                                              cols = everything(),
-                                                              names_to = "condition",
-                                                              values_to = "rate",
-                                                              values_drop_na = TRUE) %>%
+                                         . %>%
+                                           tidyr::pivot_longer(
+                                             cols = everything(),
+                                             names_to = "condition",
+                                             values_to = "rate",
+                                             values_drop_na = TRUE) %>%
                                            as.data.frame()),
                   bttest = purrr::map(data_long,
                                       ~BayesFactor::ttestBF(formula = rate ~ condition, data = .x,
