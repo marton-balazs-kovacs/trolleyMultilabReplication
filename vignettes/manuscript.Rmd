@@ -298,31 +298,15 @@ plot_data <-
   add_count(survey_name, condition) %>% 
   mutate(n_label = paste0("n = ", n))
 
-fig1_tags <-
-  tibble(x = rep(.55, 3),
-         y = rep(8.55, 3),
-         survey_name = unique(plot_data$survey_name),
-         label = LETTERS[1:3],
-         )
-
 # Create plot
-fig1 <-
+fig1_left <-
   create_plot_study1(plot_data) +
-  geom_text(data = fig1_tags, 
-            aes(x = x, y = y, label = label), 
-            fontface = "bold",
-            inherit.aes = FALSE) +
-  geom_text(y = -.05, 
-            aes(label = n_label), 
+  geom_text(y = .7,
+            aes(label = n_label),
             size = 2.5,
-            color = "black") 
+            color = "black")
 
-
-    # Save plot
-ggplot2::ggsave(plot = fig1, 
-                filename = "vignettes/figures/fig1.pdf", 
-                device = "pdf", 
-                dpi = 300)
+fig1_left
 ```
 
 #Fig 1 right
@@ -334,43 +318,15 @@ plot_data <-
   mutate(n_label = paste0("n = ", n))
 
 # Create plot
-fig2_tags <-
-  tibble(x = rep(.55, 3),
-         y = rep(8.55, 3),
-         survey_name = unique(plot_data$survey_name),
-         label = LETTERS[4:6])
-
-# Create plot
-fig2 <-
+fig1_right <-
   create_plot_study1(plot_data) +
-  geom_text(data = fig2_tags, 
-            aes(x = x, y = y, label = label), 
-            fontface = "bold",
-            inherit.aes = FALSE) +
-  geom_text(y = -.05, 
-            aes(label = n_label), 
+  geom_text(y = .7,
+            aes(label = n_label),
             size = 2.5,
-            color = "black") 
+            color = "black")
 
-# Save plot
-ggplot2::ggsave(plot = fig2, filename = "vignettes/figures/fig2.pdf", device = "pdf", dpi = 300)
+fig1_right
 ```
-
-### Merged Figure 1-2
-
-```{r}
-fig1_2 <-
-  fig1 + 
-  fig2 + 
-  plot_layout(ncol = 1, tag_level = "new")
-
-ggsave(plot = fig1_2, 
-       filename = "vignettes/figures/fig1_2.pdf", 
-       device = "pdf", dpi = 300, scale = 2)
-
-```
-
-
 
 ```{r Study1b Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 rscale <- .26
@@ -411,23 +367,14 @@ plot_data <-
   mutate(n_label = paste0("n = ", n))
 
 # Create plot
-fig3 <-
+fig2_left <-
   create_plot_study1(plot_data) +
-  geom_text(data = fig1_tags, 
-            aes(x = x, y = y, label = label), 
-            fontface = "bold",
-            inherit.aes = FALSE) +
-  geom_text(y = -.05, 
-            aes(label = n_label), 
+  geom_text(y = .7,
+            aes(label = n_label),
             size = 2.5,
-            color = "black") 
+            color = "black")
 
-    # Save plot
-ggplot2::ggsave(plot = fig3, 
-                filename = "vignettes/figures/fig3.pdf", 
-                device = "pdf", 
-                dpi = 300)
-
+fig2_left
 ```
 
 #Fig 2 right
@@ -439,35 +386,34 @@ plot_data <-
   mutate(n_label = paste0("n = ", n))
 
 # Create plot
-fig4 <-
+fig2_right <-
   create_plot_study1(plot_data) +
-  geom_text(data = fig2_tags, 
-            aes(x = x, y = y, label = label), 
-            fontface = "bold",
-            inherit.aes = FALSE) +
-  geom_text(y = -.05, 
-            aes(label = n_label), 
+  geom_text(y = .7,
+            aes(label = n_label),
             size = 2.5,
-            color = "black") 
+            color = "black")
 
-    # Save plot
-ggplot2::ggsave(plot = fig4, 
-                filename = "vignettes/figures/fig4.pdf", 
-                device = "pdf", 
-                dpi = 300)
 ```
 
-### Merged Figure 3-4
+### Merged Figure 1-2
 
 ```{r}
-fig3_4 <-
-  fig3 + 
-  fig4 + 
-  plot_layout(ncol = 1, tag_level = "new")
+fig1_2 <-
+  fig1_left + 
+    labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
+  fig1_right + 
+    labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
+  fig2_left + 
+    labs(subtitle = "C Speedboat dilemma - all exclusion criteria applied") +  
+  fig2_right +
+    labs(subtitle = "D Speedboat dilemma - familiarity exclusion not applied") +
+  plot_layout(ncol = 2)
 
-ggsave(plot = fig3_4, 
-       filename = "vignettes/figures/fig3_4.pdf", 
-       device = "pdf", dpi = 300, scale = 2)
+fig1_2
+
+ggsave(plot = fig1_2, 
+       filename = "vignettes/figures/fig1_2.pdf", 
+       device = "pdf", dpi = 300, scale = 2.3)
 
 ```
 
@@ -505,25 +451,41 @@ kbl(
 #Fig 3 left
 ```{r Study2a excl graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study2(study2a, "trolley")
+plot_data <- 
+  prepare_plot_data_study2(study2a, "trolley") %>% 
+  add_count(survey_name, intention) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study2(plot_data)
+fig3_left <-
+  create_plot_study2(plot_data) +
+  geom_text(y = .7,
+            aes(label = n_label),
+            size = 3.57,
+            color = "black")
+  
+fig3_left
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig5.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
 #Fig 3 right
 ```{r Study2a w/o excl graph, fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 while not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study2(study2a_nf, "trolley")
+plot_data <- 
+  prepare_plot_data_study2(study2a_nf, "trolley") %>% 
+  add_count(survey_name, intention) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study2(plot_data)
+fig3_right <-
+  create_plot_study2(plot_data) +
+  geom_text(y = .7,
+            aes(label = n_label),
+            size = 3.57,
+            color = "black")
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig6.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig3_right
+
 ```
 
 ```{r study2b Bayesian, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
@@ -559,25 +521,65 @@ kbl(
 #Fig 4 left
 ```{r study2b excl graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when all exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study2(study2b, "speedboat")
+plot_data <- 
+  prepare_plot_data_study2(study2b, "speedboat") %>% 
+  add_count(survey_name, intention) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study2(plot_data)
+fig4_left <-
+  create_plot_study2(plot_data) +
+  geom_text(y = .7,
+            aes(label = n_label),
+            size = 3.57,
+            color = "black")
+  
+fig4_left
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig7.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+
 ```
 #Fig 4 right
 ```{r study2b w/o excl graph,fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2, not applying familiarity exclusion. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study2(study2b_nf, "speedboat")
+plot_data <- 
+  prepare_plot_data_study2(study2b_nf, "speedboat") %>% 
+  add_count(survey_name, intention) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study2(plot_data)
+fig4_right <-
+  create_plot_study2(plot_data) +
+  geom_text(y = .7,
+            aes(label = n_label),
+            size = 3.57,
+            color = "black")
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig8.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig4_right
+
 ```
+
+### Merged Figure 3-4
+
+```{r}
+fig3_4 <-
+  fig3_left + 
+    labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
+  fig3_right + 
+    labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
+  fig4_left + 
+    labs(subtitle = "C Speedboat dilemma - all exclusion criteria applied") +  
+  fig4_right +
+    labs(subtitle = "D Speedboat dilemma - familiarity exclusion not applied") +
+  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
+  
+fig3_4
+
+ggsave(plot = fig3_4, 
+       filename = "vignettes/figures/fig3_4.pdf", 
+       dpi = 300, scale = 2.3)
+
+```
+
 
 # 3. Individualism-collectivism analysis
 
@@ -615,16 +617,15 @@ kbl(
   add_header_above(c(" " = 1, "With familiarity exclusion" = 4, "No familiarity exclusion" = 4))
 ```
 
-#Fig 5 left
+#Figure 5 left
 ```{r study2a overall individualism plot, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the effect of personal force in Eta sqaured on the Trolley dilemmas (all exclusions applied)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data_country <- prepare_plot_data_country(study2a, "study2a")
 
 # Create plot
-fig9 <- create_plot_country(plot_data_country)
+fig5_left <- create_plot_country(plot_data_country)
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig9.pdf", device = "pdf", plot = fig9, dpi = 300)
+fig5_left
 ```
 
 #Figure 6 left
@@ -634,23 +635,10 @@ graphdata <-
   filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
-fig10 <- create_plot_ind_col(graphdata)
-        
+fig6_left <- create_plot_ind_col(graphdata)
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig10.pdf", device = "pdf", plot = fig10, dpi = 300)
-```
+fig6_left
 
-### Merge Figure 9-10
-```{r}
-fig9_10 <-
-  fig10 + 
-  fig9 +
-  plot_layout(ncol = 2, tag_level = "new") +
-  plot_annotation(tag_levels = c("A", "B"))
-  
-
-fig9_10
 ```
 
 
@@ -692,10 +680,10 @@ kbl(
 plot_data_country <- prepare_plot_data_country(study2b, "study2b")
 
 # Create plot
-create_plot_country(plot_data_country)
+fig7_left <- create_plot_country(plot_data_country) + xlim(0, .5)
 
 # Save plot
-ggplot2::ggsave("vignettes/figures/fig11.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig7_left
 ```
 
 #Figure 8 left
@@ -705,10 +693,9 @@ graphdata <-
   filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
-create_plot_ind_col(graphdata)
+fig8_left <- create_plot_ind_col(graphdata)
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig12.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig8_left
 ```
 
 ## Including familiar participants
@@ -719,10 +706,9 @@ ggplot2::ggsave("vignettes/figures/fig12.pdf", device = "pdf", plot = ggplot2::l
 plot_data_country <- prepare_plot_data_country(study2a_nf, "study2a")
 
 # Create plot
-create_plot_country(plot_data_country)
+fig5_right <- create_plot_country(plot_data_country) + xlim(0, .5)
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig13.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig5_right
 ```
 
 #Figure 6 right
@@ -732,10 +718,9 @@ graphdata <-
   filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
-create_plot_ind_col(graphdata)
+fig6_right <- create_plot_ind_col(graphdata)
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig14.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig6_right
 ```
 
 #Figure 7 right
@@ -744,10 +729,9 @@ ggplot2::ggsave("vignettes/figures/fig14.pdf", device = "pdf", plot = ggplot2::l
 plot_data_country <- prepare_plot_data_country(study2b_nf, "study2b")
 
 # Create plot
-create_plot_country(plot_data_country)
+fig7_right <- create_plot_country(plot_data_country) + xlim(0, .7)
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig15.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig7_right
 ```
 
 #Figure 8 right
@@ -757,11 +741,71 @@ graphdata <-
   filter(variable != "Country-level collectivism") %>%
   select(variable, b, lower, higher)
 
-create_plot_ind_col(graphdata)
+fig8_right <- create_plot_ind_col(graphdata)
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig16.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig8_right
+
 ```
+
+### Merged Figures 5, 6, 7, 8
+
+```{r}
+fig5 <-
+  fig5_left + 
+    labs(subtitle = "A Trolley dilemmas (all exclusions applied)") +
+  fig5_right + 
+    labs(subtitle = "B Trolley dilemmas (familiarity exclusion not applied)") +
+  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
+  
+fig5  
+
+ggsave(plot = fig5, 
+       filename = "vignettes/figures/fig5.pdf", 
+       dpi = 300, scale = 2)
+
+fig6 <-
+  fig6_left + 
+    labs(subtitle = "A Trolley dilemmas (all exclusions applied)") +
+  fig6_right + 
+    labs(subtitle = "B Trolley dilemmas (familiarity exclusion not applied)") +
+  plot_layout(ncol = 2)
+  
+fig6  
+
+ggsave(plot = fig6, 
+       filename = "vignettes/figures/fig6.pdf", 
+       dpi = 300, scale = 2)
+
+fig7 <-
+  fig7_left + 
+    labs(subtitle = "A Speedboat dilemmas (all exclusions applied)") +
+  fig7_right + 
+    labs(subtitle = "B Speedboat dilemmas (familiarity exclusion not applied)") +
+  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
+  
+fig7  
+
+ggsave(plot = fig7, 
+       filename = "vignettes/figures/fig7.pdf", 
+       dpi = 300, scale = 2)
+
+
+fig8 <-
+  fig8_left + 
+    labs(subtitle = "A Speedboat dilemmas (all exclusions applied)") +
+  fig8_right + 
+    labs(subtitle = "B Speedboat dilemmas (familiarity exclusion not applied)") +
+  plot_layout(ncol = 2)
+  
+fig8  
+
+ggsave(plot = fig8, 
+       filename = "vignettes/figures/fig8.pdf", 
+       dpi = 300, scale = 2)
+
+
+```
+
 
 # 3. No exclusion analysis
 
@@ -798,24 +842,39 @@ kbl(
 #Figure 9 left
 ```{r Study1a ne graph, fig.pos = "H" ,out.width = "80%", fig.cap = "Results on Trolley dilemmas in Study 1 with no exclusion criteria applied", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study1(trolley, "trolley")
+plot_data <- 
+  prepare_plot_data_study1(trolley, "trolley") %>% 
+  add_count(survey_name, condition) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study1(plot_data)
+fig9_left <-
+  create_plot_study1(plot_data) +
+  geom_text(y = .6,
+            aes(label = n_label),
+            size = 2.5,
+            color = "black")
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig17.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig9_left
 ```
 #Figure 9 right
 ```{r Study1b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on Speedboat dilemmas in Study 1 with no exclusion criteria applied.", echo = FALSE,message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study1(trolley, "speedboat")
+plot_data <- 
+  prepare_plot_data_study1(trolley, "speedboat") %>% 
+  add_count(survey_name, condition) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study1(plot_data)
+fig9_right <-
+  create_plot_study1(plot_data) +
+  geom_text(y = .6,
+            aes(label = n_label),
+            size = 2.5,
+            color = "black")
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig18.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig9_right
+
 ```
 
 ## Study 2a and 2b
@@ -852,26 +911,72 @@ kbl(
 #Figure 10 left
 ```{r Study2a ne graph,fig.pos="H",out.width="80%",fig.cap="Results on Trolley dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study2(trolley, "trolley")
+plot_data <- 
+  prepare_plot_data_study2(trolley, "trolley") %>% 
+  add_count(survey_name, intention) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study2(plot_data)
+fig10_left <-
+  create_plot_study2(plot_data) +
+  geom_text(y = .6,
+            aes(label = n_label),
+            size = 3.57,
+            color = "black")
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig19.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig10_left
 ```
 
 #Figure 10 right
 ```{r study2b ne graph, fig.pos="H",out.width="80%",fig.cap="Results on the Speedboat dilemmas in Study 2 when no exclusion criteria are applied. Error bars are 95\\% confidence intervals on the mean.",  echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data <- prepare_plot_data_study2(trolley, "speedboat")
+plot_data <- 
+  prepare_plot_data_study2(trolley, "speedboat") %>% 
+  add_count(survey_name, intention) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_study2(plot_data)
+fig10_right <-
+  create_plot_study2(plot_data) +
+  geom_text(y = .6,
+            aes(label = n_label),
+            size = 3.57,
+            color = "black")
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig20.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig10_right
 ```
+
+### Merged Figures 9, 10
+
+```{r}
+fig9 <-
+  fig9_left + 
+    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+  fig9_right + 
+    labs(subtitle = "B Speedboat dilemma - no exclusion criteria applied") +
+  plot_layout(ncol = 1)
+  
+fig9  
+
+ggsave(plot = fig9, 
+       filename = "vignettes/figures/fig9.pdf", 
+       dpi = 300, scale = 2)
+
+fig10 <-
+  fig10_left + 
+    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+  fig10_right +
+    labs(subtitle = "B Speedboat dilemma - no exclusion criteria applied") +
+  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
+  
+fig10
+
+ggsave(plot = fig10, 
+       filename = "vignettes/figures/fig10.pdf", 
+       dpi = 300, scale = 2)
+
+```
+
 
 ## Individualism-collectivism analysis
 
@@ -910,13 +1015,16 @@ kbl(
 #Figure 11 left
 ```{r study2a overall individualism plot ne, fig.pos = "H", out.width = "80%", fig.cap = "Correlation between country-level individualism/collectivism and the interaction effect of personal force and intention in Eta sqaured on the Trolley dilemmas (no exclusion)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
-plot_data_country <- prepare_plot_data_country(trolley, "study2a")
+plot_data_country <- 
+  prepare_plot_data_country(trolley, "study2a") %>% 
+  add_count(survey_name, condition) %>% 
+  mutate(n_label = paste0("n = ", n))
 
 # Create plot
-create_plot_country(plot_data_country)
+fig11_left <- 
+  create_plot_country(plot_data_country) + xlim(0, .5)
 
-# Save plot
-ggplot2::ggsave("vignettes/figures/fig21.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
+fig11_left
 ```
 #Figure 12 left
 ```{r study2a vertical horizontal individualism ne, out.width = "80%", fig.cap = "Personal level individualism/collectivism effects on the interaction of personal force and intention (trolley dilemma, no exclusions)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
