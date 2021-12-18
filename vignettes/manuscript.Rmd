@@ -310,6 +310,7 @@ fig1_left
 ```
 
 #Fig 1 right
+
 ```{r Study1a w/o excl graph, fig.pos = "H",out.width = "80%",fig.cap = "Results on Trolley dilemmas in Study 1 with including familiar participants" , echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Prepare data for plotting
 plot_data <- 
