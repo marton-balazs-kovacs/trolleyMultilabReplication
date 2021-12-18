@@ -1,0 +1,458 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Supplementary Analysis},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{float} \floatplacement{figure}{H} \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{caption}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Supplementary Analysis}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}
+
+\hypertarget{demographics}{%
+\section{1. Demographics}\label{demographics}}
+
+\captionsetup[table]{labelformat=empty,skip=1pt}
+\begin{longtable}{llrrrrr}
+\caption*{
+{\large  } \\ 
+{\small Table S1. Demographic description of the sample by country.}
+} \\ 
+\toprule
+ & Country & N & Age (SD) & Male \% & Higher education \% & Collectivism\textsuperscript{1} \\ 
+\midrule
+\multicolumn{1}{l}{By country} \\ 
+\midrule
+Eastern & China & 1677 & $24.7$ ($7.6$) & $42.7\%$ & $88.5\%$ & $0.075$ \\ 
+Eastern & India & 502 & $22.6$ ($6.1$) & $33.7\%$ & $63.7\%$ & $0.069$ \\ 
+Eastern & Iran & 235 & $31.0$ ($9.6$) & $55.1\%$ & $89.5\%$ & $0.059$ \\ 
+Eastern & Japan & 396 & $44.0$ ($10.8$) & $63.6\%$ & $68.2\%$ & $0.073$ \\ 
+Eastern & Lebanon & 20 & $34.1$ ($16.6$) & $50.0\%$ & $95.0\%$ & $0.069$ \\ 
+Eastern & Malaysia & 171 & $20.5$ ($2.4$) & $17.0\%$ & $54.4\%$ & $0.133$ \\ 
+Eastern & North Macedonia & 282 & $22.1$ ($3.8$) & $55.7\%$ & $26.6\%$ & $0.066$ \\ 
+Eastern & Pakistan & 423 & $22.7$ ($3.7$) & $36.4\%$ & $87.5\%$ & $0.078$ \\ 
+Eastern & Thailand & 91 & $19.4$ ($1.0$) & $22.0\%$ & $53.8\%$ & $0.079$ \\ 
+Eastern & United Arab Emirates & 80 & $24.8$ ($3.7$) & $33.8\%$ & $71.2\%$ & --- \\ 
+Southern & Argentina & 253 & $34.3$ ($14.7$) & $27.4\%$ & $79.0\%$ & $0.101$ \\ 
+Southern & Chile & 54 & $34.4$ ($13.3$) & $40.7\%$ & $70.4\%$ & $0.079$ \\ 
+Southern & Colombia & 278 & $27.8$ ($12.0$) & $41.0\%$ & $87.6\%$ & $0.090$ \\ 
+Southern & Czechia & 411 & $28.1$ ($9.6$) & $69.8\%$ & $50.4\%$ & --- \\ 
+Southern & Ecuador & 45 & $23.3$ ($4.5$) & $31.1\%$ & $97.7\%$ & $0.130$ \\ 
+Southern & France & 935 & $33.8$ ($13.9$) & $17.6\%$ & $71.9\%$ & $0.083$ \\ 
+Southern & Hungary & 941 & $21.7$ ($3.8$) & $21.0\%$ & $22.0\%$ & $0.100$ \\ 
+Southern & Mexico & 64 & $33.1$ ($5.6$) & $64.1\%$ & $100.0\%$ & $0.082$ \\ 
+Southern & Peru & 141 & $24.5$ ($11.4$) & $36.9\%$ & $47.5\%$ & $0.102$ \\ 
+Southern & Philippines & 282 & $20.3$ ($3.0$) & $33.7\%$ & $57.0\%$ & $0.127$ \\ 
+Southern & Slovakia & 560 & $22.4$ ($6.0$) & $11.6\%$ & $19.7\%$ & --- \\ 
+Southern & Turkey & 1369 & $24.6$ ($8.1$) & $24.0\%$ & $42.8\%$ & $0.069$ \\ 
+Western & Australia & 1164 & $21.7$ ($6.9$) & $28.2\%$ & $25.2\%$ & $0.032$ \\ 
+Western & Austria & 346 & $24.8$ ($8.5$) & $35.1\%$ & $27.8\%$ & --- \\ 
+Western & Brazil & 267 & $30.1$ ($12.1$) & $36.7\%$ & $70.4\%$ & $0.097$ \\ 
+Western & Bulgaria & 316 & $27.7$ ($11.0$) & $14.9\%$ & $36.4\%$ & $0.066$ \\ 
+Western & Canada & 751 & $23.0$ ($7.6$) & $40.9\%$ & $58.9\%$ & $0.029$ \\ 
+Western & Croatia & 250 & $21.9$ ($4.1$) & $17.2\%$ & $19.6\%$ & --- \\ 
+Western & Denmark & 1299 & $36.7$ ($15.9$) & $46.6\%$ & $57.1\%$ & --- \\ 
+Western & Germany & 2887 & $30.2$ ($11.6$) & $29.1\%$ & $21.2\%$ & $0.047$ \\ 
+Western & Greece & 515 & $26.1$ ($11.0$) & $20.4\%$ & $52.8\%$ & --- \\ 
+Western & Italy & 500 & $35.6$ ($13.9$) & $44.4\%$ & $61.3\%$ & $0.045$ \\ 
+Western & Kazakhstan & 122 & $33.5$ ($9.1$) & $29.5\%$ & $100.0\%$ & $0.106$ \\ 
+Western & Netherlands & 479 & $20.6$ ($2.8$) & $34.4\%$ & $18.4\%$ & $0.049$ \\ 
+Western & New Zealand & 214 & $26.2$ ($10.6$) & $21.5\%$ & $35.0\%$ & $0.032$ \\ 
+Western & Poland & 1416 & $30.0$ ($11.0$) & $32.5\%$ & $49.1\%$ & $0.059$ \\ 
+Western & Portugal & 716 & $28.5$ ($9.5$) & $36.6\%$ & $70.0\%$ & --- \\ 
+Western & Romania & 755 & $24.5$ ($8.5$) & $14.0\%$ & $28.2\%$ & $0.078$ \\ 
+Western & Russia & 426 & $31.4$ ($8.2$) & $35.4\%$ & $91.5\%$ & $0.071$ \\ 
+Western & Serbia & 485 & $27.1$ ($11.0$) & $25.6\%$ & $52.5\%$ & $0.028$ \\ 
+Western & Singapore & 102 & $22.6$ ($1.7$) & $23.5\%$ & $57.8\%$ & $0.030$ \\ 
+Western & Spain & 257 & $21.5$ ($6.8$) & $16.0\%$ & $99.2\%$ & $0.041$ \\ 
+Western & Switzerland & 549 & $23.0$ ($7.2$) & $29.9\%$ & $22.1\%$ & $0.067$ \\ 
+Western & United Kingdom & 865 & $25.2$ ($11.2$) & $23.2\%$ & $42.5\%$ & $0.075$ \\ 
+Western & United States & 3611 & $20.7$ ($4.9$) & $23.4\%$ & $22.9\%$ & $0.000$ \\ 
+\midrule
+\multicolumn{1}{l}{By region} \\ 
+\midrule
+Eastern & --- & 3877 & $26.1$ ($9.7$) & $42.9\%$ & $75.2\%$ & --- \\ 
+Southern & --- & 5333 & $26.3$ ($10.5$) & $27.2\%$ & $48.7\%$ & --- \\ 
+Western & --- & 18292 & $25.9$ ($10.4$) & $28.4\%$ & $38.4\%$ & --- \\ 
+\midrule
+\multicolumn{1}{l}{All} \\ 
+All & --- & 27502 & $26.0$ ($10.3$) & $30.3\%$ & $45.8\%$ & --- \\ 
+ \bottomrule
+\end{longtable}
+\vspace{-5mm}
+\begin{minipage}{\linewidth}
+\textsuperscript{1}Distance from the US in collectivism. Some countries do not have a collectivism score. \\ 
+\end{minipage}
+
+\hypertarget{additional-analysis}{%
+\section{2. Additional analysis}\label{additional-analysis}}
+
+\hypertarget{effect-of-physical-contact}{%
+\subsection{Effect of physical
+contact}\label{effect-of-physical-contact}}
+
+In sum, when assassing the effect of physical force, we found
+inconclusive evidence for the effect of physical contact, regardless of
+dilemma type (trolley/speedboat). The summary of the results can be
+found in the tables below.
+
+\begin{table}[H]
+
+\caption{\label{tab:physical contact }Table S2. The effect of phyisical contact on moral dilemma judgements on Trolley dilemmas}
+\resizebox{\linewidth}{!}{
+\begin{tabular}[t]{lllrrrrrl}
+\toprule
+\textbf{Exclusion} & \textbf{Cluster} & \textbf{BF} & \textbf{t} & \textbf{df} & \textbf{p} & \textbf{Cohen's d} & \textbf{Raw effect} & \textbf{$89\%$ CI}\\
+\midrule
+ & Eastern & 4.11e-01 & -0.22 & 121.63 & 0.828 & 0.03 & 0.07 & {}[-0.36, 0.44]\\
+
+ & Southern & 1.94e-01 & 0.46 & 388.70 & 0.643 & 0.04 & -0.09 & {}[-0.38, 0.18]\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Exclusion} & Western & 1.72e-01 & 0.18 & 512.54 & 0.857 & 0.01 & -0.02 & {}[-0.23, 0.18]\\
+\cmidrule{1-9}
+ & Eastern & 1.76e-01 & 0.61 & 254.06 & 0.544 & 0.06 & -0.12 & {}[-0.37, 0.21]\\
+
+ & Southern & 9.49e-02 & 1.17 & 756.54 & 0.244 & 0.08 & -0.15 & {}[-0.34, 0.08]\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Include familiar} & Western & 7.91e-02 & 0.73 & 1099.31 & 0.464 & 0.03 & -0.07 & {}[-0.2, 0.08]\\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+\hypertarget{comparing-the-standard-switch-and-standard-footbridge-dilemmas}{%
+\subsection{Comparing the standard switch and standard footbridge
+dilemmas}\label{comparing-the-standard-switch-and-standard-footbridge-dilemmas}}
+
+When comparing the standard switch and standard footbridge dilemmas in
+all clusters for the trolley and the speedboat tasks we found evidence
+for a difference between the two dilemmas in moral acceptability
+ratings. The summary results of each comparison separately can be found
+in Tables below.
+
+\begin{table}[H]
+
+\caption{\label{tab:standard switch and footbridge}Table S3. Comparing the Standard Switch and Standard Footbridge Dilemmas (all exclusion applied).}
+\begin{tabular}[t]{llrlrl}
+\toprule
+\textbf{Dilemma} & \textbf{Cluster} & \textbf{t} & \textbf{Bf} & \textbf{df} & \textbf{p}\\
+\midrule
+ & Eastern & 4.81 & 2.49e+03 & 154.32 & < .001\\
+
+ & Southern & 10.38 & 2.32e+19 & 229.92 & < .001\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Trolley} & Western & 16.88 & 1.99e+54 & 780.55 & < .001\\
+\cmidrule{1-6}
+ & Eastern & 6.29 & 3.61e+05 & 130.68 & < .001\\
+
+ & Southern & 9.61 & 5.50e+15 & 335.65 & < .001\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Speedboat} & Western & 14.58 & 4.01e+41 & 1618.57 & < .001\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+
+\caption{\label{tab:switch vs footbridge no familiarity}Table S4. Comparing the Standard Switch and Standard Footbridge Dilemmas (familiarity exclusion not applied)}
+\begin{tabular}[t]{llrlrl}
+\toprule
+\textbf{Dilemma} & \textbf{Cluster} & \textbf{t} & \textbf{Bf} & \textbf{df} & \textbf{p}\\
+\midrule
+ & Eastern & 6.79 & 8.73e+07 & 282.63 & < .001\\
+
+ & Southern & 14.59 & 3.91e+38 & 544.52 & < .001\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Trolley} & Western & 27.95 & 1.86e+148 & 2310.31 & < .001\\
+\cmidrule{1-6}
+ & Eastern & 7.30 & 8.06e+08 & 257.05 & < .001\\
+
+ & Southern & 11.03 & 6.30e+22 & 647.03 & < .001\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Speedboat} & Western & 24.06 & 4.93e+116 & 4352.64 & < .001\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\#\#Analysing familiar participants
+
+As we registered, we conducted the analysis on familiar participants,
+the results can be found below.
+
+\begin{table}[H]
+
+\caption{\label{tab:Study1ab Bayesian}Table S5. The effect of personal force on moral dilemma judgements (familiar participants).}
+\begin{tabular}[t]{lllrrlrrl}
+\toprule
+\textbf{Dilemma} & \textbf{Cluster} & \textbf{BF} & \textbf{t} & \textbf{df} & \textbf{p} & \textbf{Cohen's d} & \textbf{Raw effect} & \textbf{$89\%$ CI}\\
+\midrule
+ & Eastern & 1.65e+02 & -3.65 & 437.72 & <.001 & 0.35 & 0.73 & {}[0.34, 0.98]\\
+
+ & Southern & 1.76e+05 & -5.35 & 721.33 & <.001 & 0.40 & 0.82 & {}[0.53, 1.03]\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Trolley} & Western & 2.12e+03 & -4.34 & 778.76 & <.001 & 0.31 & 0.67 & {}[0.38, 0.88]\\
+\cmidrule{1-9}
+ & Eastern & 2.06e+00 & -1.82 & 383.27 & 0.07 & 0.18 & 0.37 & {}[0, 0.62]\\
+
+ & Southern & 3.2e+03 & -4.32 & 469.42 & <.001 & 0.35 & 0.68 & {}[0.4, 0.88]\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Speedboat} & Western & 5.4e+05 & -5.56 & 707.92 & <.001 & 0.40 & 0.81 & {}[0.52, 0.99]\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+
+\caption{\label{tab:Study2ab Bayesian}Table S6. The interaction of personal force and intention on moral dilemma judgemnts (familiar participants).}
+\begin{tabular}[t]{lllrllrr}
+\toprule
+\textbf{Dilemma} & \textbf{Cluster} & \textbf{BF} & \textbf{F} & \textbf{df} & \textbf{p} & \textbf{Partial $\eta^2$} & \textbf{Raw effect}\\
+\midrule
+ & Eastern & 5.57e+01 & -0.500 & {}[-0.67, -0.2] & 0.001 & 0.043 & -2.00\\
+
+ & Southern & 6.79e+05 & -0.463 & {}[-0.56, -0.31] & <.001 & 0.047 & -1.85\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Trolley} & Western & 4.7e+18 & -0.288 & {}[-0.33, -0.24] & <.001 & 0.019 & -1.15\\
+\cmidrule{1-8}
+ & Eastern & 7.37e-01 & -0.001 & {}[-0.22, 0.21] & 0.993 & 0.000 & -0.01\\
+
+ & Southern & 2.35e+01 & -0.355 & {}[-0.48, -0.1] & 0.003 & 0.016 & -1.42\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Speedboat} & Western & 2.26e+04 & -0.143 & {}[-0.18, -0.09] & <.001 & 0.005 & -0.57\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\hypertarget{oxford-utilitarianism-scale}{%
+\subsection{Oxford utilitarianism
+Scale}\label{oxford-utilitarianism-scale}}
+
+As we registered, we first plot statistics of the Oxford Utilitarianism
+Scale in each cultural clusters. We applied no exclusion criteria during
+this analysis. Note however, that due to a technical mistake, some
+hungarian participants did not see one of the items in the OUS, hence,
+they were excluded from this analysis.
+
+\begin{figure}[H]
+\includegraphics[width=1\linewidth]{supplementary_materials_files/figure-latex/unnamed-chunk-2-1} \caption{Results on the Oxford Utilitarianism Scale by regions. The X axis shows the two subscales, while the Y axis shows the ratings. The center of the boxplots are the median, while the lower bound corresponds to the first quartiles (25th percentile), and the upper bound corresponds to the third quartile (75th percentile). The lower whisker represents the minimum value at no more than 1.5 times the inter quartile range from the lower bound, while the upper whisker respresents the maximum value at no further than 1.5 times the inter quartile range fro the upper bound.}\label{fig:unnamed-chunk-2}
+\end{figure}
+
+As registered, we also report means and confidence intervals for each
+cultural cluster and each subscale of the Oxford Utilitarianism Scale.
+
+\begin{table}[H]
+
+\caption{\label{tab:OUS means + CI}Table S7. Means and confidence intervals of the Oxford Utilitarianism Scale.)}
+\begin{tabular}[t]{lrlrl}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Instrumental Harm} & \multicolumn{2}{c}{Impartial Beneficence} \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5}
+\textbf{Cluster} & \textbf{Mean} & \textbf{$95\%$ CI} & \textbf{Mean} & \textbf{$95\%$ CI}\\
+\midrule
+Eastern & 3.404114 & {}[3.44,3.37] & 3.701470 & {}[3.74,3.67]\\
+Southern & 3.339469 & {}[3.37,3.3] & 4.219580 & {}[4.25,4.19]\\
+Western & 3.500703 & {}[3.52,3.48] & 4.013701 & {}[4.03,4]\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We also reported correlations between each Oxford Utilitarianism Scale
+subscales and moral acceptability ratings on each moral dilemma. Results
+suggests a higher correlation between acceptability ratings and the
+Instrumental Harm scale, anda somewhat lower correlation between
+Impartial Beneficence and acceptability ratings.
+
+\begin{table}[H]
+
+\caption{\label{tab:OUS correlations}Table S8. Correlational analysis of the Oxford Utilitarianism Scale subscales with moral accaptability ratings on moral dilemmas.)}
+\begin{tabular}[t]{llrlrll}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Impartial Beneficence} & \multicolumn{2}{c}{Instrumental Harm} & \multicolumn{1}{c}{ } \\
+\cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5}
+\textbf{Dilemma} & \textbf{Cluster} & \textbf{r} & \textbf{p} & \textbf{r} & \textbf{p} & \textbf{df}\\
+\midrule
+ & Eastern & 0.45 & <.001 & 0.16 & <.001 & 3875\\
+
+ & Southern & 0.44 & <.001 & 0.05 & <.001 & 4860\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Trolley} & Western & 0.42 & <.001 & 0.08 & <.001 & 17077\\
+\cmidrule{1-7}
+ & Eastern & 0.41 & <.001 & 0.20 & <.001 & 3875\\
+
+ & Southern & 0.40 & <.001 & 0.08 & <.001 & 4860\\
+
+\multirow[t]{-3}{*}{\raggedright\arraybackslash Speedboat} & Western & 0.40 & <.001 & 0.12 & <.001 & 17077\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\#Exploratory analysis on overall utilitarianism and collectivism
+
+Although not part of the planned analysis, we hypothesized that
+country-level collectivism would be negatively associated with
+utilitarian responding (i.e., higher morall acceptibility ratings). We
+found no evidence for this hypothesis, regardless of familiarity
+exclusion or dilemma context. Interestingly, however, we found strong
+evidence for the association between vertical individualism and average
+moral acceptibility ratings on moral dilemmas, regardless of dilemma
+context or exclusion criteria. The positive association means that
+higher levels of vertical individualism is associated with higher
+acceptance of the utilitarian response option. Although we hypothesized
+that it would be collectivism that makes people \emph{more} emotional
+and therefore, less utilitarian, we speculate that individualism made
+people \emph{less} emotional and therefore, more utilitarian.
+
+In all of the regression models below, we added the random intercept of
+countries.
+
+\begin{table}[H]
+
+\caption{\label{tab:analysis individual + country level study 2a}Table S9. Is the interaction of personal force and intention affected by individualism/collectivism on Trolley dilemmas?}
+\begin{tabular}[t]{lrrlrrl}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{3}{c}{With familiarity exclusion} & \multicolumn{3}{c}{No familiarity exclusion} \\
+\cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
+\textbf{Variable} & \textbf{BF} & \textbf{b} & \textbf{p} & \textbf{BF} & \textbf{b} & \textbf{p}\\
+\midrule
+Country-level collectivism & 2.5e-01 & -2.76 & 0.409 & 2.5e-01 & -3.82 & 0.216\\
+H. Collectivism & 8.0e-02 & -0.02 & 0.491 & 4.0e-02 & 0.00 & 0.861\\
+H. Individualism & 2.8e+00 & 0.06 & 0.005 & 2.1e+01 & 0.05 & <.001\\
+V. Collectivism & 1.6e-01 & 0.03 & 0.135 & 4.0e-02 & -0.01 & 0.679\\
+V. Individualism & 3.6e+13 & 0.15 & <.001 & 1.9e+23 & 0.12 & <.001\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+
+\caption{\label{tab:analysis individual + country level study 2b}Table S10. Is the interaction of personal force and intention affected by individualism/collectivism on Speedboat dilemmas?}
+\begin{tabular}[t]{lrrlrrl}
+\toprule
+\multicolumn{1}{c}{ } & \multicolumn{3}{c}{With familiarity exclusion} & \multicolumn{3}{c}{No familiarity exclusion} \\
+\cmidrule(l{3pt}r{3pt}){2-4} \cmidrule(l{3pt}r{3pt}){5-7}
+\textbf{Variable} & \textbf{BF} & \textbf{b} & \textbf{p} & \textbf{BF} & \textbf{b} & \textbf{p}\\
+\midrule
+Country-level collectivism & 6.4e-01 & -6.50 & 0.048 & 4.1e-01 & -5.25 & 0.041\\
+H. Collectivism & 7.0e-02 & -0.01 & 0.62 & 4.0e-02 & 0.00 & 0.756\\
+H. Individualism & 6.0e-02 & 0.00 & 0.876 & 6.0e-02 & 0.01 & 0.335\\
+V. Collectivism & 8.0e-02 & 0.02 & 0.423 & 8.0e-02 & -0.01 & 0.253\\
+V. Individualism & 6.2e+09 & 0.13 & <.001 & 1.1e+17 & 0.10 & <.001\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\#\#With exclusions
+
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth]{supplementary_materials_files/figure-latex/study2a overall individualism plot-1} \caption{Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice).}\label{fig:study2a overall individualism plot}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{supplementary_materials_files/figure-latex/study2a vertical horizontal individualism-1} \caption{Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)}\label{fig:study2a vertical horizontal individualism}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth]{supplementary_materials_files/figure-latex/study2b overall individualism plot-1} \caption{Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)}\label{fig:study2b overall individualism plot}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{supplementary_materials_files/figure-latex/study2b vertical horizontal individualism-1} \caption{Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)}\label{fig:study2b vertical horizontal individualism}
+\end{figure}
+
+\#\#Without familiarity exclusion
+
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth]{supplementary_materials_files/figure-latex/study2a overall individualism plot w/o exc-1} \caption{Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)}\label{fig:study2a overall individualism plot w/o exc}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{supplementary_materials_files/figure-latex/study2a vertical horizontal individualism w/o excl-1} \caption{Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)}\label{fig:study2a vertical horizontal individualism w/o excl}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics[width=0.8\linewidth]{supplementary_materials_files/figure-latex/study2b overall individualism plot w/o excl-1} \caption{Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)}\label{fig:study2b overall individualism plot w/o excl}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=0.8\linewidth]{supplementary_materials_files/figure-latex/study2b vertical horizontal individualism w/o excl-1} \caption{Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)}\label{fig:study2b vertical horizontal individualism w/o excl}
+\end{figure}
+
+\end{document}
