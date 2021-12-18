@@ -947,9 +947,9 @@ fig1_2 <-
   fig1_right + 
     labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
   fig2_left + 
-    labs(subtitle = "C Speedboat dilemma - all exclusion criteria applied") +  
+    labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +  
   fig2_right +
-    labs(subtitle = "D Speedboat dilemma - familiarity exclusion not applied") +
+    labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
   plot_layout(ncol = 2)
 
 fig1_2
@@ -964,9 +964,9 @@ fig3_4 <-
   fig3_right + 
     labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
   fig4_left + 
-    labs(subtitle = "C Speedboat dilemma - all exclusion criteria applied") +  
+    labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +  
   fig4_right +
-    labs(subtitle = "D Speedboat dilemma - familiarity exclusion not applied") +
+    labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
   
 fig3_4
@@ -977,9 +977,9 @@ ggsave(plot = fig3_4,
 
 fig5 <-
   fig5_left + 
-    labs(subtitle = "A Trolley dilemmas (all exclusions applied)") +
+    labs(subtitle = "A Trolley problem (all exclusions applied)") +
   fig5_right + 
-    labs(subtitle = "B Trolley dilemmas (familiarity exclusion not applied)") +
+    labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
   
 fig5  
@@ -990,9 +990,9 @@ ggsave(plot = fig5,
 
 fig6 <-
   fig6_left + 
-    labs(subtitle = "A Trolley dilemmas (all exclusions applied)") +
+    labs(subtitle = "A Trolley problem (all exclusions applied)") +
   fig6_right + 
-    labs(subtitle = "B Trolley dilemmas (familiarity exclusion not applied)") +
+    labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
   plot_layout(ncol = 2)
   
 fig6  
@@ -1003,9 +1003,9 @@ ggsave(plot = fig6,
 
 fig7 <-
   fig7_left + 
-    labs(subtitle = "A Speedboat dilemmas (all exclusions applied)") +
+    labs(subtitle = "A Speedboat problem (all exclusions applied)") +
   fig7_right + 
-    labs(subtitle = "B Speedboat dilemmas (familiarity exclusion not applied)") +
+    labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
   
 fig7  
@@ -1016,9 +1016,9 @@ ggsave(plot = fig7,
 
 fig8 <-
   fig8_left + 
-    labs(subtitle = "A Speedboat dilemmas (all exclusions applied)") +
+    labs(subtitle = "A Speedboat problem (all exclusions applied)") +
   fig8_right + 
-    labs(subtitle = "B Speedboat dilemmas (familiarity exclusion not applied)") +
+    labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
   plot_layout(ncol = 2)
   
 fig8  
@@ -1032,7 +1032,7 @@ fig9 <-
   fig9_left + 
     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
   fig9_right + 
-    labs(subtitle = "B Speedboat dilemma - no exclusion criteria applied") +
+    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
   plot_layout(ncol = 1)
   
 fig9  
@@ -1045,7 +1045,7 @@ fig10 <-
   fig10_left + 
     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
   fig10_right +
-    labs(subtitle = "B Speedboat dilemma - no exclusion criteria applied") +
+    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
   
 fig10
@@ -1056,9 +1056,9 @@ ggsave(plot = fig10,
 
 fig11 <-
   fig11_left + 
-    labs(subtitle = "A Trolley dilemmas - no exclusion criteria applied") +
+    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
   fig11_right + 
-    labs(subtitle = "B Speedboat dilemmas - no exclusion criteria applied") +
+    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
   plot_layout(ncol = 2, guides = "collect")
   
 fig11  
@@ -1069,9 +1069,9 @@ ggsave(plot = fig11,
 
 fig12 <-
   fig12_left + 
-    labs(subtitle = "A Trolley dilemma - no exclusion criteria applied") +
+    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
   fig12_right +
-    labs(subtitle = "B Speedboat dilemma - no exclusion criteria applied") +
+    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
    plot_layout(ncol = 2)
   
 fig12
