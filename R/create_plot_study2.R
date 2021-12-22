@@ -24,7 +24,7 @@ create_plot_study2 <- function(data) {
                      alpha = .8) +
     ggplot2::geom_point(aes(y = rate,
                             color = personal_force),
-                        position = ggplot2::position_jitter(width = .15, height = .25),
+                        position = ggplot2::position_jitter(width = .15, height = .20),
                         size = .25,
                         alpha = 0.8,
                         show.legend = FALSE) +

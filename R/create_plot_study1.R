@@ -25,7 +25,7 @@ create_plot_study1 <- function(data) {
       ggplot2::aes(
         y = rate,
         colour = condition),
-      position = ggplot2::position_jitter(width = .15, height = .25),
+      position = ggplot2::position_jitter(width = .15, height = .20),
       size = .25,
       alpha= 0.8) +
     ggplot2::stat_summary(
