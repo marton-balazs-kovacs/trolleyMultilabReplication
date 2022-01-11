@@ -1,12 +1,21 @@
 ---
-title: "Supplementary Analysis"
+title: Supplementary
 output: 
   rmarkdown::pdf_document:
-    extra_dependencies: ["float"]
+    extra_dependencies: ["float"] 
     fig_caption: yes
+
+
+    
 header-includes: 
-  \usepackage{float} \floatplacement{figure}{H} 
+  \usepackage{float}
+  \floatplacement{figure}{H} 
   \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
+  \usepackage{titling}
+  \setlength{\droptitle}{-2.3in}
+  \pagenumbering{gobble}
+
+
 editor_options: 
   chunk_output_type: console
 vignette: >
@@ -119,7 +128,8 @@ trolley_raw %>%
 ```
 
 
-# 1. Demographics  
+# 5. Demographics 
+\vspace{-8truemm}
 
 ```{r dem2,echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 summaries <-
@@ -177,18 +187,21 @@ demo_table <-
     footnote = "Distance from the US in collectivism. Some countries do not have a collectivism score.",
     locations = cells_column_labels(columns = c(Collectivism))) %>%
   gt::tab_options(
+    table.font.size = 7,
+    row_group.font.size = 7,
+    column_labels.font.size = 7,
     row.striping.include_table_body = TRUE,
     row.striping.background_color = "#EEEEEE",
     row.striping.include_stub = TRUE,
     row_group.background.color = "#999999",
-    column_labels.background.color = "#999999")
+    column_labels.background.color = "#999999",)
 
 demo_table
 ```
 
 
-# 2. Additional analysis
-## Effect of physical contact 
+#6. Additional analysis
+##6.1 Effect of physical contact 
 
 In sum, when assassing the effect of physical force, we found inconclusive evidence for the effect of physical contact, regardless of dilemma type (trolley/speedboat). The summary of the results can be found in the tables below.
 
@@ -220,7 +233,7 @@ kbl(
 ```
 
 
-## Comparing the standard switch and standard footbridge dilemmas
+##6.2 Comparing the standard switch and standard footbridge dilemmas
 
 When comparing the standard switch and standard footbridge dilemmas in all clusters for the trolley and the speedboat tasks we found evidence for a difference between the two dilemmas in moral acceptability ratings. The summary results of each comparison separately can be found in Tables below.
 
@@ -306,7 +319,7 @@ bind_rows(additional_trolley, additional_speedboat) %>%
 ```
 
 
-##Analysing familiar participants
+##6.3 Analysing familiar participants
 
 As we registered, we conducted the analysis on familiar participants, the results can be found below.
 
@@ -369,7 +382,7 @@ kbl(
 ```
 
 
-## Oxford utilitarianism Scale
+##6.4 Oxford utilitarianism Scale
 
 As we registered, we first plot statistics of the Oxford Utilitarianism Scale in each cultural clusters. We applied no exclusion criteria during this analysis. Note however, that due to a technical mistake, some hungarian participants did not see one of the items in the OUS, hence, they were excluded from this analysis.
 
@@ -562,7 +575,7 @@ kbl(
 ```
 
 
-#Exploratory analysis on overall utilitarianism and collectivism
+#7. Exploratory analysis on overall utilitarianism and collectivism
 
 Although not part of the planned analysis, we hypothesized that country-level collectivism would be negatively associated with utilitarian responding (i.e., higher morall acceptibility ratings). We found no evidence for this hypothesis, regardless of familiarity exclusion or dilemma context. Interestingly, however, we found strong evidence for the association between vertical individualism and average moral acceptibility ratings on moral dilemmas, regardless of dilemma context or exclusion criteria. The positive association means that higher levels of vertical individualism is associated with higher acceptance of the utilitarian response option. Although we hypothesized that it would be collectivism that makes people *more* emotional and therefore, less utilitarian, we speculate that individualism made people *less* emotional and therefore, more utilitarian.
 
@@ -651,8 +664,6 @@ kbl(
 ```
 
 
-##With exclusions
-
 ```{r study2a overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice).", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley, "trolley")
 
@@ -662,17 +673,6 @@ create_plot_country_utilitarianism(plot_data_country)
 ggplot2::ggsave("figures/figs2.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
-```{r study2a vertical horizontal individualism, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
-graphdata <-
-  tabledata_sa_ind_tidy %>%
-  filter(variable != "Country-level collectivism") %>%
-  select(variable, b, lower, higher)
-
-create_plot_ind_col(graphdata)
-
-# Save plot
-ggplot2::ggsave("figures/figs3.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
-```
 
 ```{r study2b overall individualism plot, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_speedboat, "speedboat")
@@ -683,20 +683,6 @@ create_plot_country_utilitarianism(plot_data_country)
 ggplot2::ggsave("figures/figs4.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
-```{r study2b vertical horizontal individualism,  out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", echo =FALSE,message=FALSE, warning=FALSE, paged.print=FALSE}
-graphdata <-
-  tabledata_sb_ind_tidy %>%
-  filter(variable != "Country-level collectivism") %>%
-  select(variable, b, lower, higher)
-
-create_plot_ind_col(graphdata)
-
-# Save plot
-ggplot2::ggsave("figures/figs5.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
-```
-
-
-##Without familiarity exclusion
 
 ```{r study2a overall individualism plot w/o exc, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Trolley dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_trolley_nf, "trolley")
@@ -707,17 +693,6 @@ create_plot_country_utilitarianism(plot_data_country)
 ggplot2::ggsave("figures/figs6.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
-```{r study2a vertical horizontal individualism w/o excl, out.width="80%", fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (trolley dilemmas)", echo = FALSE, message=FALSE, warning = FALSE, paged.print = FALSE}
-graphdata <-
-  tabledata_sa_ind_f_tidy %>%
-  filter(variable != "Country-level collectivism") %>%
-  select(variable, b, lower, higher)
-
-create_plot_ind_col(graphdata)
-
-# Save plot
-ggplot2::ggsave("figures/figs7.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
-```
 
 ```{r study2b overall individualism plot w/o excl, fig.pos="H",out.width="80%",fig.cap="Correlation between country-level individualism/collectivism and moral accessibility ratings on the Speedboat dilemmas (higher moral acceptibility means higher acceptibility of the utilitarian choice)", echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 plot_data_country <- prepare_plot_data_country_means(utilitarian_speedboat_nf, "speedboat")
@@ -728,17 +703,6 @@ create_plot_country_utilitarianism(plot_data_country)
 ggplot2::ggsave("figures/figs8.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
 ```
 
-```{r study2b vertical horizontal individualism w/o excl, echo=FALSE, fig.cap="Personal level individualism/collectivism effects on moral acceptibility ratings (speedboat dilemmas)", message=FALSE, warning=FALSE, out.width="80%", paged.print=FALSE}
-graphdata <-
-  tabledata_sb_ind_f_tidy %>%
-  filter(variable != "Country-level collectivism") %>%
-  select(variable, b, lower, higher)
-
-create_plot_ind_col(graphdata)
-
-# Save plot
-ggplot2::ggsave("figures/figs9.pdf", device = "pdf", plot = ggplot2::last_plot(), dpi = 300)
-```
 
 
 ```{r, include=FALSE}
