@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 ```{r setup, echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 # Load packages
 #library(trolleyMultilabReplication)
+set.seed(42)
 devtools::load_all()
 library(tidyverse)
 library(kableExtra)
@@ -941,144 +942,144 @@ fig12_right
 ## Merge Figures
 
 ```{r}
-fig1_2 <-
-  fig1_left + 
-    labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
-  fig1_right + 
-    labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
-  fig2_left + 
-    labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +  
-  fig2_right +
-    labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
-  plot_layout(ncol = 2)
-
-fig1_2
-
-ggsave(plot = fig1_2, 
-       filename = "vignettes/figures/fig1_2.pdf", 
-       device = "pdf", dpi = 300, scale = 2.3)
-
-fig3_4 <-
-  fig3_left + 
-    labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
-  fig3_right + 
-    labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
-  fig4_left + 
-    labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +  
-  fig4_right +
-    labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
-  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
-  
-fig3_4
-
-ggsave(plot = fig3_4, 
-       filename = "vignettes/figures/fig3_4.pdf", 
-       dpi = 300, scale = 2.3)
-
-fig5 <-
-  fig5_left + 
-    labs(subtitle = "A Trolley problem (all exclusions applied)") +
-  fig5_right + 
-    labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
-  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
-  
-fig5  
-
-ggsave(plot = fig5, 
-       filename = "vignettes/figures/fig5.pdf", 
-       dpi = 300, scale = 2)
-
-fig6 <-
-  fig6_left + 
-    labs(subtitle = "A Trolley problem (all exclusions applied)") +
-  fig6_right + 
-    labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
-  plot_layout(ncol = 2)
-  
-fig6  
-
-ggsave(plot = fig6, 
-       filename = "vignettes/figures/fig6.pdf", 
-       dpi = 300, scale = 2)
-
-fig7 <-
-  fig7_left + 
-    labs(subtitle = "A Speedboat problem (all exclusions applied)") +
-  fig7_right + 
-    labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
-  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
-  
-fig7  
-
-ggsave(plot = fig7, 
-       filename = "vignettes/figures/fig7.pdf", 
-       dpi = 300, scale = 2)
-
-fig8 <-
-  fig8_left + 
-    labs(subtitle = "A Speedboat problem (all exclusions applied)") +
-  fig8_right + 
-    labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
-  plot_layout(ncol = 2)
-  
-fig8  
-
-ggsave(plot = fig8, 
-       filename = "vignettes/figures/fig8.pdf", 
-       dpi = 300, scale = 2)
-
-
-fig9 <-
-  fig9_left + 
-    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
-  fig9_right + 
-    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
-  plot_layout(ncol = 1)
-  
-fig9  
-
-ggsave(plot = fig9, 
-       filename = "vignettes/figures/fig9.pdf", 
-       dpi = 300, scale = 2)
-
-fig10 <-
-  fig10_left + 
-    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
-  fig10_right +
-    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
-  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
-  
-fig10
-
-ggsave(plot = fig10, 
-       filename = "vignettes/figures/fig10.pdf", 
-       dpi = 300, scale = 2)
-
-fig11 <-
-  fig11_left + 
-    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
-  fig11_right + 
-    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
-  plot_layout(ncol = 2, guides = "collect")
-  
-fig11  
-
-ggsave(plot = fig11, 
-       filename = "vignettes/figures/fig11.pdf", 
-       dpi = 300, scale = 2)
-
-fig12 <-
-  fig12_left + 
-    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
-  fig12_right +
-    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
-   plot_layout(ncol = 2)
-  
-fig12
-
-ggsave(plot = fig12, 
-       filename = "vignettes/figures/fig12.pdf", 
-       dpi = 300, scale = 2)
+# fig1_2 <-
+#   fig1_left + 
+#     labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
+#   fig1_right + 
+#     labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
+#   fig2_left + 
+#     labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +  
+#   fig2_right +
+#     labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
+#   plot_layout(ncol = 2)
+# 
+# fig1_2
+# 
+# ggsave(plot = fig1_2, 
+#        filename = "vignettes/figures/fig1_2.pdf", 
+#        device = "pdf", dpi = 300, scale = 2.3)
+# 
+# fig3_4 <-
+#   fig3_left + 
+#     labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
+#   fig3_right + 
+#     labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
+#   fig4_left + 
+#     labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +  
+#   fig4_right +
+#     labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
+#   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
+#   
+# fig3_4
+# 
+# ggsave(plot = fig3_4, 
+#        filename = "vignettes/figures/fig3_4.pdf", 
+#        dpi = 300, scale = 2.3)
+# 
+# fig5 <-
+#   fig5_left + 
+#     labs(subtitle = "A Trolley problem (all exclusions applied)") +
+#   fig5_right + 
+#     labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
+#   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
+#   
+# fig5  
+# 
+# ggsave(plot = fig5, 
+#        filename = "vignettes/figures/fig5.pdf", 
+#        dpi = 300, scale = 2)
+# 
+# fig6 <-
+#   fig6_left + 
+#     labs(subtitle = "A Trolley problem (all exclusions applied)") +
+#   fig6_right + 
+#     labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
+#   plot_layout(ncol = 2)
+#   
+# fig6  
+# 
+# ggsave(plot = fig6, 
+#        filename = "vignettes/figures/fig6.pdf", 
+#        dpi = 300, scale = 2)
+# 
+# fig7 <-
+#   fig7_left + 
+#     labs(subtitle = "A Speedboat problem (all exclusions applied)") +
+#   fig7_right + 
+#     labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
+#   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
+#   
+# fig7  
+# 
+# ggsave(plot = fig7, 
+#        filename = "vignettes/figures/fig7.pdf", 
+#        dpi = 300, scale = 2)
+# 
+# fig8 <-
+#   fig8_left + 
+#     labs(subtitle = "A Speedboat problem (all exclusions applied)") +
+#   fig8_right + 
+#     labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
+#   plot_layout(ncol = 2)
+#   
+# fig8  
+# 
+# ggsave(plot = fig8, 
+#        filename = "vignettes/figures/fig8.pdf", 
+#        dpi = 300, scale = 2)
+# 
+# 
+# fig9 <-
+#   fig9_left + 
+#     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+#   fig9_right + 
+#     labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
+#   plot_layout(ncol = 1)
+#   
+# fig9  
+# 
+# ggsave(plot = fig9, 
+#        filename = "vignettes/figures/fig9.pdf", 
+#        dpi = 300, scale = 2)
+# 
+# fig10 <-
+#   fig10_left + 
+#     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+#   fig10_right +
+#     labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
+#   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
+#   
+# fig10
+# 
+# ggsave(plot = fig10, 
+#        filename = "vignettes/figures/fig10.pdf", 
+#        dpi = 300, scale = 2)
+# 
+# fig11 <-
+#   fig11_left + 
+#     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+#   fig11_right + 
+#     labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
+#   plot_layout(ncol = 2, guides = "collect")
+#   
+# fig11  
+# 
+# ggsave(plot = fig11, 
+#        filename = "vignettes/figures/fig11.pdf", 
+#        dpi = 300, scale = 2)
+# 
+# fig12 <-
+#   fig12_left + 
+#     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+#   fig12_right +
+#     labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
+#    plot_layout(ncol = 2)
+#   
+# fig12
+# 
+# ggsave(plot = fig12, 
+#        filename = "vignettes/figures/fig12.pdf", 
+#        dpi = 300, scale = 2)
 ```
 
 
@@ -1093,51 +1094,51 @@ custom_countries <-
     "SWT" = "CHE",
     "PSA" = "USA")
 
-# Transform data for the table
-## Table 1 represents the countries who collected data for the study
-## in the three investigated clusters
-table_data <-
-  trolley %>%
-  select(survey_name, lab) %>%
-  drop_na(lab) %>%
-  mutate(country3 = str_extract(lab, "[A-Z]+") %>%
-              recode(., !!!custom_countries),
-         region = str_remove(survey_name, "PSA006_"),
-         Country = countrycode(sourcevar = country3,
-                                      origin = "iso3c",
-                                      destination = "country.name"))
-# GBR_001!
-# Check the number of countries per region
-table_data %>%
-  distinct(region, Country) %>%
-  count(region)
-
-# Check the number of countries
-table_data %>%
-  distinct(Country) %>%
-  count()
-
-# Missing countries since the Stage 1 manuscript:
-# Western: South Africa
-# Southern: El Salvador
-# Eastern: Indonesia
-
-table_data <-
-  table_data %>%
-  distinct(region, Country) %>%
-  group_by(region) %>%
-  arrange(Country) %>%
-  filter(!(region == "Eastern" & Country == "United Kingdom")) %>%
-  summarise(countries = str_c(Country, collapse = ", ")) %>%
-  pivot_wider(names_from = region, values_from = countries)
-
-table_data$Eastern
-table_data$Western
-table_data$Southern
-
-# Create APA formatted table
-papaja::apa_table(
-  table_data,
-  caption = "The Cultural Classification of Countries of Participating Labs Following Awad et al.",
-  escape = TRUE)
+# # Transform data for the table
+# ## Table 1 represents the countries who collected data for the study
+# ## in the three investigated clusters
+# table_data <-
+#   trolley %>%
+#   select(survey_name, lab) %>%
+#   drop_na(lab) %>%
+#   mutate(country3 = str_extract(lab, "[A-Z]+") %>%
+#               recode(., !!!custom_countries),
+#          region = str_remove(survey_name, "PSA006_"),
+#          Country = countrycode(sourcevar = country3,
+#                                       origin = "iso3c",
+#                                       destination = "country.name"))
+# # GBR_001!
+# # Check the number of countries per region
+# table_data %>%
+#   distinct(region, Country) %>%
+#   count(region)
+# 
+# # Check the number of countries
+# table_data %>%
+#   distinct(Country) %>%
+#   count()
+# 
+# # Missing countries since the Stage 1 manuscript:
+# # Western: South Africa
+# # Southern: El Salvador
+# # Eastern: Indonesia
+# 
+# table_data <-
+#   table_data %>%
+#   distinct(region, Country) %>%
+#   group_by(region) %>%
+#   arrange(Country) %>%
+#   filter(!(region == "Eastern" & Country == "United Kingdom")) %>%
+#   summarise(countries = str_c(Country, collapse = ", ")) %>%
+#   pivot_wider(names_from = region, values_from = countries)
+# 
+# table_data$Eastern
+# table_data$Western
+# table_data$Southern
+# 
+# # Create APA formatted table
+# papaja::apa_table(
+#   table_data,
+#   caption = "The Cultural Classification of Countries of Participating Labs Following Awad et al.",
+#   escape = TRUE)
 ```
