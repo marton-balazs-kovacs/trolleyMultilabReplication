@@ -1,14 +1,22 @@
 #' Calculate interaction stats for study2 interaction terms
 #'
-#' This is the description.
+#' The function calculates the effect of culture on the interaction between intention
+#' and physical force for the trolley and speedboat dilemmas.
 #'
 #' @param df a dataframe, either "study2a" or "study2b"
 #' @param study_type the type of the study either "trolley" or "speedboat"
+#' @param iteration the number of iterations for the Bayesian analysis
+#' @param selected_cultural_vars character vector. the cultural variables to be included in the interaction.
+#' Possible values: "Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col"
 #'
 #' @return The function returns the Bayesian and frequentist
 #'   stats for study2 3rd order interactions.
 #' @export
-calculate_interaction_stats <- function(df = NULL, study_type) {
+calculate_interaction_stats <- function(
+  df = NULL,
+  study_type,
+  selected_cultural_vars = c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col"),
+  iteration = 100000) {
   # Get response columns
   response_cols <-
     switch(study_type,
@@ -17,8 +25,14 @@ calculate_interaction_stats <- function(df = NULL, study_type) {
 
   # Create a tibble that contains the labels for the cultural variables
   cultural_vars <-
-    tibble::tibble(var = c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col"),
-           variable = c("Country-level collectivism", "V. Individualism", "H. Individualism", "V. Collectivism", "H. Collectivism"))
+    tibble::tibble(
+      var = c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col"),
+      variable = c("Country-level collectivism", "V. Individualism", "H. Individualism", "V. Collectivism", "H. Collectivism"))
+
+  # Filter selected cultural vars
+  cultural_vars <-
+    cultural_vars %>%
+    dplyr::filter(var %in% selected_cultural_vars)
 
   # Create a nested tibble that can be mapped through
   df %>%
@@ -62,7 +76,7 @@ calculate_interaction_stats <- function(df = NULL, study_type) {
                                             whichRandom = "country0",
                                             data = as.data.frame(.x))),
       datt3 = purrr::map2(datt, datt2,
-                          ~BayesFactor::recompute((.x/.y), iterations = 100000) %>%
+                          ~BayesFactor::recompute((.x/.y), iterations = iteration) %>%
                             as_tibble()),
       frequentist = purrr::map(data,
                                ~lmerTest::lmer(rate ~ personal_force2 * intention2 * value + (1|country3),
