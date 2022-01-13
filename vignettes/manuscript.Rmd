@@ -550,14 +550,14 @@ fig4_right
 tabledata_s2a_ind <-
   study2a %>%
   left_join(., cultural_distance, by = "country3") %>%
-  calculate_interaction_stats(study_type="trolley")
+  calculate_interaction_stats(study_type="trolley", selected_cultural_vars="Collectivism", iteration = 3000000)
 
 tabledata_s2a_ind_tidy <- tidy_interaction_stats(tabledata_s2a_ind)
 
 tabledata_s2a_ind_f <-
   study2a_nf %>%
   left_join(., cultural_distance, by = "country3") %>%
-  calculate_interaction_stats(study_type="trolley")
+  calculate_interaction_stats(study_type="trolley", selected_cultural_vars="Collectivism", iteration = 10000000)
 
 tabledata_s2a_ind_f_tidy <- tidy_interaction_stats(tabledata_s2a_ind_f)
 
@@ -608,14 +608,14 @@ fig6_left
 tabledata_s2b_ind <-
   study2b %>%
   left_join(., cultural_distance, by = "country3") %>%
-  calculate_interaction_stats(study_type = "speedboat")
+  calculate_interaction_stats(study_type = "speedboat", selected_cultural_vars="Collectivism", iteration = 10000000)
 
 tabledata_s2b_ind_tidy <- tidy_interaction_stats(tabledata_s2b_ind)
 
 tabledata_s2b_ind_nf <-
   study2b_nf %>%
   left_join(., cultural_distance, by = "country3") %>%
-  calculate_interaction_stats(study_type = "speedboat")
+  calculate_interaction_stats(study_type = "speedboat", selected_cultural_vars="Collectivism", iteration = 100000000)
 
 tabledata_s2b_ind_nf_tidy <- tidy_interaction_stats(tabledata_s2b_ind_nf)
 
@@ -867,7 +867,7 @@ tabledata_s2a_ind_ne_tidy <- tidy_interaction_stats(tabledata_s2a_ne_ind)
 tabledata_s2b_ne_ind <-
   trolley %>%
   left_join(., cultural_distance, by = "country3") %>%
-  calculate_interaction_stats(., study_type = "speedboat")
+  calculate_interaction_stats(., study_type = "speedboat", iteration=100000000, selected_cultural_vars="Collectivism")
 
 tabledata_s2b_ind_ne_tidy <- tidy_interaction_stats(tabledata_s2b_ne_ind)
 
@@ -886,6 +886,13 @@ kbl(
   kable_styling(full_width = FALSE,  position = "left") %>%
   row_spec(row = 0, bold = TRUE) %>%
   add_header_above(c(" " = 1, "Trolley" = 4, "Speedboat" = 4))
+
+
+tabledata_s2b_ne_ind <-
+  trolley %>%
+  left_join(., cultural_distance, by = "country3") %>%
+  calculate_interaction_stats(., study_type = "trolley", iteration=100000, selected_cultural_vars="hor_col")
+
 ```
 
 ###Figure 11 left
