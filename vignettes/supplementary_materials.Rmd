@@ -4,6 +4,8 @@ output:
   rmarkdown::pdf_document:
     extra_dependencies: ["float"] 
     fig_caption: yes
+geometry: "left=2cm,right=2cm,top=1cm,bottom=1.8cm"
+
 
 
     
@@ -129,6 +131,7 @@ trolley_raw %>%
 
 # 1. Demographics 
 \newpage
+
 ```{r dem2,echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
 #\vspace{-8truemm}
 
