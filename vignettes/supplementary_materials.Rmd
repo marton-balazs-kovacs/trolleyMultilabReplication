@@ -1,5 +1,5 @@
 ---
-title: Supplementary
+title: Supplementary Analysis
 output: 
   rmarkdown::pdf_document:
     extra_dependencies: ["float"] 
@@ -11,8 +11,6 @@ header-includes:
   \usepackage{float}
   \floatplacement{figure}{H} 
   \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
-  \usepackage{titling}
-  \setlength{\droptitle}{-2.3in}
   \pagenumbering{gobble}
 
 
@@ -129,10 +127,11 @@ trolley_raw %>%
 ```
 
 
-# 5. Demographics 
-\vspace{-8truemm}
-
+# 1. Demographics 
+\newpage
 ```{r dem2,echo = FALSE, message = FALSE, warning = FALSE, paged.print = FALSE}
+#\vspace{-8truemm}
+
 summaries <-
   trolley %>%
   tidyr::nest(data = dplyr::everything()) %>%
@@ -201,8 +200,8 @@ demo_table
 ```
 
 
-#6. Additional analysis
-##6.1 Effect of physical contact 
+#2. Additional analysis
+##2.1 Effect of physical contact 
 
 In sum, when assassing the effect of physical force, we found inconclusive evidence for the effect of physical contact, regardless of dilemma type (trolley/speedboat). The summary of the results can be found in the tables below.
 
@@ -234,7 +233,7 @@ kbl(
 ```
 
 
-##6.2 Comparing the standard switch and standard footbridge dilemmas
+##2.2 Comparing the standard switch and standard footbridge dilemmas
 
 When comparing the standard switch and standard footbridge dilemmas in all clusters for the trolley and the speedboat tasks we found evidence for a difference between the two dilemmas in moral acceptability ratings. The summary results of each comparison separately can be found in Tables below.
 
@@ -320,7 +319,7 @@ bind_rows(additional_trolley, additional_speedboat) %>%
 ```
 
 
-##6.3 Analysing familiar participants
+##2.3 Analysing familiar participants
 
 As we registered, we conducted the analysis on familiar participants, the results can be found below.
 
@@ -383,7 +382,7 @@ kbl(
 ```
 
 
-##6.4 Oxford utilitarianism Scale
+##2.4 Oxford utilitarianism Scale
 
 As we registered, we first plot statistics of the Oxford Utilitarianism Scale in each cultural clusters. We applied no exclusion criteria during this analysis. Note however, that due to a technical mistake, some hungarian participants did not see one of the items in the OUS, hence, they were excluded from this analysis.
 
@@ -576,7 +575,7 @@ kbl(
 ```
 
 
-#7. Exploratory analysis on overall utilitarianism and collectivism
+#3. Exploratory analysis on overall utilitarianism and collectivism
 
 Although not part of the planned analysis, we hypothesized that country-level collectivism would be negatively associated with utilitarian responding (i.e., higher morall acceptibility ratings). We found no evidence for this hypothesis, regardless of familiarity exclusion or dilemma context. Interestingly, however, we found strong evidence for the association between vertical individualism and average moral acceptibility ratings on moral dilemmas, regardless of dilemma context or exclusion criteria. The positive association means that higher levels of vertical individualism is associated with higher acceptance of the utilitarian response option. Although we hypothesized that it would be collectivism that makes people *more* emotional and therefore, less utilitarian, we speculate that individualism made people *less* emotional and therefore, more utilitarian.
 
