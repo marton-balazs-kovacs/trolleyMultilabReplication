@@ -196,17 +196,17 @@ exclude_table <-
   bind_rows(all_wide) %>% 
   group_by(info) %>% 
   gt() %>% 
-  fmt_number(vars(n_Eastern, n_Southern, n_Western, n_All), 
+  fmt_number(c(n_Eastern, n_Southern, n_Western, n_All), 
              decimals = 0) %>%
-  fmt_percent(columns = vars(perc_Eastern, perc_Southern, perc_Western, perc_All), decimals = 1) %>%
+  fmt_percent(columns = c(perc_Eastern, perc_Southern, perc_Western, perc_All), decimals = 1) %>%
   fmt_missing(everything(), missing_text = "") %>%
-  cols_merge(columns = vars(n_Eastern, perc_Eastern), 
+  cols_merge(columns = c(n_Eastern, perc_Eastern), 
              pattern = "{1} ({2})") %>% 
-  cols_merge(columns = vars(n_Southern, perc_Southern), 
+  cols_merge(columns = c(n_Southern, perc_Southern), 
              pattern = "{1} ({2})") %>% 
-  cols_merge(columns = vars(n_Western, perc_Western), 
+  cols_merge(columns = c(n_Western, perc_Western), 
            pattern = "{1} ({2})") %>% 
-  cols_merge(columns = vars(n_All, perc_All), 
+  cols_merge(columns = c(n_All, perc_All), 
        pattern = "{1} ({2})") %>% 
   cols_label(Reason = " ",
              n_Eastern = "Eastern",
@@ -214,14 +214,14 @@ exclude_table <-
              n_Western = "Western",
              n_All = "All") %>% 
   cols_align("left", columns = "Reason") %>%
-  cols_align("right", columns = vars(n_Eastern, n_Southern, n_Western, n_All)) %>%
+  cols_align("right", columns = c(n_Eastern, n_Southern, n_Western, n_All)) %>%
   tab_options(row.striping.include_table_body = TRUE,
               row.striping.background_color = "#EEEEEE", 
               row.striping.include_stub = TRUE,
               row_group.background.color = "#999999", 
               column_labels.background.color = "#999999") %>% 
   text_transform(locations = cells_body(
-                 columns = vars(n_Eastern, n_Southern, n_Western, n_All)),
+                 columns = c(n_Eastern, n_Southern, n_Western, n_All)),
                           fn = function(x) {if_else(str_detect(x, "()"), 
                                         str_remove(x, "\\(\\)"),
                                         x)})
@@ -301,11 +301,11 @@ fig1left_df <-
 
 # Create plot
 fig1_left <-
-  create_plot_study1(fig1left_df) +
-  geom_text(y = .7,
-            aes(label = n_label),
-            size = 2.5,
-            color = "black")
+  create_plot_study1(fig1left_df) #+
+  # geom_text(y = .7,
+  #           aes(label = n_label),
+  #           size = 2.5,
+  #           color = "black")
 
 fig1_left
 ```
@@ -321,11 +321,11 @@ fig1right_df <-
 
 # Create plot
 fig1_right <-
-  create_plot_study1(fig1right_df) +
-  geom_text(y = .7,
-            aes(label = n_label),
-            size = 2.5,
-            color = "black")
+  create_plot_study1(fig1right_df) #+
+  # geom_text(y = .7,
+  #           aes(label = n_label),
+  #           size = 2.5,
+  #           color = "black")
 
 fig1_right
 ```
@@ -370,11 +370,11 @@ fig2left_df <-
 
 # Create plot
 fig2_left <-
-  create_plot_study1(fig2left_df) +
-  geom_text(y = .7,
-            aes(label = n_label),
-            size = 2.5,
-            color = "black")
+  create_plot_study1(fig2left_df) #+
+  # geom_text(y = .7,
+  #           aes(label = n_label),
+  #           size = 2.5,
+  #           color = "black")
 
 fig2_left
 ```
@@ -389,12 +389,13 @@ fig2right_df <-
 
 # Create plot
 fig2_right <-
-  create_plot_study1(fig2right_df) +
-  geom_text(y = .7,
-            aes(label = n_label),
-            size = 2.5,
-            color = "black")
+  create_plot_study1(fig2right_df)# +
+  # geom_text(y = .7,
+  #           aes(label = n_label),
+  #           size = 2.5,
+  #           color = "black")
 
+fig2_right
 ```
 
 
@@ -440,11 +441,11 @@ fig3left_df <-
 
 # Create plot
 fig3_left <-
-  create_plot_study2(fig3left_df) +
-  geom_text(y = .7,
-            aes(label = n_label),
-            size = 3.57,
-            color = "black")
+  create_plot_study2(fig3left_df) #+
+  # geom_text(y = .7,
+  #           aes(label = n_label),
+  #           size = 3.57,
+  #           color = "black")
   
 fig3_left
 
@@ -460,11 +461,11 @@ fig3right_df <-
 
 # Create plot
 fig3_right <-
-  create_plot_study2(fig3right_df) +
-  geom_text(y = .7,
-            aes(label = n_label),
-            size = 3.57,
-            color = "black")
+  create_plot_study2(fig3right_df) # +
+  # geom_text(y = .7,
+  #           aes(label = n_label),
+  #           size = 3.57,
+  #           color = "black")
 
 fig3_right
 
@@ -510,11 +511,11 @@ fig4left_df <-
 
 # Create plot
 fig4_left <-
-  create_plot_study2(fig4left_df) +
-  geom_text(y = .7,
-            aes(label = n_label),
-            size = 3.57,
-            color = "black")
+  create_plot_study2(fig4left_df) #+
+  # geom_text(y = .7,
+  #           aes(label = n_label),
+  #           size = 3.57,
+  #           color = "black")
   
 fig4_left
 
@@ -531,11 +532,11 @@ fig4right_df <-
 
 # Create plot
 fig4_right <-
-  create_plot_study2(fig4right_df) +
-  geom_text(y = .7,
-            aes(label = n_label),
-            size = 3.57,
-            color = "black")
+  create_plot_study2(fig4right_df) #+
+  # geom_text(y = .7,
+  #           aes(label = n_label),
+  #           size = 3.57,
+  #           color = "black")
 
 fig4_right
 
@@ -754,11 +755,11 @@ fig9left_df <-
   mutate(n_label = paste0("n = ", n))
 
 fig9_left <-
-  create_plot_study1(fig9left_df) +
-  geom_text(y = .6,
-            aes(label = n_label),
-            size = 2.5,
-            color = "black")
+  create_plot_study1(fig9left_df) #+
+  # geom_text(y = .6,
+  #           aes(label = n_label),
+  #           size = 2.5,
+  #           color = "black")
 
 fig9_left
 ```
@@ -773,11 +774,11 @@ plot_data <-
 
 # Create plot
 fig9_right <-
-  create_plot_study1(plot_data) +
-  geom_text(y = .6,
-            aes(label = n_label),
-            size = 2.5,
-            color = "black")
+  create_plot_study1(plot_data) #+
+  # geom_text(y = .6,
+  #           aes(label = n_label),
+  #           size = 2.5,
+  #           color = "black")
 
 fig9_right
 
@@ -823,11 +824,11 @@ fig10left_df <-
   mutate(n_label = paste0("n = ", n))
 
 fig10_left <-
-  create_plot_study2(fig10left_df) +
-  geom_text(y = .6,
-            aes(label = n_label),
-            size = 3.57,
-            color = "black")
+  create_plot_study2(fig10left_df) #+
+  # geom_text(y = .6,
+  #           aes(label = n_label),
+  #           size = 3.57,
+  #           color = "black")
 
 fig10_left
 ```
@@ -842,11 +843,11 @@ plot_data <-
 
 # Create plot
 fig10_right <-
-  create_plot_study2(plot_data) +
-  geom_text(y = .6,
-            aes(label = n_label),
-            size = 3.57,
-            color = "black")
+  create_plot_study2(plot_data) #+
+  # geom_text(y = .6,
+  #           aes(label = n_label),
+  #           size = 3.57,
+  #           color = "black")
 
 fig10_right
 ```
@@ -948,145 +949,145 @@ fig12_right
 
 ## Merge Figures
 
-```{r}
-# fig1_2 <-
-#   fig1_left + 
-#     labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
-#   fig1_right + 
-#     labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
-#   fig2_left + 
-#     labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +  
-#   fig2_right +
-#     labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
-#   plot_layout(ncol = 2)
-# 
-# fig1_2
-# 
-# ggsave(plot = fig1_2, 
-#        filename = "vignettes/figures/fig1_2.pdf", 
-#        device = "pdf", dpi = 300, scale = 2.3)
-# 
-# fig3_4 <-
-#   fig3_left + 
-#     labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
-#   fig3_right + 
-#     labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
-#   fig4_left + 
-#     labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +  
-#   fig4_right +
-#     labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
-#   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
-#   
-# fig3_4
-# 
-# ggsave(plot = fig3_4, 
-#        filename = "vignettes/figures/fig3_4.pdf", 
-#        dpi = 300, scale = 2.3)
-# 
-# fig5 <-
-#   fig5_left + 
-#     labs(subtitle = "A Trolley problem (all exclusions applied)") +
-#   fig5_right + 
-#     labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
-#   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
-#   
-# fig5  
-# 
-# ggsave(plot = fig5, 
-#        filename = "vignettes/figures/fig5.pdf", 
-#        dpi = 300, scale = 2)
-# 
-# fig6 <-
-#   fig6_left + 
-#     labs(subtitle = "A Trolley problem (all exclusions applied)") +
-#   fig6_right + 
-#     labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
-#   plot_layout(ncol = 2)
-#   
-# fig6  
-# 
-# ggsave(plot = fig6, 
-#        filename = "vignettes/figures/fig6.pdf", 
-#        dpi = 300, scale = 2)
-# 
-# fig7 <-
-#   fig7_left + 
-#     labs(subtitle = "A Speedboat problem (all exclusions applied)") +
-#   fig7_right + 
-#     labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
-#   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
-#   
-# fig7  
-# 
-# ggsave(plot = fig7, 
-#        filename = "vignettes/figures/fig7.pdf", 
-#        dpi = 300, scale = 2)
-# 
-# fig8 <-
-#   fig8_left + 
-#     labs(subtitle = "A Speedboat problem (all exclusions applied)") +
-#   fig8_right + 
-#     labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
-#   plot_layout(ncol = 2)
-#   
-# fig8  
-# 
-# ggsave(plot = fig8, 
-#        filename = "vignettes/figures/fig8.pdf", 
-#        dpi = 300, scale = 2)
-# 
-# 
-# fig9 <-
-#   fig9_left + 
-#     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
-#   fig9_right + 
-#     labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
-#   plot_layout(ncol = 1)
-#   
-# fig9  
-# 
-# ggsave(plot = fig9, 
-#        filename = "vignettes/figures/fig9.pdf", 
-#        dpi = 300, scale = 2)
-# 
-# fig10 <-
-#   fig10_left + 
-#     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
-#   fig10_right +
-#     labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
-#   plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
-#   
-# fig10
-# 
-# ggsave(plot = fig10, 
-#        filename = "vignettes/figures/fig10.pdf", 
-#        dpi = 300, scale = 2)
-# 
-# fig11 <-
-#   fig11_left + 
-#     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
-#   fig11_right + 
-#     labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
-#   plot_layout(ncol = 2, guides = "collect")
-#   
-# fig11  
-# 
-# ggsave(plot = fig11, 
-#        filename = "vignettes/figures/fig11.pdf", 
-#        dpi = 300, scale = 2)
-# 
-# fig12 <-
-#   fig12_left + 
-#     labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
-#   fig12_right +
-#     labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
-#    plot_layout(ncol = 2)
-#   
-# fig12
-# 
-# ggsave(plot = fig12, 
-#        filename = "vignettes/figures/fig12.pdf", 
-#        dpi = 300, scale = 2)
+```{r eval=FALSE, include=FALSE}
+fig1_2 <-
+  fig1_left +
+    labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
+  fig1_right +
+    labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
+  fig2_left +
+    labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +
+  fig2_right +
+    labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
+  plot_layout(ncol = 2)
+
+fig1_2
+
+ggsave(plot = fig1_2,
+       filename = "vignettes/figures/fig1_2.pdf",
+       device = "pdf", dpi = 300, scale = 2.3)
+
+fig3_4 <-
+  fig3_left +
+    labs(subtitle = "A Trolley problem - all exclusion criteria applied") +
+  fig3_right +
+    labs(subtitle = "B Trolley problem - familiarity exclusion not applied") +
+  fig4_left +
+    labs(subtitle = "C Speedboat problem - all exclusion criteria applied") +
+  fig4_right +
+    labs(subtitle = "D Speedboat problem - familiarity exclusion not applied") +
+  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
+
+fig3_4
+
+ggsave(plot = fig3_4,
+       filename = "vignettes/figures/fig3_4.pdf",
+       dpi = 300, scale = 2.3)
+
+fig5 <-
+  fig5_left +
+    labs(subtitle = "A Trolley problem (all exclusions applied)") +
+  fig5_right +
+    labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
+  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
+
+fig5
+
+ggsave(plot = fig5,
+       filename = "vignettes/figures/fig5.pdf",
+       dpi = 300, scale = 2)
+
+fig6 <-
+  fig6_left +
+    labs(subtitle = "A Trolley problem (all exclusions applied)") +
+  fig6_right +
+    labs(subtitle = "B Trolley problem (familiarity exclusion not applied)") +
+  plot_layout(ncol = 2)
+
+fig6
+
+ggsave(plot = fig6,
+       filename = "vignettes/figures/fig6.pdf",
+       dpi = 300, scale = 2)
+
+fig7 <-
+  fig7_left +
+    labs(subtitle = "A Speedboat problem (all exclusions applied)") +
+  fig7_right +
+    labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
+  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'right')
+
+fig7
+
+ggsave(plot = fig7,
+       filename = "vignettes/figures/fig7.pdf",
+       dpi = 300, scale = 2)
+
+fig8 <-
+  fig8_left +
+    labs(subtitle = "A Speedboat problem (all exclusions applied)") +
+  fig8_right +
+    labs(subtitle = "B Speedboat problem (familiarity exclusion not applied)") +
+  plot_layout(ncol = 2)
+
+fig8
+
+ggsave(plot = fig8,
+       filename = "vignettes/figures/fig8.pdf",
+       dpi = 300, scale = 2)
+
+
+fig9 <-
+  fig9_left +
+    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+  fig9_right +
+    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
+  plot_layout(ncol = 1)
+
+fig9
+
+ggsave(plot = fig9,
+       filename = "vignettes/figures/fig9.pdf",
+       dpi = 300, scale = 2)
+
+fig10 <-
+  fig10_left +
+    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+  fig10_right +
+    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
+  plot_layout(ncol = 2, guides = "collect") & theme(legend.position = 'bottom')
+
+fig10
+
+ggsave(plot = fig10,
+       filename = "vignettes/figures/fig10.pdf",
+       dpi = 300, scale = 2)
+
+fig11 <-
+  fig11_left +
+    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+  fig11_right +
+    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
+  plot_layout(ncol = 2, guides = "collect")
+
+fig11
+
+ggsave(plot = fig11,
+       filename = "vignettes/figures/fig11.pdf",
+       dpi = 300, scale = 2)
+
+fig12 <-
+  fig12_left +
+    labs(subtitle = "A Trolley problem - no exclusion criteria applied") +
+  fig12_right +
+    labs(subtitle = "B Speedboat problem - no exclusion criteria applied") +
+   plot_layout(ncol = 2)
+
+fig12
+
+ggsave(plot = fig12,
+       filename = "vignettes/figures/fig12.pdf",
+       dpi = 300, scale = 2)
 ```
 
 
