@@ -187,14 +187,15 @@ demo_table <-
     footnote = "Distance from the US in collectivism. Some countries do not have a collectivism score.",
     locations = cells_column_labels(columns = c(Collectivism))) %>%
   gt::tab_options(
-    table.font.size = 7,
-    row_group.font.size = 7,
-    column_labels.font.size = 7,
+    table.font.size = 10,
+    # row_group.font.size = 7,
+    # column_labels.font.size = 7,
     row.striping.include_table_body = TRUE,
     row.striping.background_color = "#EEEEEE",
     row.striping.include_stub = TRUE,
     row_group.background.color = "#999999",
-    column_labels.background.color = "#999999",)
+    column_labels.background.color = "#999999",
+    data_row.padding = px(1))
 
 demo_table
 ```
