@@ -62,7 +62,7 @@
 #'   \item{religious_rate}{integer, How religious is the respondent from 1 "absolutely not" to 10 "very".}
 #'   \item{religion_1}{integer, Whether the respondent indicated that following the first listed religion. For the listed religions see the projects OSF page at https://osf.io/efy2w/.}
 #'   \item{education_leve}{integer, Highest level of education. 1 is "Below high school", 2 is "High school", 3 is "Bachelor's degree", 4 is "Master's degree", 5 is "Doctoral degree". The labels can differ for certian countries but these are recorded in separate variables.}
-#'   \item{age_1}{integer, Age of the respondent, minimum 18.}
+#'   \item{age_1}{integer, Age of the respondent, minimum 18. To calculate the actual age of the respondent 17 should be added to the value.}
 #'   \item{sex}{integer, Gender of the respondent.}
 #'   \item{countr_origin_1}{character, Origin country of the respondent.}
 #'   \item{immigrant_back}{integer, Is the respondent from an immigrant background, with 1 "Yes" and 2 "No".}
