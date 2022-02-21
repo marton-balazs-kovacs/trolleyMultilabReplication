@@ -4,17 +4,29 @@
 \alias{calculate_interaction_stats}
 \title{Calculate interaction stats for study2 interaction terms}
 \usage{
-calculate_interaction_stats(df = NULL, study_type)
+calculate_interaction_stats(
+  df = NULL,
+  study_type,
+  selected_cultural_vars = c("Collectivism", "ver_ind", "hor_ind", "ver_col",
+    "hor_col"),
+  iteration = 1e+05
+)
 }
 \arguments{
 \item{df}{a dataframe, either "study2a" or "study2b"}
 
 \item{study_type}{the type of the study either "trolley" or "speedboat"}
+
+\item{selected_cultural_vars}{character vector. the cultural variables to be included in the interaction.
+Possible values: "Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col"}
+
+\item{iteration}{the number of iterations for the Bayesian analysis}
 }
 \value{
 The function returns the Bayesian and frequentist
   stats for study2 3rd order interactions.
 }
 \description{
-This is the description.
+The function calculates the effect of culture on the interaction between intention
+and physical force for the trolley and speedboat dilemmas.
 }
