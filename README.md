@@ -43,7 +43,9 @@ You can load this datafile if you are replicating the results of the
 study by the following code:
 
 ``` r
-trolley_raw <- system.file("extdata", "trolley_raw.csv", package = "trolleyMultilabReplication")
+# install.packages("readr")
+# library(readr)
+trolley_raw <- readr::read_csv(system.file("extdata", "trolley_raw.csv", package = "trolleyMultilabReplication"))
 ```
 
 The steps for preprocessing the raw datafile can be found in the
