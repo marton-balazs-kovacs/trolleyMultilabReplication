@@ -7,8 +7,7 @@
 calculate_interaction_stats(
   df = NULL,
   study_type,
-  selected_cultural_vars = c("Collectivism", "ver_ind", "hor_ind", "ver_col",
-    "hor_col"),
+  selected_cultural_vars = c("Collectivism", "ver_ind", "hor_ind", "ver_col", "hor_col"),
   iteration = 1e+05
 )
 }

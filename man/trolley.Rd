@@ -62,9 +62,9 @@ A dataframe with 27502 rows and 152 variables:
   \item{oxford_utilitarian_1}{integer, First item of the Oxford utilitarian scale. 1 is "Strongly disagree" and 7 is "Strongly agree".}
   \item{individualism_scale_1}{integer, First item of the Individualism scale. 1 is "Never of definitely no" while 9 is "Always or definitely yes".}
   \item{religious_rate}{integer, How religious is the respondent from 1 "absolutely not" to 10 "very".}
-  \item{religion_1}{integer, Whether the respondent indicated that following the first listed religion. For the listed religions see the projects OSF page at https://osf.io/efy2w/.}
+  \item{religion_[1-16]}{integer, Whether the respondent indicated that they are followers of the listed religion. 1 - Agnostic, 2 - Atheist, 3 - Baha'i, 4 - Buddhist, 5 - Chinese Traditional, 6 - Christian, 7 - Christian (specifically Catholic), 8 - Christian (specifically Protestant), 9 - Hindu, 10 - Humanist, 11 - Jewish, 12 - Muslim, 13 - No religion, 14 - Sikh, 15 - Taoist, 16 - Other, please specify}
   \item{education_leve}{integer, Highest level of education. 1 is "Below high school", 2 is "High school", 3 is "Bachelor's degree", 4 is "Master's degree", 5 is "Doctoral degree". The labels can differ for certian countries but these are recorded in separate variables.}
-  \item{age_1}{integer, Age of the respondent, minimum 18.}
+  \item{age_1}{integer, Age of the respondent, minimum 18. To calculate the actual age of the respondent 17 should be added to the value.}
   \item{sex}{integer, Gender of the respondent.}
   \item{countr_origin_1}{character, Origin country of the respondent.}
   \item{immigrant_back}{integer, Is the respondent from an immigrant background, with 1 "Yes" and 2 "No".}
@@ -73,7 +73,7 @@ A dataframe with 27502 rows and 152 variables:
   \item{further_comments}{character, Further comments by the respondent.}
   \item{native_language}{integer, Was the study presented in the primary language of the respondent with 1 as "Yes" and 2 as "No"}
   \item{fluency}{integer, Is the respondent fluent in the language of the survey with 1 as "Yes" and 2 as "No".}
-  \item{Q_Lang}{character, Language of the survey.}
+  \item{Q_Lang}{character, Language of the survey. Value-key mapping of the variable: English (US) - EN, Argentinian Spanish - ES-ARG, Bahasa Indonesia - INDO, Brazilian Portuguese - PT-BR, Bulgarian - BG, Chilean Spanish - CHI, Chinese (Simplified) - ZH-S, Colombian Spanish - COL-ESP, Czech - CS, Dutch - NL, Ecuadorian Spanish - ES-EC, España - ESP-ESP, French - FR, German - DE, Greek - EL, Hrvatski - CR, Hungarian - HU, Italian - IT, Japanese - JA, Macedonian - MK, Mexican Spanish - ES-MX, Persian - FA, Peruvian Spanish - ES-PE, Polish - PL, Portuguese - PT, Romanian - RO, Russian - RU, Salvador Spanish - ESP-SAL, Slovak - SK, Spanish - ES-ES, Thai - TH, Turkish - TR, Српски - SERB}
   \item{lab}{character, Unique identifier of the lab collecting the given response.}
   \item{attention}{, }
   \item{scenario1}{character, Which dilemma was shown to the respondent first. Added during data cleaning.}
