@@ -102,7 +102,10 @@ trolley <-
          Region = str_remove(survey_name, "PSA006_"),
          # Age is a multiple choice question that starts(1) at 18
          Age = age_1 + 17,
-         Gender = sex,
+         # The sex variable was renamed as Gender during the original analysis but this is erroneous
+         # Since the original question asked about sex
+         # Thus we comment this line out
+         # Gender = sex,
          # select those that have a higher education
          edu_high = education_leve > 2,
          # Higher education is recorded differently in Germany and Austria

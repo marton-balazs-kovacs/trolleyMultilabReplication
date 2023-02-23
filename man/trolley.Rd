@@ -65,7 +65,7 @@ A dataframe with 27502 rows and 152 variables:
   \item{religion_[1-16]}{integer, Whether the respondent indicated that they are followers of the listed religion. 1 - Agnostic, 2 - Atheist, 3 - Baha'i, 4 - Buddhist, 5 - Chinese Traditional, 6 - Christian, 7 - Christian (specifically Catholic), 8 - Christian (specifically Protestant), 9 - Hindu, 10 - Humanist, 11 - Jewish, 12 - Muslim, 13 - No religion, 14 - Sikh, 15 - Taoist, 16 - Other, please specify}
   \item{education_leve}{integer, Highest level of education. 1 is "Below high school", 2 is "High school", 3 is "Bachelor's degree", 4 is "Master's degree", 5 is "Doctoral degree". The labels can differ for certian countries but these are recorded in separate variables.}
   \item{age_1}{integer, Age of the respondent, minimum 18. To calculate the actual age of the respondent 17 should be added to the value.}
-  \item{sex}{integer, Gender of the respondent.}
+  \item{sex}{integer, Sex of the respondent. 1 - Male; 2 - Female; 3 - Other; 4 - I wish not to answer.}
   \item{countr_origin_1}{character, Origin country of the respondent.}
   \item{immigrant_back}{integer, Is the respondent from an immigrant background, with 1 "Yes" and 2 "No".}
   \item{technical_problems}{integer, Whether the respondent had technical problems during survey completition. 1 is "No" while 2 is "Yes".}
@@ -81,7 +81,7 @@ A dataframe with 27502 rows and 152 variables:
   \item{country3}{character, ISO3 country code of the respondents' country.}
   \item{Region}{character, Which world region the respondents' country belongs to.}
   \item{Age}{integer, Recoded age value during data cleaning.}
-  \item{Gender}{character, Recoded values of the "sex" variable during data cleaning.}
+  \item{Gender}{character, Renamed "sex" variable during data cleaning. Renaming was a mistake, the variable contains the sex and NOT the gender of the respondents.}
   \item{Higher education}{character, Recoded values of the "education_leve" variable during data cleaning.}
   \item{include_nocareless}{logical, TRUE if respondent passed the carelesness test and FALSE if dont}
   \item{include_noconfusion}{logical, TRUE if respondent passed the confusion test and FALSE if dont}

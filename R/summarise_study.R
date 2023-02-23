@@ -16,7 +16,7 @@ summarise_study <- function(data = NULL){
       N = dplyr::n(),
       `Age Mean` = mean(Age, na.rm = TRUE),
       `Age SD` = sd(Age, na.rm = TRUE),
-      `Male %` = mean(Gender == 1, na.rm = TRUE),
+      `Male %` = mean(sex == 1, na.rm = TRUE),
       `Higher education %` = mean(`Higher education`, na.rm = TRUE),
        .groups = "drop")
 
